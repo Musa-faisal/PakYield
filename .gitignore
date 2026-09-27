@@ -1,0 +1,67 @@
+# ========================================
+# PakYield — Git Ignore
+# ========================================
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Environment / secrets
+.env
+.env.local
+*.pem
+*.key
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Python tooling
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# macOS
+.DS_Store
+
+# VS Code local settings
+.vscode/
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+
+# Generated databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Data
+# Raw and generated research datasets should not be committed by default.
+data/raw/*
+data/interim/*
+data/processed/*
+
+# Keep data directory documentation / placeholders
+!data/raw/.gitkeep
+!data/interim/.gitkeep
+!data/processed/.gitkeep
+
+# Streamlit secrets
+.streamlit/secrets.toml
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
