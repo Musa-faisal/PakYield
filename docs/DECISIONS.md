@@ -2422,3 +2422,70 @@ Affected Components:
 - future ingestion and analytics modules
 
 Supersedes: None
+# 78. D073 — Phase 3 Repository and Architecture Acceptance
+
+Date: September 27, 2026
+Status: ACCEPTED
+
+Decision:
+
+Phase 3 — Repository & Architecture is formally accepted.
+
+The accepted Phase 3 baseline includes:
+
+- permanent PakYield Git repository;
+- production directory architecture;
+- isolated Python 3.12 virtual environment;
+- centralized research configuration;
+- SQLite research database schema;
+- formal data dictionary and storage conventions;
+- automated database integrity tests;
+- multipage Streamlit application architecture;
+- Bloomberg-inspired research-terminal visual direction;
+- centralized Ruff, pytest, coverage, and mypy quality gates;
+- verified Git exclusions for local databases, environments, and secrets;
+- GitHub SSH remote configuration;
+- synchronized local and remote `main` branches.
+
+Acceptance evidence includes:
+
+- all required project directories validated;
+- production empirical tables empty before ingestion;
+- Streamlit application compiling successfully;
+- six secondary Streamlit pages present;
+- Ruff checks passing;
+- Ruff formatting checks passing;
+- 24 automated tests passing;
+- mypy reporting no issues in production source files;
+- forbidden local files absent from Git tracking;
+- Phase 3 decision headings D064 through D072 verified;
+- local and remote Git HEAD synchronized.
+
+No empirical research findings have been manufactured or introduced during
+this architecture phase.
+
+Reasoning:
+
+The software and research-governance foundation is sufficiently stable to
+support the next implementation phase without mixing architecture work with
+production data ingestion.
+
+Implications:
+
+- Phase 3 architecture is now the accepted baseline;
+- subsequent work should build on this structure rather than bypass it;
+- changes to accepted architectural conventions should be documented;
+- production data ingestion begins only in the next explicitly started phase;
+- empirical conclusions remain prohibited until validated data and analytical
+  procedures support them.
+
+Affected Components:
+
+- entire PakYield repository
+- Git workflow
+- database architecture
+- Streamlit architecture
+- testing and quality gates
+- research governance
+
+Supersedes: None
