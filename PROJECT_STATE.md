@@ -11,7 +11,7 @@
 ## Current Status
 
 **Current Phase:** Phase 3 — Repository & Architecture
-**Current Batch:** Batch 3.8A — First Clean Git Baseline
+**Current Batch:** Batch 3.8B — GitHub Remote & First Push
 **Overall Status:** IN PROGRESS
 
 ---
@@ -214,11 +214,11 @@ Expected during Phase 1:
 
 ## Next Action
 
-Complete Batch 3.8A — First Clean Git Baseline.
+Complete Batch 3.8B — GitHub Remote & First Push.
 
-Verify Git exclusions, inspect the files entering version control, create the
-first clean repository baseline commit, and validate the resulting Git state
-before connecting PakYield to GitHub.
+Create the remote GitHub repository, connect the verified local PakYield
+repository through SSH, push the main branch, and confirm that local and remote
+Git histories are synchronized.
 
 ## Phase 1 Acceptance Criteria
 
