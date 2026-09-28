@@ -2580,3 +2580,71 @@ Affected Components:
 - research governance
 
 Supersedes: None
+
+# 80. D075 — Primary PKRV Empirical Sample Begins in 2022
+
+Date: September 29, 2026
+Status: ACCEPTED
+
+Decision:
+
+PakYield v1 will use 4 January 2022 as the beginning of the primary PKRV
+empirical sample.
+
+The primary PKRV research window is therefore:
+
+**2022-01-04 through the latest validated 2026 observation.**
+
+The required monetary-policy and macroeconomic analytical window is likewise
+centered on 2022 through 2026.
+
+The PKRV/PKISRV common comparative sample continues to begin on 3 February
+2025.
+
+The twelve monthly PKRV workbooks available for 2020 are optional historical
+material and are not required for the primary empirical analysis.
+
+PKRV observations for 2021 are excluded from required v1 because the current
+MUFAP machine-readable archive does not expose those production artifacts
+through the same reproducible acquisition path.
+
+This decision does not imply that PKRV observations did not exist during 2021.
+
+Reasoning:
+
+The current MUFAP pricing API provides a consistent, machine-readable daily
+PKRV archive from January 2022 through the current 2026 observation period.
+
+Using that consistent period is preferable for the portfolio research project
+to reconstructing a broken legacy archive solely to lengthen the historical
+sample.
+
+The 2022-2026 window provides substantial daily fixed-income data and multiple
+monetary-policy regimes while preserving transparent and reproducible source
+acquisition.
+
+Implications:
+
+- `PKRV_SAMPLE_START` becomes 2022-01-04;
+- the primary macroeconomic analytical window begins in 2022;
+- 2020 PKRV files are optional historical material;
+- 2021 PKRV recovery is not required for v1;
+- missing 2021 observations will not be interpolated or synthesized;
+- conclusions must be scoped to the validated analytical period;
+- earlier CPI observations may still be acquired as support data when needed
+  for twelve-month inflation validation.
+
+Affected Components:
+
+- research scope
+- PKRV acquisition
+- monetary-policy event study
+- CPI alignment
+- configuration
+- methodology
+- portfolio documentation
+
+Supersedes:
+
+- D062 only with respect to the original 2020 PKRV and macro sample starts;
+- D063 where sample-period assumptions depend on the previous PKRV start date.

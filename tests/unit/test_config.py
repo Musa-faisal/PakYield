@@ -59,9 +59,9 @@ def test_event_study_configuration() -> None:
 def test_sample_start_dates() -> None:
     """Accepted analytical sample start dates should remain frozen."""
 
-    assert PKRV_SAMPLE_START == date(2020, 1, 29)
+    assert PKRV_SAMPLE_START == date(2022, 1, 4)
     assert PKRV_PKISRV_SAMPLE_START == date(2025, 2, 3)
-    assert MACRO_SAMPLE_START == date(2020, 1, 1)
+    assert MACRO_SAMPLE_START == date(2022, 1, 1)
 
 
 def test_term_spread_definitions() -> None:

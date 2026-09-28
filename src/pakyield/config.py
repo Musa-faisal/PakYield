@@ -169,11 +169,11 @@ MPC_LONGER_END_TENORS = (
 # Research sample boundaries
 # ---------------------------------------------------------------------------
 
-PKRV_SAMPLE_START = date(2020, 1, 29)
+PKRV_SAMPLE_START = date(2022, 1, 4)
 
 PKRV_PKISRV_SAMPLE_START = date(2025, 2, 3)
 
-MACRO_SAMPLE_START = date(2020, 1, 1)
+MACRO_SAMPLE_START = date(2022, 1, 1)
 
 # End dates are intentionally not frozen here.
 # Pipelines will use the latest validated observation available within the
