@@ -1,0 +1,6 @@
+dataset_id,source_authority,acquisition_source,raw_directory,frequency,required_v1,status,notes
+PKRV,MUFAP,MUFAP,data/raw/mufap/pkrv,daily,YES,PENDING,Modern standardized PKRV acquisition
+PKISRV,MUFAP,PakDataHub validated against MUFAP,data/raw/pakdatahub/pkisrv,daily,YES,PENDING,Standardized comparable tenor series
+SBP_POLICY_RATE,State Bank of Pakistan,SBP EasyData,data/raw/sbp/policy_rate,event-based,YES,PENDING,Official policy target rate history
+SBP_MPC_EVENTS,State Bank of Pakistan,SBP Monetary Policy Statements archive,data/raw/sbp/mpc,event-based,YES,PENDING,Announcement dates and decisions
+PBS_CPI,Pakistan Bureau of Statistics,PBS,data/raw/pbs/cpi,monthly,YES,PENDING,National headline CPI base 2015-16

@@ -10,8 +10,8 @@
 
 ## Current Status
 
-**Current Phase:** Phase 3 — Repository & Architecture
-**Current Batch:** COMPLETE — Phase 3 Final Acceptance Audit
+**Current Phase:** Phase 4 — Raw Data Acquisition
+**Current Batch:** Batch 4.1 — Raw Acquisition Framework & Provenance
 **Overall Status:** IN PROGRESS
 
 ---
@@ -214,11 +214,11 @@ Expected during Phase 1:
 
 ## Next Action
 
-Phase 3 — Repository & Architecture is accepted and complete.
+Complete Batch 4.1 — Raw Acquisition Framework & Provenance.
 
-Do not begin production data ingestion until Phase 4 is explicitly started.
-The repository, database architecture, Streamlit shell, quality gates, and
-GitHub baseline are ready for the next implementation phase.
+Establish the immutable raw-data handling rules, source directory structure,
+acquisition manifest, provenance metadata contract, and checksum tooling
+required before downloading production research data.
 ## Phase 1 Acceptance Criteria
 
 Phase 1 passes only when the project has clearly documented:

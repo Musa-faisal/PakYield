@@ -2489,3 +2489,94 @@ Affected Components:
 - research governance
 
 Supersedes: None
+
+# 79. D074 — Raw Data Acquisition and Provenance Contract
+
+Date: September 29, 2026
+Status: ACCEPTED
+
+Decision:
+
+PakYield production data acquisition will follow an immutable raw-data and
+provenance-first workflow.
+
+Production source artifacts will be stored under dataset-specific directories
+within:
+
+`data/raw/`
+
+and will remain distinct from transformed data stored under:
+
+- `data/interim/`;
+- `data/processed/`.
+
+The Phase 4 required production datasets are:
+
+- PKRV;
+- PKISRV;
+- SBP policy rate;
+- SBP MPC events;
+- PBS CPI.
+
+Every successfully acquired production artifact should retain sufficient
+provenance to identify:
+
+- dataset identifier;
+- source authority;
+- acquisition source;
+- source reference;
+- retrieval timestamp;
+- local raw path;
+- file format;
+- SHA-256 checksum;
+- file size;
+- acquisition status;
+- known source or schema issues.
+
+Raw production files must not be manually altered to normalize schemas, fill
+missing observations, change dates, convert units, remove apparent anomalies,
+or manufacture consistent historical structures.
+
+Source-format and schema differences are evidence about the source and must be
+handled explicitly in later transformation stages.
+
+Missing raw observations remain missing. They must not be represented as zero
+unless the source itself reports zero.
+
+Production raw market and macroeconomic files remain outside Git under the
+current repository policy. Acquisition code, manifests, metadata contracts,
+and documentation may be version controlled.
+
+The raw-data stage does not establish empirical findings, causality, monetary
+policy surprises, predictive relationships, or an Islamic premium or discount.
+
+Reasoning:
+
+PakYield is intended to support reproducible fixed-income research. Preserving
+source artifacts and recording provenance before transformation makes it
+possible to distinguish what the source actually supplied from what PakYield
+later derives.
+
+Checksums provide byte-level identification of acquired artifacts and reduce
+the risk of silently replacing or modifying evidence used in later analysis.
+
+Implications:
+
+- cleaning never modifies production raw files in place;
+- derived datasets must be traceable to raw artifacts;
+- acquisitions should receive checksums and metadata;
+- raw schema drift remains visible;
+- ingestion failures must not be presented as successful acquisitions;
+- empirical interpretation occurs only after validation and analysis.
+
+Affected Components:
+
+- data acquisition
+- provenance
+- raw data storage
+- ingestion
+- validation
+- reproducibility
+- research governance
+
+Supersedes: None
