@@ -1,0 +1,2 @@
+dataset_id,source_authority,acquisition_source,source_reference,retrieved_at_utc,raw_file_name,raw_relative_path,file_format,sha256,file_size_bytes,status,notes
+PKRV,MUFAP,MUFAP current pricing API,https://www.mufap.com.pk/Upload/WebDoc/IndustryStatictics/PKRV040120221900.csv,2026-09-28T20:13:29+00:00,PKRV040120221900.csv,data/raw/mufap/pkrv/PKRV040120221900.csv,csv,e2bee0efd2e87bcddb30332def0ba40c1bf2c5c33d9bae468692e2743c08f252,329,SUCCESS,title=PKRV04012022; api=https://www.mufap.com.pk/WebRegulations/GetSecpFileById; content_type=application/octet-stream

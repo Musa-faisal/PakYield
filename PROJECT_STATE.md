@@ -11,7 +11,7 @@
 ## Current Status
 
 **Current Phase:** Phase 4 — Raw Data Acquisition
-**Current Batch:** Batch 4.2A — PKRV Source Discovery & 2022–2026 Scope Freeze
+**Current Batch:** Batch 4.2B — PKRV Single-Artifact Acquisition & Structural Validation
 **Overall Status:** IN PROGRESS
 
 ---
@@ -214,12 +214,12 @@ Expected during Phase 1:
 
 ## Next Action
 
-Complete Batch 4.2A — PKRV Source Discovery & 2022–2026 Scope Freeze.
+Complete Batch 4.2B — PKRV Single-Artifact Acquisition & Structural Validation.
 
-Freeze the reproducible 2022–2026 primary empirical sample, document the
-MUFAP archive discontinuity, replace the obsolete legacy discovery approach
-with the verified current MUFAP API source, and prepare for single-artifact
-PKRV acquisition validation.
+Acquire exactly one official MUFAP PKRV artifact for the accepted sample start
+date, preserve the source bytes unchanged, record acquisition provenance and a
+SHA-256 checksum, and inspect the raw structure before designing the bulk
+2022–2026 acquisition pipeline.
 ## Phase 1 Acceptance Criteria
 
 Phase 1 passes only when the project has clearly documented:

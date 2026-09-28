@@ -2648,3 +2648,114 @@ Supersedes:
 
 - D062 only with respect to the original 2020 PKRV and macro sample starts;
 - D063 where sample-period assumptions depend on the previous PKRV start date.
+
+# 81. D076 — Current MUFAP PKRV Source and Daily Raw Schema
+
+Date: September 29, 2026
+Status: ACCEPTED
+
+Decision:
+
+PakYield will use MUFAP's current Pricing API and the file references returned
+by that API as the required v1 acquisition path for PKRV observations from the
+accepted 2022-2026 primary sample.
+
+The verified current MUFAP metadata endpoint is:
+
+`https://www.mufap.com.pk/WebRegulations/GetSecpFileById`
+
+using the PKRV/PKISRV/PKFRV pricing category represented by:
+
+`fk_HeaderSubMenuTabId = 46`
+
+A single production PKRV artifact for 4 January 2022 was successfully acquired
+from MUFAP and preserved without transformation.
+
+The verified raw daily PKRV CSV schema is:
+
+- `Tenor`
+- `Mid Rate`
+- `Change`
+
+The 4 January 2022 artifact contains exactly twenty tenor observations in this
+order:
+
+- 1W
+- 2W
+- 1M
+- 2M
+- 3M
+- 4M
+- 6M
+- 9M
+- 1Y
+- 2Y
+- 3Y
+- 4Y
+- 5Y
+- 6Y
+- 7Y
+- 8Y
+- 9Y
+- 10Y
+- 15Y
+- 20Y
+
+This sequence exactly matches `PKRV_CANONICAL_TENORS`.
+
+The validated artifact is:
+
+`PKRV040120221900.csv`
+
+with:
+
+- size: 329 bytes;
+- SHA-256:
+  `e2bee0efd2e87bcddb30332def0ba40c1bf2c5c33d9bae468692e2743c08f252`.
+
+The production raw artifact remains excluded from Git while its provenance
+metadata may be version controlled.
+
+Reasoning:
+
+A one-artifact acquisition was required before bulk downloading the historical
+PKRV universe.
+
+The validation established that:
+
+- the current MUFAP API can be accessed reproducibly;
+- the returned production file URL is valid;
+- the source file can be stored unchanged;
+- its checksum and file size can be reproduced;
+- the daily PKRV file exposes the complete canonical tenor structure expected
+  by PakYield;
+- production raw files remain separate from version-controlled research code
+  and metadata.
+
+The raw `Change` field is preserved as supplied by MUFAP. Its economic and unit
+interpretation will not be assumed merely from the column name and will be
+validated before analytical use.
+
+Implications:
+
+- bulk PKRV acquisition may proceed for the accepted 2022-2026 sample;
+- each production artifact must retain byte-level provenance;
+- bulk acquisition must not overwrite existing raw artifacts silently;
+- duplicate MUFAP metadata dates must be detected explicitly;
+- title/file-path metadata discrepancies must remain auditable;
+- raw PKRV data must not be cleaned in place;
+- tenor/schema deviations must be surfaced rather than silently normalized;
+- the meaning of the raw `Change` field remains subject to later validation.
+
+Affected Components:
+
+- MUFAP acquisition
+- PKRV provenance
+- PKRV schema validation
+- raw-data storage
+- bulk ingestion
+- later cleaning and transformation
+
+Supersedes:
+
+- the obsolete legacy-MUFAP acquisition approach explored during Batch 4.2A.
