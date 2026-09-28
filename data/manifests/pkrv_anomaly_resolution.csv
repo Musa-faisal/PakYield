@@ -1,0 +1,14 @@
+observation_date,file_name,decision,resolution_reason,probe_sha256
+2022-03-30,PKRV300320221960.csv,KEEP,Byte-identical duplicate; canonical 20-tenor PKRV; lower metadata index selected deterministically.,410745b152cbffc5240b5023731a0a74548f91aeefb6bca999e7e8ba38d99942
+2022-03-30,PKRV300320221963.csv,REJECT,Byte-identical duplicate of selected 2022-03-30 artifact; redundant metadata entry.,410745b152cbffc5240b5023731a0a74548f91aeefb6bca999e7e8ba38d99942
+2022-03-31,PKRV310320221961.csv,KEEP,Byte-identical duplicate; contains complete 20-tenor PKRV curve plus trailing blank row; lower metadata index selected.,e5972957b8090e959fc7c319e2c7bd29e6a17c622ee436c369f31ea410ee702f
+2022-03-31,PKRV310320221962.csv,REJECT,Byte-identical duplicate of selected 2022-03-31 artifact; redundant metadata entry.,e5972957b8090e959fc7c319e2c7bd29e6a17c622ee436c369f31ea410ee702f
+2024-07-24,PKRV24072023833.csv,REJECT,"Metadata title says 2024 but filepath contains 2023; artifact is an old-style dealer/rate sheet, not canonical daily PKRV.",91bfcc8f41c9ec8bfcf62ca0861d81aadd16c3aa32a6cc340a06f0263c42fdd9
+2024-07-24,PKRV24072024679.csv,KEEP,Canonical 20-tenor PKRV CSV for 2024-07-24.,d714e3e8b824b2d66990e7fdee5e72d09836769ed63a8ca16689b09c0154caae
+2024-08-02,PKRV0208020241026.csv,KEEP,Canonical 20-tenor PKRV CSV; filename contains a malformed date token but source contents and metadata identify 2024-08-02.,053e052b62fee03be0f346962f2b16ad99751d18087c69f36f0a9e5ca1a9d9c9
+2024-09-23,PKISRV230920241327.csv,REJECT,"Artifact is GOP Ijarah Sukuk revaluation / PKISRV content, not the conventional PKRV curve.",73ef6b5b40ebd0e50a61bc5eab68107254931bd569ae3acbd6dd19e66c12b19c
+2024-09-23,PKRV230920241328.csv,KEEP,Canonical 20-tenor PKRV CSV for 2024-09-23.,01fe94fdcc02e1e45efe0d5fd7244b6c651f5ded7fb41bc8461c300bc397e2fb
+2025-01-06,PKRV060120253092.csv,REJECT,MUFAP metadata entry resolves to HTTP 404; no production artifact.,
+2025-01-06,PKRV060120253224.csv,KEEP,HTTP 200 canonical 20-tenor PKRV CSV for 2025-01-06.,51e6ad2451cc5bf83aecba98f53475215303abe1efac387834e7a1d89f1e4ebe
+2025-08-20,PKRV2008202523896.xlsx,KEEP,Valid XLSX workbook with sheet PKRV20082025 and complete canonical 20-tenor Tenor/Mid Rate/Change structure.,104e2ffeb2ed1a4cde320c2e9903c98e6d55212154d82e9975fff78b0af742e1
+2026-03-18,PKRV1803202624793.xls,KEEP,File uses .xls extension but contains Spreadsheet XML; verified complete canonical 20-tenor PKRV curve.,5e7d2bee7450fbbbefb30cc9fe5263fcdf01754e0f430f5162d93dcc990fdfd3

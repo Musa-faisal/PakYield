@@ -11,7 +11,7 @@
 ## Current Status
 
 **Current Phase:** Phase 4 — Raw Data Acquisition
-**Current Batch:** Batch 4.2B — PKRV Single-Artifact Acquisition & Structural Validation
+**Current Batch:** Batch 4.2C1 — PKRV Bulk Acquisition Plan & Anomaly Census
 **Overall Status:** IN PROGRESS
 
 ---
@@ -214,12 +214,12 @@ Expected during Phase 1:
 
 ## Next Action
 
-Complete Batch 4.2B — PKRV Single-Artifact Acquisition & Structural Validation.
+Close Batch 4.2C1 — PKRV Bulk Acquisition Plan & Anomaly Census.
 
-Acquire exactly one official MUFAP PKRV artifact for the accepted sample start
-date, preserve the source bytes unchanged, record acquisition provenance and a
-SHA-256 checksum, and inspect the raw structure before designing the bulk
-2022–2026 acquisition pipeline.
+The approved PKRV acquisition universe contains exactly 1,159 unique
+observation dates from 2022-01-04 through 2026-09-28. Commit the deterministic
+selection plan and anomaly-resolution evidence, then begin Batch 4.2C2 for
+resumable byte-preserving bulk acquisition and provenance capture.
 ## Phase 1 Acceptance Criteria
 
 Phase 1 passes only when the project has clearly documented:

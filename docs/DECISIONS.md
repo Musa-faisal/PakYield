@@ -2759,3 +2759,148 @@ Affected Components:
 Supersedes:
 
 - the obsolete legacy-MUFAP acquisition approach explored during Batch 4.2A.
+
+# 82. D077 — PKRV Bulk Metadata Anomaly Resolution
+
+Date: September 29, 2026
+Status: ACCEPTED
+
+Decision:
+
+PakYield resolved all thirteen PKRV metadata rows classified for manual review
+within the accepted 2022-2026 acquisition period.
+
+The 1,164 MUFAP PKRV metadata rows are reduced to exactly 1,159 approved
+observation artifacts, representing exactly 1,159 unique observation dates.
+
+No missing observation is synthesized and no raw source file is modified.
+
+Resolved cases:
+
+### 30 March 2022
+
+Two MUFAP CSV artifacts are byte-identical and contain the same canonical
+twenty-tenor PKRV curve.
+
+PakYield selects the lower-metadata-index artifact:
+
+`PKRV300320221960.csv`
+
+The duplicate `PKRV300320221963.csv` is excluded as redundant.
+
+### 31 March 2022
+
+Two MUFAP CSV artifacts are byte-identical.
+
+Both contain the complete twenty-tenor PKRV curve followed by a blank row.
+
+PakYield selects:
+
+`PKRV310320221961.csv`
+
+The duplicate `PKRV310320221962.csv` is excluded as redundant.
+
+The trailing blank row remains part of the immutable raw artifact and may only
+be handled in a later cleaning layer.
+
+### 24 July 2024
+
+`PKRV24072023833.csv` is excluded.
+
+Its filepath contains a 2023 date token and its contents are an old-style
+dealer/rate sheet rather than the canonical daily PKRV structure.
+
+PakYield selects the canonical artifact:
+
+`PKRV24072024679.csv`
+
+### 2 August 2024
+
+PakYield selects:
+
+`PKRV0208020241026.csv`
+
+The filename contains a malformed date token, but the MUFAP metadata and
+artifact contents identify it as the valid canonical PKRV observation for
+2 August 2024.
+
+The raw filename is preserved unchanged.
+
+### 23 September 2024
+
+`PKISRV230920241327.csv` is excluded from PKRV acquisition because its contents
+are GOP Ijarah Sukuk / PKISRV revaluation data.
+
+PakYield selects:
+
+`PKRV230920241328.csv`
+
+which contains the canonical twenty-tenor PKRV curve.
+
+### 6 January 2025
+
+`PKRV060120253092.csv` is excluded because the MUFAP file reference currently
+returns HTTP 404.
+
+PakYield selects:
+
+`PKRV060120253224.csv`
+
+which returns HTTP 200 and contains the canonical twenty-tenor PKRV curve.
+
+### 20 August 2025
+
+PakYield accepts the source artifact:
+
+`PKRV2008202523896.xlsx`
+
+The XLSX workbook contains the expected `Tenor`, `Mid Rate`, and `Change`
+columns and the complete canonical twenty-tenor PKRV sequence.
+
+The XLSX file remains in its original source format.
+
+### 18 March 2026
+
+PakYield accepts:
+
+`PKRV1803202624793.xls`
+
+Despite the `.xls` extension, the source bytes are Microsoft Spreadsheet XML,
+not a legacy binary XLS workbook.
+
+The XML spreadsheet contains the expected `Tenor`, `Mid Rate`, and `Change`
+structure and the complete canonical twenty-tenor PKRV sequence.
+
+The raw artifact remains unchanged and retains its original `.xls` filename.
+
+Selection policy:
+
+- clean READY metadata rows are selected automatically;
+- REVIEW rows require explicit evidence-based resolution;
+- byte-identical duplicates use the lower metadata index as the deterministic
+  selected artifact;
+- a correct dataset and valid PKRV structure take precedence over misleading
+  metadata or filenames;
+- source-format deviations are preserved rather than converted in the raw
+  layer;
+- HTTP 404 metadata entries are not treated as successful acquisitions;
+- exactly one artifact is selected for each approved observation date.
+
+Result:
+
+The approved PKRV acquisition universe contains:
+
+- 1,159 artifacts;
+- 1,159 unique observation dates;
+- 1,157 CSV files;
+- 1 XLSX file;
+- 1 Spreadsheet XML artifact carrying an `.xls` extension;
+- dates from 2022-01-04 through 2026-09-28.
+
+Affected Components:
+
+- PKRV bulk acquisition
+- raw provenance
+- anomaly resolution
+- source-format routing
+- later PKRV cleaning and normalization
