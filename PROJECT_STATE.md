@@ -11,7 +11,7 @@
 ## Current Status
 
 **Current Phase:** Phase 4 — Raw Data Acquisition
-**Current Batch:** Batch 4.2C1 — PKRV Bulk Acquisition Plan & Anomaly Census
+**Current Batch:** Batch 4.3 — PKISRV Raw Acquisition
 **Overall Status:** IN PROGRESS
 
 ---
@@ -214,12 +214,12 @@ Expected during Phase 1:
 
 ## Next Action
 
-Close Batch 4.2C1 — PKRV Bulk Acquisition Plan & Anomaly Census.
+Complete Batch 4.2C2 — Resumable PKRV Bulk Acquisition.
 
-The approved PKRV acquisition universe contains exactly 1,159 unique
-observation dates from 2022-01-04 through 2026-09-28. Commit the deterministic
-selection plan and anomaly-resolution evidence, then begin Batch 4.2C2 for
-resumable byte-preserving bulk acquisition and provenance capture.
+Acquire the approved 1,159-date PKRV universe from MUFAP using byte-preserving,
+atomic and resumable downloads. Verify existing artifacts against provenance,
+record SHA-256 and file size for every successful acquisition, refuse silent
+overwrites, and reconcile raw storage against the approved acquisition plan.
 ## Phase 1 Acceptance Criteria
 
 Phase 1 passes only when the project has clearly documented:

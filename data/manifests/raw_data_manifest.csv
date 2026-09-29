@@ -1,5 +1,5 @@
 dataset_id,source_authority,acquisition_source,raw_directory,frequency,required_v1,status,notes
-PKRV,MUFAP,MUFAP,data/raw/mufap/pkrv,daily,YES,PENDING,Modern standardized PKRV acquisition
+PKRV,MUFAP,MUFAP,data/raw/mufap/pkrv,daily,YES,COMPLETE,"2022-2026 core raw acquisition accepted: 1,159 approved metadata dates; 1,157 immutable raw artifacts acquired; 2 documented source gaps; 8 wrong-dataset attachments preserved but excluded; 1,149 structurally valid PKRV observations (1,119 full 20-tenor; 30 valid partial 14-tenor)."
 PKISRV,MUFAP,PakDataHub validated against MUFAP,data/raw/pakdatahub/pkisrv,daily,YES,PENDING,Standardized comparable tenor series
 SBP_POLICY_RATE,State Bank of Pakistan,SBP EasyData,data/raw/sbp/policy_rate,event-based,YES,PENDING,Official policy target rate history
 SBP_MPC_EVENTS,State Bank of Pakistan,SBP Monetary Policy Statements archive,data/raw/sbp/mpc,event-based,YES,PENDING,Announcement dates and decisions

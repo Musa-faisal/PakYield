@@ -2904,3 +2904,94 @@ Affected Components:
 - anomaly resolution
 - source-format routing
 - later PKRV cleaning and normalization
+
+# 84. D079 — PKRV Raw Structural Acceptance
+
+Date: September 29, 2026
+Status: ACCEPTED
+
+Decision:
+
+The Phase 4 PKRV metadata universe contains 1,159 approved MUFAP observation
+dates covering the primary 2022-2026 sample.
+
+Raw-source reconciliation identifies:
+
+- 2 approved metadata dates whose MUFAP source artifacts are unavailable;
+- 1,157 acquired immutable source artifacts;
+- 8 acquired artifacts that are not PKRV yield curves:
+  - 7 KIBOR attachments;
+  - 1 PKFRV floating-rate PIB attachment.
+
+The validated PKRV analytical source universe therefore contains 1,149
+observations.
+
+Structural validation of those 1,149 valid PKRV observations identifies:
+
+- 1,119 full 20-tenor curves;
+- 30 valid partial 14-tenor curves.
+
+The 30 partial curves consistently contain:
+
+- 1W;
+- 2W;
+- 1Y through 10Y where represented by the canonical maturity set;
+- 15Y;
+- 20Y.
+
+They consistently lack:
+
+- 1M;
+- 2M;
+- 3M;
+- 4M;
+- 6M;
+- 9M.
+
+These missing short-end observations will remain missing. PakYield will not
+interpolate, synthesize, copy from adjacent dates, or otherwise manufacture the
+six unavailable tenor values.
+
+Legacy PKRV source formats are valid source observations where their historical
+tenor conventions can be mapped deterministically to the canonical maturity
+set.
+
+Historical day buckets are normalized as:
+
+- 0-7 days -> 1W;
+- 8-15 days -> 2W;
+- 16-30 days -> 1M;
+- 31-60 days -> 2M;
+- 61-90 days -> 3M;
+- 91-120 days -> 4M;
+- 121-180 days -> 6M;
+- 181-270 days -> 9M;
+- 271-365 days -> 1Y.
+
+Two valid legacy PKRV artifacts are UTF-16 encoded and are decoded as UTF-16
+based on their byte-order marks. Raw bytes remain unchanged.
+
+The authoritative acquired-artifact structural classification is stored in:
+
+`data/manifests/pkrv_structural_acceptance.csv`
+
+The two unavailable MUFAP artifacts remain documented separately in:
+
+`data/manifests/pkrv_source_gaps.csv`
+
+Wrong-dataset acquired artifacts remain preserved in immutable raw storage and
+provenance but are excluded from PKRV analysis according to:
+
+`data/manifests/pkrv_validation_exclusions.csv`
+
+Implications:
+
+- Only rows classified ACCEPT in the structural acceptance manifest may enter
+  PKRV yield parsing.
+- PARTIAL_14 observations remain eligible for analyses whose required tenors
+  are available.
+- Analyses requiring a missing tenor must treat that tenor as unavailable for
+  the affected date.
+- Nelson-Siegel eligibility will be assessed separately using an explicit
+  maturity-coverage rule.
+- No source exclusion or missing tenor may be silently repaired.

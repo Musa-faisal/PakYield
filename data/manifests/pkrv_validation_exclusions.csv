@@ -1,0 +1,9 @@
+observation_date,file_name,classification,status,reason
+2022-04-14,PKRV140420221972.csv,WRONG_DATASET_ATTACHMENT_KIBOR,EXCLUDE,Artifact content explicitly identifies itself as Kibor Fixing / Karachi InterBank Offer Rate rather than PKRV.
+2022-04-15,PKRV150420221973.csv,WRONG_DATASET_ATTACHMENT_KIBOR,EXCLUDE,Artifact content explicitly identifies itself as Kibor Fixing / Karachi InterBank Offer Rate rather than PKRV.
+2022-04-16,PKRV160420221974.csv,WRONG_DATASET_ATTACHMENT_KIBOR,EXCLUDE,Artifact content explicitly identifies itself as Kibor Fixing / Karachi InterBank Offer Rate rather than PKRV.
+2022-04-23,PKRV230420221980.csv,WRONG_DATASET_ATTACHMENT_KIBOR,EXCLUDE,Artifact content explicitly identifies itself as Kibor Fixing / Karachi InterBank Offer Rate rather than PKRV.
+2022-04-26,PKRV260420221982.csv,WRONG_DATASET_ATTACHMENT_KIBOR,EXCLUDE,Artifact content explicitly identifies itself as Kibor Fixing / Karachi InterBank Offer Rate rather than PKRV.
+2022-04-27,PKRV270420221983.csv,WRONG_DATASET_ATTACHMENT_KIBOR,EXCLUDE,Artifact content explicitly identifies itself as Kibor Fixing / Karachi InterBank Offer Rate rather than PKRV.
+2022-07-04,PKRV040720222041.csv,WRONG_DATASET_ATTACHMENT_KIBOR,EXCLUDE,Artifact content explicitly identifies itself as Kibor Fixing / Karachi InterBank Offer Rate rather than PKRV.
+2024-06-03,PKFRV03062024209.csv,WRONG_DATASET_ATTACHMENT,EXCLUDE,MUFAP PKRV metadata points to a PKFRV artifact containing floating-rate PIB instrument prices rather than a PKRV tenor curve.
