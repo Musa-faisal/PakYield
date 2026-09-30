@@ -3036,3 +3036,63 @@ raw attachment.
 The complete 407-artifact MUFAP raw archive will be acquired before the final
 structural census determines how many dates contain the standardized benchmark
 block.
+
+# 86. D081 — PKISRV Primary Source, Validation and Missing-Observation Policy
+
+**Date:** 2026-09-30
+**Status:** ACCEPTED
+
+Direct MUFAP publications are the primary acquisition source for standardized
+PKISRV observations.
+
+The frozen standardized MUFAP archive covers 2025-02-03 through 2026-09-30:
+
+- 407 authoritative MUFAP publication dates.
+- 403 publications contain the complete standardized five-tenor benchmark
+  block: 1M, 3M, 6M, 9M and 1Y.
+- 4 publications omit the standardized benchmark block entirely:
+  - 2025-03-07
+  - 2025-08-20
+  - 2026-03-18
+  - 2026-03-27
+- No partial benchmark blocks were found.
+- No duplicate standardized tenors were found.
+- No unparseable standardized benchmark rates were found.
+
+The four missing standardized observations remain missing. They will not be
+interpolated, forward-filled, backfilled, inferred from instrument prices or
+otherwise manufactured.
+
+PakDataHub is retained as a secondary machine-readable validation source, not
+as the primary acquisition source.
+
+For the accessible overlap:
+
+- Each PakDataHub tenor contained 235 observations.
+- All five tenor date sets were identical.
+- The accessible overlap ran from 2025-09-30 through 2026-09-29.
+- 235 dates were common to accepted MUFAP observations and PakDataHub.
+- 1,175 date-tenor values were compared.
+- All 1,175 values matched exactly.
+- There were zero value mismatches.
+- Maximum absolute difference was zero.
+- PakDataHub supplied zero dates absent from the accepted MUFAP overlap.
+- MUFAP contained 11 accepted dates not available through PakDataHub in the
+  compared window.
+
+Direct targeted PakDataHub probing also confirmed that 2026-03-18 and
+2026-03-27 contain no standardized observations in any of the five tenors.
+
+The 2025-03-07 and 2025-08-20 omissions predate the currently accessible
+PakDataHub history window, so no PakDataHub recovery claim is made for those
+dates.
+
+Accordingly:
+
+1. MUFAP direct raw artifacts are authoritative for acquisition.
+2. PakDataHub is used for independent overlap validation.
+3. Canonical PKISRV observation dates come from the MUFAP title/file date.
+4. Only COMPLETE_5 MUFAP records enter the standardized analytical PKISRV
+   dataset.
+5. The four source-level omissions remain explicit missing observations.
+6. No synthetic recovery, interpolation or silent imputation is permitted.
