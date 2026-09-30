@@ -3090,9 +3090,68 @@ dates.
 Accordingly:
 
 1. MUFAP direct raw artifacts are authoritative for acquisition.
-2. PakDataHub is used for independent overlap validation.
+2. PakDataHub is used for secondary overlap validation.
 3. Canonical PKISRV observation dates come from the MUFAP title/file date.
 4. Only COMPLETE_5 MUFAP records enter the standardized analytical PKISRV
    dataset.
 5. The four source-level omissions remain explicit missing observations.
 6. No synthetic recovery, interpolation or silent imputation is permitted.
+
+# 87. D082 — SBP Policy-Rate Raw Source and Validation Policy
+
+**Date:** 2026-09-30
+**Status:** ACCEPTED
+
+The official State Bank of Pakistan EasyData series
+`TS_GP_IR_SIRPR_AH.SBPOL0030` is the authoritative v1 source for the
+State Bank of Pakistan policy target rate.
+
+Automated command-line access to the EasyData series page was blocked by a
+Cloudflare challenge. The official public EasyData browser interface was
+therefore used to download the source CSV. The browser-downloaded artifact
+was preserved byte-for-byte in the raw layer.
+
+Frozen raw artifact:
+
+- Raw path: `data/raw/sbp/policy_rate/data_series.csv`
+- Format: CSV
+- Size: 6,559 bytes
+- SHA-256:
+  `4dbf6d69a8ece64bd45e9f3fc8bdb0424d77ded1169b04e68696c5ee8d702420`
+- Series key: `TS_GP_IR_SIRPR_AH.SBPOL0030`
+- Series name: `SBP Policy (Target) Rate`
+- Unit: Percent
+- Source observations: 39
+- First chronological observation: 2015-05-25
+- Last chronological observation: 2026-04-28
+- Unique observation dates: 39
+- Duplicate observation dates: 0
+- Source-status values: 39 `Normal`
+- Missing observation values: 0
+- Structural review records: 0
+
+The official source file is ordered in descending observation-date order and
+is retained unchanged. The analytical layer may reorder observations
+chronologically, but the raw source artifact must never be rewritten for
+sorting, formatting or normalization.
+
+The EasyData policy-rate series is an event-based rate-history series. Its
+observation dates must not automatically be treated as the complete set of
+Monetary Policy Committee meeting or announcement dates. MPC event dates and
+policy decisions will be acquired separately from official SBP monetary
+policy statement material.
+
+For PakYield's core 2022-2026 empirical period, the source contains 17
+policy-rate observations. The final available raw-series observation is
+2026-04-28 at 11.5 percent.
+
+Accordingly:
+
+1. SBP EasyData is the authoritative policy-rate source for v1.
+2. The frozen browser export is the immutable raw artifact.
+3. All 39 source observations are structurally accepted.
+4. Policy-rate observation dates remain distinct from the separately acquired
+   MPC event calendar.
+5. No missing dates or rates may be manufactured, interpolated or silently
+   inferred.
+6. Later transformations must preserve raw provenance and source values.

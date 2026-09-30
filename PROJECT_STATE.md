@@ -11,7 +11,7 @@
 ## Current Status
 
 **Current Phase:** Phase 4 — Raw Data Acquisition
-**Current Batch:** Batch 4.4 — SBP Policy Rate Raw Acquisition
+**Current Batch:** Batch 4.5 — SBP MPC Events Raw Acquisition
 **Overall Status:** IN PROGRESS
 
 ---
