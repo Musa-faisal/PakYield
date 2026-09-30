@@ -2995,3 +2995,44 @@ Implications:
 - Nelson-Siegel eligibility will be assessed separately using an explicit
   maturity-coverage rule.
 - No source exclusion or missing tenor may be silently repaired.
+
+# 85. D080 — PKISRV Canonical Date and Raw-Artifact Strategy
+
+**Date:** 2026-09-30  
+**Status:** ACCEPTED
+
+For standardized PKISRV observations, the canonical observation date is the
+date encoded in the MUFAP PKISRV title and file name, rather than the MUFAP API
+metadata Date field.
+
+The standardized acquisition window is frozen as:
+
+- Start: 2025-02-03
+- End: 2026-09-30
+- Planned MUFAP artifacts: 407
+- Unique canonical observation dates: 407
+- File formats: 405 CSV, 1 XLS, 1 XLSX
+- API-date/title-date mismatches: 10
+- True canonical-date duplicates: 0
+
+The following MUFAP special-format artifacts were inspected directly:
+
+- 2025-08-20 — PKISRV2008202523897.xlsx
+- 2026-03-18 — PKISRV1803202624792.xls
+
+Both are valid MUFAP sovereign Islamic-security publications, but neither
+contains the standardized five-tenor PKISRV benchmark block
+(1M, 3M, 6M, 9M, 1Y).
+
+These raw files will be preserved unchanged. No tenor values will be inferred,
+interpolated, manufactured, or derived from their instrument-level data.
+
+PakDataHub remains a secondary machine-readable standardized PKISRV source for
+cross-source validation and, where independently verified, possible recovery of
+a benchmark observation omitted from a MUFAP attachment. Any such recovery must
+retain distinct provenance and must not be represented as coming from the MUFAP
+raw attachment.
+
+The complete 407-artifact MUFAP raw archive will be acquired before the final
+structural census determines how many dates contain the standardized benchmark
+block.
