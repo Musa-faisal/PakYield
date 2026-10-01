@@ -3155,3 +3155,124 @@ Accordingly:
 5. No missing dates or rates may be manufactured, interpolated or silently
    inferred.
 6. Later transformations must preserve raw provenance and source values.
+
+# 88. D083 — SBP MPC Event Corpus, Decision Extraction and Policy-Rate Validation
+
+**Date:** 2026-10-01
+**Status:** ACCEPTED
+
+PakYield v1 uses official State Bank of Pakistan Monetary Policy Statement
+material as the authoritative source for Monetary Policy Committee event dates
+and announced policy decisions.
+
+The canonical MPC event universe for the primary 2022-2026 empirical period
+contains 39 events:
+
+- 2022: 8
+- 2023: 9
+- 2024: 8
+- 2025: 8
+- 2026 through 14 September: 6
+
+The raw acquisition process initially encountered four same-day SBP document
+collisions where a valid SBP press-release filename resolved to an unrelated
+document rather than the Monetary Policy Statement:
+
+- 2022-07-07 — `Pr-07-Jul-2022.pdf`
+- 2023-01-23 — `Pr-23-Jan-2023.pdf`
+- 2023-06-26 — `Pr-26-Jun-2023.pdf`
+- 2024-09-12 — `Pr-12-Sep-2024.pdf`
+
+These source artifacts are preserved byte-for-byte for provenance and are
+explicitly classified as `WRONG_SAME_DAY_DOCUMENT`. They are excluded from MPC
+analysis rather than deleted or silently overwritten.
+
+The corresponding accepted monetary-policy documents are:
+
+- 2022-07-07 — `MPS-Jul-2022-Eng.pdf`
+- 2023-01-23 — `Pr1-23-Jan-2023.pdf`
+- 2023-06-26 — `Pr-26-Jun-2023-2.pdf`
+- 2024-09-12 — `MPS-Sep-2024-Eng.pdf`
+
+The resulting frozen MPC raw corpus therefore contains:
+
+- 39 accepted Monetary Policy Statements;
+- 4 preserved wrong-document exclusions;
+- 43 physical raw PDF artifacts;
+- 43 corresponding `SBP_MPC_EVENTS` provenance rows.
+
+All 39 accepted documents expose machine-readable text and pass semantic
+validation for Monetary Policy Statement and policy-rate content.
+
+Deterministic decision extraction from the accepted statements produces:
+
+- 22 HOLD decisions;
+- 9 RAISE decisions;
+- 8 CUT decisions;
+- 17 rate-changing events in total.
+
+Decision extraction is anchored on the current decision clause rather than
+generic monetary-policy keywords. This prevents unrelated references to past
+rate changes, inflation movements, or other percentages from being
+misclassified as the current MPC decision.
+
+For each event, the validated decision manifest records:
+
+- event date;
+- decision direction;
+- basis-point change;
+- explicitly announced policy rate where present;
+- explicitly stated effective date where present;
+- source statement;
+- extracted decision text;
+- validation status.
+
+Effective dates are populated only when explicitly stated in the Monetary
+Policy Statement. Ten events contain explicit effective dates. No effective
+date is inferred merely because the separate policy-rate series changes on a
+subsequent date.
+
+The 15 December 2025 decision requires special handling. The statement
+explicitly announces:
+
+- a 50 basis-point reduction; and
+- an effective date of 16 December 2025.
+
+However, the statement does not explicitly state the resulting 10.5 percent
+policy rate. Accordingly, `announced_policy_rate` remains blank for this event.
+The resulting 10.5 percent value is derived from statement-sequence arithmetic
+only for validation and is labelled
+`SEQUENCE_DERIVED_FOR_VALIDATION_ONLY`.
+
+The independently acquired official SBP EasyData policy-target-rate series is
+used as a secondary validation source for the 17 rate-changing MPC events.
+All 17 statement-derived rate changes reconcile exactly to the corresponding
+EasyData observation:
+
+- 17 events checked;
+- 17 value matches;
+- 0 value mismatches.
+
+The EasyData series is not used to replace, fill or rewrite fields that are not
+explicitly present in an MPC statement.
+
+Accordingly:
+
+1. Official SBP Monetary Policy Statements are authoritative for the v1 MPC
+   event calendar and decision text.
+2. The accepted analytical MPC universe contains exactly 39 events.
+3. The four wrong same-day SBP documents remain preserved as explicit raw
+   exclusions.
+4. Raw exclusions must never be silently deleted or replaced.
+5. Decision direction and basis-point changes are extracted from the current
+   statement decision clause.
+6. Effective dates are recorded only when explicitly stated by SBP.
+7. Policy-rate effective dates remain conceptually distinct from MPC event
+   dates.
+8. The 2025-12-15 resulting 10.5 percent rate is validation-derived only and
+   must not be represented as an explicitly announced statement rate.
+9. The EasyData rate series is an independent cross-check, not a substitution
+   source for statement-derived fields.
+10. No interpolation, inferred policy surprise, causal interpretation or
+    synthetic policy observation is introduced during this phase.
+

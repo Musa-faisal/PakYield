@@ -270,3 +270,34 @@ v1 scope.
 
 No production ingestion pipeline or empirical analysis was created during
 Phase 2.
+
+## Phase 4.5 — SBP MPC Events
+
+**Status:** COMPLETE / ACCEPTED  
+**Completed:** 2026-10-01
+
+SBP Monetary Policy Committee raw acquisition, semantic validation and
+decision extraction are complete.
+
+Validated state:
+
+- 39 canonical MPC events from 2022 through 2026-09-14.
+- Event distribution: 2022 = 8, 2023 = 9, 2024 = 8, 2025 = 8, 2026 = 6.
+- 39 accepted Monetary Policy Statement PDFs.
+- 4 preserved same-day wrong-document exclusions.
+- 43 physical MPC raw PDFs.
+- 43 `SBP_MPC_EVENTS` provenance rows.
+- Decision classification: 22 HOLD, 9 RAISE, 8 CUT.
+- 17 rate-changing MPC events.
+- 10 statement-explicit effective dates.
+- 17/17 rate-changing events reconcile to the official SBP EasyData policy
+  target-rate series.
+- 2025-12-15 explicitly states a 50 bps cut effective 2025-12-16 but does not
+  explicitly state the resulting rate; 10.5 percent is retained only as a
+  sequence-derived validation value.
+- Raw MPC files remain outside Git under the existing raw-data policy.
+- Acquisition, resolution, decision extraction, validation manifests and
+  integration tests are tracked.
+
+Decision reference: D083.
+

@@ -1,0 +1,40 @@
+event_date,year,event_type,statement_title,source_basis,universe_status
+2022-01-24,2022,MPC_STATEMENT,Monetary Policy Statement - Jan 24 2022,Official SBP monetary policy statements archive,DISCOVERED
+2022-03-08,2022,MPC_STATEMENT,Monetary Policy Statement - Mar 08 2022,Official SBP monetary policy statements archive,DISCOVERED
+2022-04-07,2022,MPC_STATEMENT,Monetary Policy Statement - Apr 07 2022,Official SBP monetary policy statements archive,DISCOVERED
+2022-05-23,2022,MPC_STATEMENT,Monetary Policy Statement - May 23 2022,Official SBP monetary policy statements archive,DISCOVERED
+2022-07-07,2022,MPC_STATEMENT,Monetary Policy Statement - Jul 07 2022,Official SBP monetary policy statements archive,DISCOVERED
+2022-08-22,2022,MPC_STATEMENT,Monetary Policy Statement - Aug 22 2022,Official SBP monetary policy statements archive,DISCOVERED
+2022-10-10,2022,MPC_STATEMENT,Monetary Policy Statement - Oct 10 2022,Official SBP monetary policy statements archive,DISCOVERED
+2022-11-25,2022,MPC_STATEMENT,Monetary Policy Statement - Nov 25 2022,Official SBP monetary policy statements archive,DISCOVERED
+2023-01-23,2023,MPC_STATEMENT,Monetary Policy Statement - Jan 23 2023,Official SBP annual press archive,DISCOVERED
+2023-03-02,2023,MPC_STATEMENT,Monetary Policy Statement - Mar 02 2023,Official SBP annual press archive,DISCOVERED
+2023-04-04,2023,MPC_STATEMENT,Monetary Policy Statement - Apr 04 2023,Official SBP annual press archive,DISCOVERED
+2023-06-12,2023,MPC_STATEMENT,Monetary Policy Statement - Jun 12 2023,Official SBP annual press archive,DISCOVERED
+2023-06-26,2023,MPC_STATEMENT,Monetary Policy Statement - Jun 26 2023,Official SBP annual press archive,DISCOVERED
+2023-07-31,2023,MPC_STATEMENT,Monetary Policy Statement - Jul 31 2023,Official SBP annual press archive,DISCOVERED
+2023-09-14,2023,MPC_STATEMENT,Monetary Policy Statement - Sep 14 2023,Official SBP annual press archive,DISCOVERED
+2023-10-30,2023,MPC_STATEMENT,Monetary Policy Statement - Oct 30 2023,Official SBP annual press archive,DISCOVERED
+2023-12-12,2023,MPC_STATEMENT,Monetary Policy Statement - Dec 12 2023,Official SBP annual press archive,DISCOVERED
+2024-01-29,2024,MPC_STATEMENT,Monetary Policy Statement - Jan 29 2024,Official SBP annual press archive; resolves current-archive metadata anomaly,DISCOVERED
+2024-03-18,2024,MPC_STATEMENT,Monetary Policy Statement - Mar 18 2024,Official SBP annual press archive,DISCOVERED
+2024-04-29,2024,MPC_STATEMENT,Monetary Policy Statement - Apr 29 2024,Official SBP annual press archive,DISCOVERED
+2024-06-10,2024,MPC_STATEMENT,Monetary Policy Statement - Jun 10 2024,Official SBP annual press archive,DISCOVERED
+2024-07-29,2024,MPC_STATEMENT,Monetary Policy Statement - Jul 29 2024,Official SBP annual press archive,DISCOVERED
+2024-09-12,2024,MPC_STATEMENT,Monetary Policy Statement - Sep 12 2024,Official SBP annual press archive,DISCOVERED
+2024-11-04,2024,MPC_STATEMENT,Monetary Policy Statement - Nov 04 2024,Official SBP annual press archive,DISCOVERED
+2024-12-16,2024,MPC_STATEMENT,Monetary Policy Statement - Dec 16 2024,Official SBP annual press archive,DISCOVERED
+2025-01-27,2025,MPC_STATEMENT,Monetary Policy Statement - Jan 27 2025,Official SBP annual press archive,DISCOVERED
+2025-03-10,2025,MPC_STATEMENT,Monetary Policy Statement - Mar 10 2025,Official SBP annual press archive,DISCOVERED
+2025-05-05,2025,MPC_STATEMENT,Monetary Policy Statement - May 05 2025,Official SBP annual press archive,DISCOVERED
+2025-06-16,2025,MPC_STATEMENT,Monetary Policy Statement - Jun 16 2025,Official SBP annual press archive,DISCOVERED
+2025-07-30,2025,MPC_STATEMENT,Monetary Policy Statement - Jul 30 2025,Official SBP annual press archive,DISCOVERED
+2025-09-15,2025,MPC_STATEMENT,Monetary Policy Statement - Sep 15 2025,Official SBP annual press archive,DISCOVERED
+2025-10-27,2025,MPC_STATEMENT,Monetary Policy Statement - Oct 27 2025,Official SBP annual press archive,DISCOVERED
+2025-12-15,2025,MPC_STATEMENT,Monetary Policy Statement - Dec 15 2025,Official SBP annual press archive,DISCOVERED
+2026-01-26,2026,MPC_STATEMENT,Monetary Policy Statement - Jan 26 2026,Official SBP archive,DISCOVERED
+2026-03-09,2026,MPC_STATEMENT,Monetary Policy Statement - Mar 09 2026,Official SBP archive,DISCOVERED
+2026-04-27,2026,MPC_STATEMENT,Monetary Policy Statement - Apr 27 2026,Official SBP archive,DISCOVERED
+2026-06-15,2026,MPC_STATEMENT,Monetary Policy Statement - Jun 15 2026,Official SBP archive,DISCOVERED
+2026-07-27,2026,MPC_STATEMENT,Monetary Policy Statement - Jul 27 2026,Official SBP current statements archive,DISCOVERED
+2026-09-14,2026,MPC_STATEMENT,Monetary Policy Statement - Sep 14 2026,Official SBP current statements archive,DISCOVERED
