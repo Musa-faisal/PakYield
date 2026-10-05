@@ -10,8 +10,8 @@
 
 ## Current Status
 
-**Current Phase:** Phase 4 — Raw Data Acquisition
-**Current Batch:** Batch 4.5 — SBP MPC Events Raw Acquisition
+**Current Phase:** Phase 5 — Cleaning & Validation
+**Current Batch:** Batch 5A2 — SBP Policy Rate Normalization
 **Overall Status:** IN PROGRESS
 
 ---
@@ -80,17 +80,29 @@ No empirical findings were produced during Phase 1.
 
 ## Current Research Position
 
-The project has not yet collected, transformed, analyzed, or modeled any empirical financial-market data.
+PakYield now contains real, provenance-controlled empirical source data for
+PKRV, PKISRV, the SBP Policy (Target) Rate, SBP MPC events and PBS National
+CPI.
+
+Current normalized SQLite state includes:
+
+- 57 monthly PBS National CPI observations from 2022-01 through 2026-09;
+- 18 official SBP Policy (Target) Rate observations consisting of one
+  pre-sample state anchor and 17 in-sample policy-rate changes.
+
+PKRV, PKISRV and MPC source datasets have completed raw acquisition and
+validation but have not yet all been normalized into their final SQLite
+analytical tables.
 
 Therefore:
 
-* no empirical findings exist;
-* no hypothesis has been supported or rejected;
-* no causal claims have been made;
-* no final sample period has been selected;
-* no final tenor universe has been selected;
-* no production database exists;
-* no production code exists.
+- source acquisition and validation findings exist;
+- no substantive yield-curve, event-study or econometric findings have yet
+  been declared;
+- no hypothesis has been supported or rejected;
+- no causal monetary-policy claim has been made;
+- no synthetic observation has been inserted into the empirical dataset;
+- further normalization and analytical processing remain in progress.
 
 ---
 
@@ -343,4 +355,49 @@ Relevant tracked artifacts:
 - `tests/integration/test_pbs_cpi_database_load.py`
 
 Decision reference: D084.
+
+## Phase 5A2 — SBP Policy Rate Normalization
+
+**Status:** COMPLETE
+
+**Accepted:** 2026-10-05
+
+Official SBP Policy (Target) Rate normalization is complete.
+
+Validated normalized state:
+
+- authoritative structural source observations: 39;
+- source series key: `TS_GP_IR_SIRPR_AH.SBPOL0030`;
+- official in-sample changes, 2022-2026: 17;
+- official pre-sample state anchors: 1;
+- normalized SQLite policy-rate observations: 18;
+- normalized coverage: 2021-12-15 through 2026-04-28;
+- anchor observation: 2021-12-15 at 9.75 percent;
+- first in-sample change: 2022-04-08 at 12.25 percent;
+- last normalized observation: 2026-04-28 at 11.5 percent.
+
+The 2021-12-15 observation is retained because it is the latest official
+policy-rate observation preceding the 2022 analytical period and is required
+to establish the policy-rate state at the beginning of that period.
+
+It is an official source observation, not an interpolated or synthetic value.
+
+The normalized source table remains a policy-rate change-observation table.
+Daily policy-rate state construction is deferred to a later processing step.
+
+Production loading is:
+
+- conflict rejecting;
+- source-lineage preserving;
+- uniqueness constrained by effective date;
+- idempotent on matching reruns.
+
+Relevant tracked artifacts:
+
+- `data/manifests/sbp_policy_rate_structural_census.csv`
+- `scripts/build_sbp_policy_rate_structural_census.py`
+- `scripts/load_sbp_policy_rate_database.py`
+- `tests/integration/test_sbp_policy_rate_database_load.py`
+
+Decision reference: D085.
 

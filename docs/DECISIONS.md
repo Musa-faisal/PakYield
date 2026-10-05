@@ -3405,3 +3405,101 @@ Accordingly:
 10. This phase establishes source acquisition and normalization only; it does
     not establish causal monetary-policy relationships.
 
+# 90. D085 — SBP Policy-Rate Normalization and Pre-Sample State Anchor
+
+**Date:** 2026-10-05
+
+**Status:** ACCEPTED
+
+PakYield normalizes the official State Bank of Pakistan SBP Policy (Target)
+Rate series from the validated EasyData structural census into
+`policy_rate_observations`.
+
+The authoritative source series is:
+
+- series key: `TS_GP_IR_SIRPR_AH.SBPOL0030`;
+- series name: `SBP Policy (Target) Rate`;
+- unit: percent;
+- source organization: State Bank of Pakistan.
+
+The frozen structural census contains 39 accepted official observations from
+2015-05-25 through 2026-04-28.
+
+The principal PakYield research sample begins in 2022. There are 17 official
+policy-rate change observations from 2022-04-08 through 2026-04-28.
+
+However, retaining only those 17 observations would leave the policy-rate
+state undefined between the beginning of the 2022 research period and the
+first in-sample policy-rate change on 2022-04-08.
+
+Therefore PakYield also retains the immediately preceding official source
+observation:
+
+- 2021-12-15: 9.75 percent.
+
+This observation is a **pre-sample state anchor**. It is not a synthetic,
+interpolated, backfilled or inferred policy-rate observation.
+
+The normalized policy-rate source table therefore contains exactly:
+
+- 1 official pre-sample anchor;
+- 17 official in-sample policy-rate changes;
+- 18 normalized source observations in total.
+
+The anchor exists so that a later derived daily policy-rate state can identify
+the policy rate applicable at the start of the 2022 analytical period.
+
+The normalized source table itself remains a change-observation table. It does
+not create one row per calendar or market day.
+
+Any later daily policy-rate state must be treated as a derived analytical
+series based on the most recent official effective observation. Such derivation
+must preserve the originating policy-rate observation date and must not be
+misrepresented as daily SBP publication.
+
+Normalized fields retain:
+
+- effective date;
+- official policy rate;
+- EasyData series key;
+- source observation status;
+- source status comment;
+- source organization;
+- source file;
+- ingestion-run lineage.
+
+The loader is fail-closed:
+
+- conflicting existing values are rejected;
+- matching existing rows are validated;
+- matching reruns insert no duplicates;
+- the SQLite unique effective-date constraint remains active.
+
+Production validation confirmed an exact 18-row normalized sequence from
+2021-12-15 through 2026-04-28.
+
+The production database retained the earlier 17-row ingestion audit history
+when the pre-sample-anchor rule was introduced. The new loader added only the
+missing official 2021-12-15 anchor and validated the 17 existing rows.
+
+Subsequent idempotency reruns inserted zero additional policy-rate
+observations.
+
+Accordingly:
+
+1. The official SBP EasyData target-rate series is authoritative for normalized
+   policy-rate change observations.
+2. The 2022-2026 research sample contains 17 in-sample rate changes.
+3. The official 2021-12-15 observation is retained as the single pre-sample
+   state anchor.
+4. The normalized policy-rate source set therefore contains 18 observations.
+5. The anchor is source-observed, not synthetic or interpolated.
+6. Daily policy-rate state construction is deferred to a later analytical
+   processing step.
+7. A derived daily state must preserve source-event lineage.
+8. Conflicting existing normalized observations must never be silently
+   overwritten.
+9. Matching reruns must remain idempotent.
+10. Policy-rate effective observations remain distinct from MPC announcement
+    events.
+
