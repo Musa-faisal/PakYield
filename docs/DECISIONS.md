@@ -3503,3 +3503,146 @@ Accordingly:
 10. Policy-rate effective observations remain distinct from MPC announcement
     events.
 
+# 91. D086 — SBP MPC Event Normalization
+
+**Date:** 2026-10-05
+
+**Status:** ACCEPTED
+
+PakYield normalizes the validated State Bank of Pakistan Monetary Policy
+Committee event corpus into the SQLite `mpc_events` table.
+
+The authoritative event source is the frozen set of official SBP Monetary
+Policy Statements already validated during Phase 4.5.
+
+The accepted analytical MPC universe contains exactly:
+
+- 39 canonical MPC events;
+- first event: 2022-01-24;
+- last event: 2026-09-14;
+- 22 HOLD decisions;
+- 9 rate increases;
+- 8 rate cuts;
+- 17 rate-changing events in total.
+
+The source decision manifest uses the direction labels:
+
+- `HOLD`;
+- `RAISE`;
+- `CUT`.
+
+The SQLite schema uses the canonical database labels:
+
+- `HOLD`;
+- `HIKE`;
+- `CUT`.
+
+Therefore source `RAISE` is normalized to database `HIKE`.
+
+This is a schema-label normalization only. It does not alter the economic
+meaning or source classification of the event.
+
+The normalized MPC record retains:
+
+- event date;
+- decision type;
+- previous policy rate;
+- statement-announced policy rate where explicitly stated;
+- decision change in basis points;
+- statement-explicit effective date where available;
+- official statement title;
+- official SBP statement URL;
+- source organization;
+- ingestion-run lineage;
+- normalization notes.
+
+`previous_rate_pct` is constructed from the validated chronological MPC
+sequence so that each event records the policy-rate state immediately preceding
+that decision.
+
+It must not be interpreted as a separately announced field in every SBP
+statement.
+
+`announced_rate_pct` follows a stricter rule:
+
+- populate it only when the MPC statement explicitly states the resulting
+  policy rate;
+- otherwise retain `NULL`.
+
+This distinction is required for the 2025-12-15 MPC event.
+
+On 2025-12-15, SBP explicitly announced:
+
+- a CUT;
+- change of -50 basis points;
+- effective date 2025-12-16.
+
+The statement did not explicitly state the resulting 10.5 percent policy rate.
+
+Accordingly:
+
+- `previous_rate_pct` = 11.0;
+- `change_bps` = -50;
+- `effective_date` = 2025-12-16;
+- `announced_rate_pct` = NULL.
+
+The resulting 10.5 percent rate is used only for chronological continuity and
+cross-validation against the official policy-rate series. It is not stored as
+a statement-announced value for the 2025-12-15 event.
+
+The subsequent 2026-01-26 HOLD statement explicitly states 10.5 percent and is
+stored accordingly.
+
+Effective dates follow the same source-discipline rule.
+
+Only dates explicitly stated by SBP are stored in `effective_date`.
+
+The validated universe contains exactly 10 such statement-explicit effective
+dates.
+
+No unstated effective date is inferred from the EasyData policy-rate series or
+from neighboring observations.
+
+Statement title and official source URL are joined deterministically from the
+validated MPC acquisition plan for the same canonical event date.
+
+The loader is fail-closed:
+
+- conflicting existing normalized events are rejected;
+- matching existing events are validated;
+- event-date uniqueness remains enforced by SQLite;
+- matching reruns insert no duplicates.
+
+Production validation confirmed:
+
+- 39 normalized SQLite MPC events;
+- 22 HOLD;
+- 9 HIKE;
+- 8 CUT;
+- 10 statement-explicit effective dates;
+- first production load inserted 39 events;
+- immediate validation rerun inserted zero events and validated all 39.
+
+The normalization does not create:
+
+- monetary-policy surprise measures;
+- causal interpretations;
+- inferred market expectations;
+- synthetic MPC events;
+- inferred statement-announced rates.
+
+Accordingly:
+
+1. Official SBP Monetary Policy Statements remain authoritative for MPC event
+   dates and statement-derived decision fields.
+2. The normalized analytical MPC universe contains exactly 39 events.
+3. Source `RAISE` is stored as schema-canonical `HIKE`.
+4. `previous_rate_pct` is a chronology-derived analytical state field.
+5. `announced_rate_pct` is statement-explicit only.
+6. The 2025-12-15 resulting 10.5 percent rate remains validation-derived and
+   is not stored as an explicitly announced rate.
+7. Effective dates are populated only when explicitly stated by SBP.
+8. Statement title and official URL preserve source-document lineage.
+9. Matching reruns must remain idempotent.
+10. MPC normalization alone does not establish causal monetary-policy effects.
+

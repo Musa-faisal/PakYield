@@ -11,7 +11,7 @@
 ## Current Status
 
 **Current Phase:** Phase 5 — Cleaning & Validation
-**Current Batch:** Batch 5A2 — SBP Policy Rate Normalization
+**Current Batch:** Batch 5A3 — SBP MPC Events Normalization
 **Overall Status:** IN PROGRESS
 
 ---
@@ -88,11 +88,14 @@ Current normalized SQLite state includes:
 
 - 57 monthly PBS National CPI observations from 2022-01 through 2026-09;
 - 18 official SBP Policy (Target) Rate observations consisting of one
-  pre-sample state anchor and 17 in-sample policy-rate changes.
+  pre-sample state anchor and 17 in-sample policy-rate changes;
+- 39 validated SBP Monetary Policy Committee events from 2022-01-24 through
+  2026-09-14.
 
-PKRV, PKISRV and MPC source datasets have completed raw acquisition and
-validation but have not yet all been normalized into their final SQLite
-analytical tables.
+PKRV and PKISRV source datasets have completed raw acquisition and validation
+but have not yet been normalized into their final SQLite analytical tables.
+
+SBP policy-rate, SBP MPC-event and PBS CPI normalization are complete.
 
 Therefore:
 
@@ -400,4 +403,69 @@ Relevant tracked artifacts:
 - `tests/integration/test_sbp_policy_rate_database_load.py`
 
 Decision reference: D085.
+
+## Phase 5A3 — SBP MPC Events Normalization
+
+**Status:** COMPLETE
+
+**Accepted:** 2026-10-05
+
+Official SBP MPC event normalization is complete.
+
+Validated normalized state:
+
+- canonical MPC events: 39;
+- normalized coverage: 2022-01-24 through 2026-09-14;
+- HOLD decisions: 22;
+- HIKE decisions: 9;
+- CUT decisions: 8;
+- rate-changing events: 17;
+- statement-explicit effective dates: 10;
+- normalized SQLite MPC rows: 39.
+
+Source decision label `RAISE` is normalized to schema-canonical `HIKE`.
+
+The normalized database preserves statement-explicit values separately from
+chronology-derived analytical state.
+
+In particular, the 2025-12-15 statement records:
+
+- CUT;
+- -50 basis points;
+- effective date 2025-12-16;
+- no explicitly announced resulting policy rate.
+
+Therefore `announced_rate_pct` remains NULL for that event.
+
+The resulting 10.5 percent rate is used only for sequence continuity and
+policy-rate validation. It is not represented as statement-announced.
+
+The subsequent 2026-01-26 HOLD statement explicitly states 10.5 percent.
+
+Production loading is:
+
+- conflict rejecting;
+- event-date uniqueness constrained;
+- source-lineage preserving;
+- statement-semantics preserving;
+- idempotent on matching reruns.
+
+Production verification confirmed:
+
+- initial production load inserted all 39 canonical events;
+- immediate rerun inserted zero duplicates and validated all 39;
+- the full project test suite passed with 68 tests.
+
+Relevant tracked artifacts:
+
+- `data/manifests/sbp_mpc_event_universe.csv`
+- `data/manifests/sbp_mpc_acquisition_plan.csv`
+- `data/manifests/sbp_mpc_decisions_validated.csv`
+- `data/manifests/sbp_mpc_policy_rate_crosscheck.csv`
+- `scripts/build_sbp_mpc_decisions.py`
+- `scripts/load_sbp_mpc_database.py`
+- `tests/integration/test_sbp_mpc_decisions.py`
+- `tests/integration/test_sbp_mpc_database_load.py`
+
+Decision reference: D086.
 
