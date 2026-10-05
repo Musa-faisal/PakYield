@@ -301,3 +301,46 @@ Validated state:
 
 Decision reference: D083.
 
+## Phase 4.6 — PBS National CPI
+
+**Status:** COMPLETE
+
+**Accepted:** 2026-10-05
+
+Official PBS National CPI acquisition, source-transition validation,
+deterministic extraction and normalized SQLite loading are complete.
+
+Frozen empirical state:
+
+- authoritative raw PBS artifacts: 4
+- PBS CPI provenance rows: 4
+- validated monthly observations: 57
+- analytical period: 2022-01 through 2026-09
+- historical-series observations: 54
+- monthly-review observations: 3
+- historical source precision: 1 decimal place
+- current monthly-review source precision: 2 decimal places
+- source-explicit MoM observations retained in manifest: 3
+- cross-publication prior-year diagnostics: 3
+- normalized SQLite CPI observations: 57
+- base year: 2015-16
+- primary inflation variable: National headline CPI YoY
+
+Historical observations are not retroactively replaced by differing prior-year
+comparison columns in later PBS monthly reviews.
+
+No CPI values are interpolated or silently inferred.
+
+Relevant tracked artifacts:
+
+- `data/manifests/pbs_cpi_acquisition_plan.csv`
+- `data/manifests/pbs_cpi_monthly_validated.csv`
+- `data/manifests/pbs_cpi_cross_publication_diagnostic.csv`
+- `scripts/acquire_pbs_cpi.py`
+- `scripts/build_pbs_cpi_monthly.py`
+- `scripts/load_pbs_cpi_database.py`
+- `tests/integration/test_pbs_cpi_monthly.py`
+- `tests/integration/test_pbs_cpi_database_load.py`
+
+Decision reference: D084.
+

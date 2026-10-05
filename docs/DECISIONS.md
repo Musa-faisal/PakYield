@@ -3276,3 +3276,132 @@ Accordingly:
 10. No interpolation, inferred policy surprise, causal interpretation or
     synthetic policy observation is introduced during this phase.
 
+# 89. D084 — PBS National CPI Source, Validation and Database Policy
+
+**Date:** 2026-10-05
+
+**Status:** ACCEPTED
+
+PakYield v1 uses official Pakistan Bureau of Statistics publications as the
+authoritative source for Pakistan National Consumer Price Index observations
+and National headline year-on-year inflation.
+
+The frozen raw source set contains four official PBS PDF artifacts:
+
+- `indices_and_growth_rates_historical-1.pdf`
+- `Monthly-Review-July-2026.pdf`
+- `Monthly-Review-August-2026.pdf`
+- `Monthly-Review-September2026.pdf`
+
+The historical publication supplies the PakYield core monthly National CPI
+index and National headline year-on-year inflation series from January 2022
+through June 2026.
+
+The three monthly reviews extend the frozen analytical sample through:
+
+- July 2026
+- August 2026
+- September 2026
+
+The validated analytical source manifest therefore contains exactly 57
+consecutive monthly observations from 2022-01 through 2026-09.
+
+Source composition:
+
+- 54 observations from the historical PBS series;
+- 3 observations from monthly PBS reviews.
+
+The historical publication reports the retained National CPI index and
+year-on-year inflation values at one decimal place. The July-September 2026
+monthly-review values are preserved at the two-decimal precision published in
+their National CPI tables.
+
+Source precision is not homogenized by manufacturing additional decimal
+places.
+
+The transition from the historical publication to monthly reviews was
+validated through overlapping National CPI index observations:
+
+- historical June 2026: 293.5;
+- July review previous-month index: 293.47, which agrees when evaluated at
+  the historical publication's one-decimal precision;
+- July 2026 current index: 296.97, equal to the August review's previous-month
+  index;
+- August 2026 current index: 300.50, equal to the September review's
+  previous-month index.
+
+Later monthly reviews contain prior-year comparison indices that differ from
+the frozen historical-series values:
+
+- July 2026 review versus historical July 2025: +0.04 index points;
+- August 2026 review versus historical August 2025: +0.15 index points;
+- September 2026 review versus historical September 2025: +0.41 index points.
+
+These differences are retained in
+`pbs_cpi_cross_publication_diagnostic.csv` as diagnostic evidence only.
+
+They do not trigger retrospective replacement of the already frozen historical
+observations because no explicit PBS revision policy establishing those later
+comparison values as replacements was identified during this phase.
+
+Accordingly, the analytical source rule is:
+
+- 2022-01 through 2026-06: use values explicitly published in the frozen
+  historical series;
+- 2026-07 through 2026-09: use current-month values explicitly published in
+  the corresponding monthly review.
+
+No CPI observation is interpolated, backfilled, forward-filled or silently
+reconstructed.
+
+The validated monthly manifest retains source-explicit month-on-month inflation
+for July, August and September 2026. The existing normalized
+`cpi_observations` database schema intentionally stores the National CPI index
+and National headline year-on-year inflation only. Month-on-month values
+therefore remain in the validated source manifest and are not forced into a
+database column that does not exist.
+
+The normalized SQLite CPI table contains exactly 57 observations covering
+2022-01 through 2026-09.
+
+Database records retain:
+
+- `period`;
+- `national_cpi_index`;
+- `cpi_inflation_yoy_pct`;
+- CPI base year `2015-16`;
+- source organization `Pakistan Bureau of Statistics`;
+- source file;
+- ingestion-run linkage.
+
+The production loader is fail-closed for conflicting existing observations.
+A matching rerun validates existing observations and inserts no duplicate CPI
+rows.
+
+Production validation confirmed:
+
+- 57 validated source rows;
+- 57 normalized database rows;
+- exact reconciliation of National CPI index and YoY values;
+- first normalized observation: 2022-01, index 158.8, YoY 13.0 percent;
+- last normalized observation: 2026-09, index 304.33, YoY 10.26 percent;
+- an idempotent validation rerun inserted zero additional CPI observations.
+
+Accordingly:
+
+1. PBS is the authoritative National CPI source for PakYield v1.
+2. The frozen raw CPI source set contains four official PBS PDFs.
+3. The required analytical sample contains 57 consecutive months.
+4. Historical and current-review source precision remains explicit.
+5. Later prior-year comparison differences remain diagnostic and do not
+   silently replace historical observations.
+6. National headline YoY CPI is the primary inflation measure.
+7. National CPI index levels are retained as source observations and validation
+   inputs.
+8. Month-on-month inflation is retained only where explicitly available and is
+   not manufactured for historical rows.
+9. The normalized database loader must reject conflicting pre-existing CPI
+   observations rather than overwrite them.
+10. This phase establishes source acquisition and normalization only; it does
+    not establish causal monetary-policy relationships.
+
