@@ -11,7 +11,7 @@
 ## Current Status
 
 **Current Phase:** Phase 5 — Cleaning & Validation
-**Current Batch:** Batch 5A3 — SBP MPC Events Normalization
+**Current Batch:** Batch 5A5 — PKISRV Normalization
 **Overall Status:** IN PROGRESS
 
 ---
@@ -86,16 +86,19 @@ CPI.
 
 Current normalized SQLite state includes:
 
+- 22,800 source-observed PKRV benchmark-yield observations across 1,149
+  accepted market dates from 2022-01-04 through 2026-09-28;
 - 57 monthly PBS National CPI observations from 2022-01 through 2026-09;
 - 18 official SBP Policy (Target) Rate observations consisting of one
   pre-sample state anchor and 17 in-sample policy-rate changes;
 - 39 validated SBP Monetary Policy Committee events from 2022-01-24 through
   2026-09-14.
 
-PKRV and PKISRV source datasets have completed raw acquisition and validation
-but have not yet been normalized into their final SQLite analytical tables.
+PKISRV raw acquisition and structural validation are complete but standardized
+PKISRV observations have not yet been normalized into the final SQLite
+analytical table.
 
-SBP policy-rate, SBP MPC-event and PBS CPI normalization are complete.
+PKRV, SBP policy-rate, SBP MPC-event and PBS CPI normalization are complete.
 
 Therefore:
 
@@ -229,12 +232,17 @@ Expected during Phase 1:
 
 ## Next Action
 
-Complete Batch 4.2C2 — Resumable PKRV Bulk Acquisition.
+Begin Batch 5A5 — PKISRV Normalization.
 
-Acquire the approved 1,159-date PKRV universe from MUFAP using byte-preserving,
-atomic and resumable downloads. Verify existing artifacts against provenance,
-record SHA-256 and file size for every successful acquisition, refuse silent
-overwrites, and reconcile raw storage against the approved acquisition plan.
+Normalize the 403 accepted COMPLETE_5 MUFAP PKISRV observations into a
+deterministic five-tenor long-form analytical source containing exactly 2,015
+source-observed date-tenor rows.
+
+Preserve the four source-level standardized-benchmark omissions as missing
+observations, retain direct MUFAP lineage, reject conflicting or manufactured
+values, independently audit the normalized artifact, and validate the SQLite
+loader in an isolated database before any production PKISRV write.
+
 ## Phase 1 Acceptance Criteria
 
 Phase 1 passes only when the project has clearly documented:
@@ -468,4 +476,98 @@ Relevant tracked artifacts:
 - `tests/integration/test_sbp_mpc_database_load.py`
 
 Decision reference: D086.
+
+## Phase 5A4 — PKRV Normalization
+
+**Status:** COMPLETE
+
+**Accepted:** 2026-10-06
+
+Deterministic PKRV normalization and production SQLite ingestion are complete.
+
+Frozen accepted source universe:
+
+- accepted PKRV observation dates: 1,149;
+- accepted coverage: 2022-01-04 through 2026-09-28;
+- FULL_20 observations: 1,119;
+- PARTIAL_14 observations: 30;
+- source-observed normalized date-tenor rows: 22,800;
+- unique normalized date-tenor keys: 22,800;
+- FULL_20 normalized rows: 22,380;
+- PARTIAL_14 normalized rows: 420.
+
+The 30 PARTIAL_14 observations consistently retain 14 canonical maturities.
+
+The following six canonical monthly maturities remain unavailable on those
+dates:
+
+- 1M;
+- 2M;
+- 3M;
+- 4M;
+- 6M;
+- 9M.
+
+No missing maturity was interpolated, zero-filled, forward-filled, copied from
+another date or otherwise manufactured.
+
+The normalization layer deterministically supports the accepted historical
+source representations:
+
+- `CSV_DIRECT_RATE`: 1,003 source files;
+- `CSV_PUBLISHED_BENCHMARK`: 139;
+- `FIXED_WIDTH_AVG_RATE`: 3;
+- `FIXED_WIDTH_FMAP`: 2;
+- `XLSX_MID_RATE`: 1;
+- `XML_SPREADSHEETML`: 1.
+
+Four accepted 2022 source artifacts contain repeated canonical-tenor rows.
+Every repeated row was independently verified to be an exact repeated source
+row with identical tenor, benchmark value and source content.
+
+The parser collapses only those explicitly audited exact repetitions and
+remains fail-closed for conflicting duplicate-tenor content.
+
+Historical comma exports that split the published `Avg Rate` heading into
+adjacent `Avg,Rate` fields use the terminal published `Rate` position.
+
+Noncanonical legacy labels such as `1s`, `2s`, `3s`, `4s`, `6s` and `9s` are
+not coerced into monthly maturities.
+
+The deterministic normalized artifact is:
+
+`data/interim/pkrv_normalized_long.csv`
+
+with frozen SHA-256:
+
+`e2f968f4e295d1e1c6c3b6934bf504018c66dd58376b543d18185840ba297d5c`
+
+Byte-for-byte regeneration produced the same SHA-256.
+
+Production SQLite verification confirmed:
+
+- first production load inserted all 22,800 PKRV observations;
+- immediate production rerun inserted zero observations and validated all
+  22,800 existing rows;
+- all 22,800 production date-tenor keys reconcile to the normalized artifact;
+- 1,149 distinct raw `source_file` values remain represented;
+- production yield rows retain ingestion-run lineage to the original write;
+- the idempotency run does not rewrite existing yield observations;
+- SQLite integrity check returned `ok`;
+- foreign-key validation reported zero issues;
+- non-PKRV production state remained unchanged.
+
+The final Phase 5A4 project test suite contains 77 passing tests.
+
+Relevant tracked artifacts:
+
+- `scripts/build_pkrv_normalized_long.py`
+- `scripts/load_pkrv_database.py`
+- `tests/integration/test_pkrv_normalized_long.py`
+- `tests/integration/test_pkrv_database_load.py`
+
+The normalized CSV and production SQLite database remain outside Git according
+to the existing data-storage policy.
+
+Decision reference: D087.
 

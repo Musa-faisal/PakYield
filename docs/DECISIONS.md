@@ -3646,3 +3646,157 @@ Accordingly:
 9. Matching reruns must remain idempotent.
 10. MPC normalization alone does not establish causal monetary-policy effects.
 
+# 92. D087 — PKRV Deterministic Normalization and Production Loading
+
+**Date:** 2026-10-06
+
+**Status:** ACCEPTED
+
+PakYield normalizes the accepted MUFAP PKRV structural source universe into a
+deterministic long-form analytical yield dataset and then loads that frozen
+dataset into SQLite `yield_observations` using `curve_type = 'PKRV'`.
+
+The accepted structural source universe contains exactly:
+
+- 1,149 accepted PKRV observation dates;
+- first accepted observation: 2022-01-04;
+- last accepted observation: 2026-09-28;
+- 1,119 FULL_20 curves;
+- 30 PARTIAL_14 curves.
+
+The resulting normalized analytical artifact contains exactly:
+
+- 22,800 date-tenor observations;
+- 22,800 unique date-tenor keys;
+- 22,380 observations originating from FULL_20 curves;
+- 420 observations originating from PARTIAL_14 curves.
+
+For FULL_20 dates, all twenty canonical PKRV maturities are retained.
+
+For PARTIAL_14 dates, the following six canonical monthly maturities remain
+missing exactly as supplied by the source:
+
+- 1M;
+- 2M;
+- 3M;
+- 4M;
+- 6M;
+- 9M.
+
+No interpolation, extrapolation, zero filling, forward filling, backward
+filling, adjacent-date copying or synthetic maturity construction is permitted
+for those missing observations.
+
+The deterministic parser explicitly supports the accepted source-layout
+universe:
+
+- 1,003 `CSV_DIRECT_RATE` artifacts;
+- 139 `CSV_PUBLISHED_BENCHMARK` artifacts;
+- 3 `FIXED_WIDTH_AVG_RATE` artifacts;
+- 2 `FIXED_WIDTH_FMAP` artifacts;
+- 1 `XLSX_MID_RATE` artifact;
+- 1 `XML_SPREADSHEETML` artifact.
+
+Historical source semantics take precedence over superficial column position.
+
+In particular, historical comma exports that represent the aggregate
+publication heading as adjacent `Avg,Rate` cells use the terminal `Rate`
+position as the published benchmark value.
+
+The normalization process also identified four accepted 2022 artifacts with
+repeated canonical-tenor rows:
+
+- `PKRV161120222132.csv` — repeated 1W;
+- `PKRV281220222162.csv` — repeated 1Y;
+- `PKRV291220222164.csv` — repeated 4M;
+- `PKRV301220222166.csv` — repeated 8Y.
+
+Every repeated row was independently inspected and found to be an exact
+repetition of the complete parsed source row.
+
+PakYield therefore permits collapse only for these audited exact repetitions.
+
+Any repeated tenor with differing source-row content or a differing benchmark
+yield remains a hard normalization failure.
+
+The historical PARTIAL_14 source files also contain noncanonical labels such
+as:
+
+- `1s`;
+- `2s`;
+- `3s`;
+- `4s`;
+- `6s`;
+- `9s`.
+
+These labels are not silently interpreted as month tenors.
+
+Only canonical source labels accepted by the structural contract enter the
+normalized analytical dataset.
+
+The frozen normalized artifact is:
+
+`data/interim/pkrv_normalized_long.csv`
+
+SHA-256:
+
+`e2f968f4e295d1e1c6c3b6934bf504018c66dd58376b543d18185840ba297d5c`
+
+Independent validation confirmed:
+
+- exact 22,800-row cardinality;
+- exact 22,800-key uniqueness;
+- exact 1,149-date coverage;
+- exact FULL_20/PARTIAL_14 distribution;
+- exact year-level row totals;
+- exact maturity-level counts;
+- representative source-layout sentinel values;
+- preservation of the PARTIAL_14 missing-tenor pattern;
+- 1,149 distinct source files;
+- byte-for-byte deterministic regeneration.
+
+The SQLite loader validates the frozen artifact before database mutation.
+
+Production loading is:
+
+- SHA-pinned;
+- conflict rejecting;
+- natural-key constrained by observation date, curve type and tenor;
+- source-file lineage preserving;
+- ingestion-run lineage preserving;
+- idempotent on matching reruns.
+
+Production validation confirmed:
+
+- first production load inserted 22,800 PKRV observations;
+- immediate rerun inserted zero observations and validated all 22,800 existing
+  observations;
+- all database values reconcile exactly to the frozen normalized source within
+  numeric storage tolerance;
+- all 1,149 source files remain represented in production provenance;
+- the rerun does not rewrite the ingestion lineage of previously inserted yield
+  rows;
+- SQLite integrity validation returned `ok`;
+- foreign-key validation returned zero issues;
+- non-PKRV production tables and ingestion history remained unchanged.
+
+The complete project test suite passed with 77 tests after production loading.
+
+Accordingly:
+
+1. The accepted PKRV analytical source universe contains 1,149 market dates.
+2. The normalized PKRV analytical dataset contains exactly 22,800
+   source-observed date-tenor rows.
+3. The 30 PARTIAL_14 dates remain partial rather than being synthetically
+   repaired.
+4. Historical source layouts are parsed according to explicit publication
+   semantics.
+5. Exact repeated source rows may be collapsed only under the audited
+   duplicate-row contract.
+6. Conflicting duplicate tenor rows remain fail-closed.
+7. Noncanonical legacy labels are not silently reinterpreted as canonical
+   monthly maturities.
+8. The frozen normalized artifact is identified by its SHA-256 checksum.
+9. Production PKRV loading must remain conflict rejecting and idempotent.
+10. Phase 5A4 establishes normalized PKRV source data only; it does not itself
+    establish yield-curve, event-study, econometric or causal findings.
