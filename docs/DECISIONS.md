@@ -3800,3 +3800,158 @@ Accordingly:
 9. Production PKRV loading must remain conflict rejecting and idempotent.
 10. Phase 5A4 establishes normalized PKRV source data only; it does not itself
     establish yield-curve, event-study, econometric or causal findings.
+
+# 93. D088 — PKISRV Deterministic Normalization and Production Loading
+
+**Date:** 2026-10-07
+
+**Status:** ACCEPTED
+
+PakYield normalizes the accepted MUFAP PKISRV source universe into a
+deterministic long-form analytical yield dataset and loads that frozen dataset
+into SQLite `yield_observations` using `curve_type = 'PKISRV'`.
+
+The frozen PKISRV source universe contains:
+
+- 407 source-publication records;
+- 403 accepted COMPLETE_5 observation dates;
+- 4 source-level ABSENT dates;
+- accepted coverage from 2025-02-03 through 2026-09-30.
+
+The accepted maturity universe is exactly:
+
+- 1M;
+- 3M;
+- 6M;
+- 9M;
+- 1Y.
+
+The normalized analytical artifact therefore contains exactly:
+
+- 2,015 source-observed date-tenor rows;
+- 2,015 unique date-tenor keys;
+- 403 observations for each of the five accepted tenors.
+
+The source-level ABSENT dates are:
+
+- 2025-03-07;
+- 2025-08-20;
+- 2026-03-18;
+- 2026-03-27.
+
+No normalized rows are created for those dates.
+
+PakYield does not interpolate, extrapolate, forward-fill, backward-fill,
+cross-source recover, adjacent-date copy or otherwise manufacture PKISRV
+benchmark observations for those source omissions.
+
+All 403 accepted COMPLETE_5 artifacts are UTF-8 CSV files.
+
+The accepted raw benchmark labels are:
+
+- `1 - Month`;
+- `3 - Month`;
+- `6 - Month`;
+- `9 - Month`;
+- `1 - Year`.
+
+The source-published benchmark-value header is:
+
+`PKISRV Rates (Yields)`
+
+Exhaustive source-layout inspection identified nine physical CSV signatures.
+
+The signatures vary in absolute tenor-column position, value-column position
+and trailing row width, but all preserve the same semantic benchmark
+structure.
+
+Normalization therefore depends on explicit publication semantics rather than
+one hard-coded absolute column.
+
+The parser requires:
+
+1. exactly the five accepted tenor labels;
+2. exactly one occurrence of each tenor;
+3. canonical tenor ordering;
+4. five contiguous benchmark rows;
+5. a constant tenor column within the block;
+6. the published value immediately to the right of the tenor;
+7. a directly preceding `Tenor` / `PKISRV Rates (Yields)` header pair;
+8. an explicit percent marker on every source benchmark yield.
+
+Changes to those semantics remain hard failures.
+
+The frozen deterministic normalized artifact is:
+
+`data/interim/pkisrv_normalized_long.csv`
+
+SHA-256:
+
+`b581918c66e3d867f17d3f81672c665ab843196be7e2a5764189738c8d193b98`
+
+Independent validation confirmed:
+
+- exact 2,015-row cardinality;
+- exact 2,015-key uniqueness;
+- exact 403-date accepted coverage;
+- exact five-observation per-date structure;
+- exact year-level row counts;
+- exact tenor-level counts;
+- all 403 source files represented exactly through provenance;
+- direct reconciliation of all 2,015 normalized values to raw MUFAP values;
+- preservation of all four source-level ABSENT dates;
+- all nine audited source-layout signatures;
+- byte-for-byte deterministic regeneration.
+
+The SQLite loader validates the frozen SHA and full analytical contract before
+database mutation.
+
+Production loading is:
+
+- SHA-pinned;
+- conflict rejecting;
+- source-lineage preserving;
+- ingestion-run lineage preserving;
+- natural-key constrained by observation date, curve type and tenor;
+- compatible with same-date and same-tenor PKRV observations because curve
+  type remains part of the natural key;
+- idempotent on matching reruns.
+
+Production verification confirmed:
+
+- ingestion run 13 inserted all 2,015 normalized PKISRV observations;
+- ingestion run 14 inserted zero observations and validated all 2,015 existing
+  rows;
+- existing PKISRV rows retained run-13 ingestion lineage;
+- 403 distinct source files remain represented;
+- all four source-level ABSENT dates remain absent;
+- PKRV remained at 22,800 observations;
+- policy-rate observations remained at 18;
+- MPC events remained at 39;
+- CPI observations remained at 57;
+- exact pre-load hashes for every non-PKISRV production dataset matched after
+  both PKISRV production runs;
+- SQLite integrity validation returned `ok`;
+- foreign-key validation returned zero issues.
+
+The complete project test suite passed with 87 tests after production loading.
+
+Accordingly:
+
+1. The normalized PKISRV analytical universe contains exactly 403 accepted
+   market dates and 2,015 source-observed benchmark rows.
+2. The comparative PKISRV maturity universe is 1M, 3M, 6M, 9M and 1Y.
+3. The four source-level ABSENT dates remain missing rather than being
+   synthetically repaired.
+4. Physical CSV-layout differences are handled only where the publication
+   semantics remain explicitly identifiable.
+5. Changed or ambiguous benchmark semantics remain fail-closed.
+6. The normalized artifact is frozen by SHA-256.
+7. Production PKISRV loading must remain conflict rejecting and idempotent.
+8. PKRV and PKISRV may coexist on the same date-tenor natural coordinates
+   because `curve_type` distinguishes them.
+9. PKISRV-PKRV differences are not, by normalization alone, evidence of an
+   Islamic premium or discount.
+10. Phase 5A5 establishes normalized PKISRV source data only; it does not
+    establish yield-curve, monetary-policy, event-study, econometric or causal
+    findings.

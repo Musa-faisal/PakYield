@@ -11,7 +11,7 @@
 ## Current Status
 
 **Current Phase:** Phase 5 — Cleaning & Validation
-**Current Batch:** Batch 5A5 — PKISRV Normalization
+**Current Batch:** Phase 5A — Core Dataset Normalization Complete
 **Overall Status:** IN PROGRESS
 
 ---
@@ -88,17 +88,16 @@ Current normalized SQLite state includes:
 
 - 22,800 source-observed PKRV benchmark-yield observations across 1,149
   accepted market dates from 2022-01-04 through 2026-09-28;
+- 2,015 source-observed PKISRV benchmark-yield observations across 403
+  accepted COMPLETE_5 market dates from 2025-02-03 through 2026-09-30;
 - 57 monthly PBS National CPI observations from 2022-01 through 2026-09;
 - 18 official SBP Policy (Target) Rate observations consisting of one
   pre-sample state anchor and 17 in-sample policy-rate changes;
 - 39 validated SBP Monetary Policy Committee events from 2022-01-24 through
   2026-09-14.
 
-PKISRV raw acquisition and structural validation are complete but standardized
-PKISRV observations have not yet been normalized into the final SQLite
-analytical table.
-
-PKRV, SBP policy-rate, SBP MPC-event and PBS CPI normalization are complete.
+Core normalization is complete for PKRV, PKISRV, the SBP policy-rate series,
+SBP MPC events and PBS National CPI.
 
 Therefore:
 
@@ -108,7 +107,7 @@ Therefore:
 - no hypothesis has been supported or rejected;
 - no causal monetary-policy claim has been made;
 - no synthetic observation has been inserted into the empirical dataset;
-- further normalization and analytical processing remain in progress.
+- core source normalization is complete; deterministic transformation, alignment and analytical processing remain in progress.
 
 ---
 
@@ -232,16 +231,20 @@ Expected during Phase 1:
 
 ## Next Action
 
-Begin Batch 5A5 — PKISRV Normalization.
+Begin the next Phase 5 transformation and cross-dataset alignment batch.
 
-Normalize the 403 accepted COMPLETE_5 MUFAP PKISRV observations into a
-deterministic five-tenor long-form analytical source containing exactly 2,015
-source-observed date-tenor rows.
+Before substantive empirical analysis, construct and validate the derived
+analytical states required by the methodology, including:
 
-Preserve the four source-level standardized-benchmark omissions as missing
-observations, retain direct MUFAP lineage, reject conflicting or manufactured
-values, independently audit the normalized artifact, and validate the SQLite
-loader in an isolated database before any production PKISRV write.
+- daily policy-rate state from the official change observations;
+- previous-available-market-observation yield changes by curve and tenor;
+- same-date PKRV/PKISRV matching for 1M, 3M, 6M, 9M and 1Y;
+- explicit preservation of unmatched or missing observations;
+- lower-frequency yield alignment required for monthly CPI analysis.
+
+Do not begin hypothesis evaluation, MPC event-study aggregation, regression
+estimation or economic interpretation until the required derived datasets have
+their own deterministic validation contracts.
 
 ## Phase 1 Acceptance Criteria
 
@@ -570,4 +573,105 @@ The normalized CSV and production SQLite database remain outside Git according
 to the existing data-storage policy.
 
 Decision reference: D087.
+
+## Phase 5A5 — PKISRV Normalization
+
+**Status:** COMPLETE
+
+**Accepted:** 2026-10-07
+
+Deterministic PKISRV normalization and production SQLite ingestion are
+complete.
+
+Frozen source universe:
+
+- MUFAP PKISRV source-publication records: 407;
+- accepted COMPLETE_5 observation dates: 403;
+- source-level ABSENT dates: 4;
+- accepted coverage: 2025-02-03 through 2026-09-30;
+- canonical comparable tenors: 1M, 3M, 6M, 9M and 1Y;
+- normalized source-observed date-tenor rows: 2,015;
+- unique normalized date-tenor keys: 2,015.
+
+The four source-level ABSENT dates are:
+
+- 2025-03-07;
+- 2025-08-20;
+- 2026-03-18;
+- 2026-03-27.
+
+Those dates remain absent from normalized PKISRV output.
+
+No benchmark value was interpolated, forward-filled, backward-filled,
+recovered from another source, copied from another date or otherwise
+manufactured.
+
+All 403 accepted COMPLETE_5 source artifacts are UTF-8 CSV files.
+
+The accepted benchmark block uses the source labels:
+
+- `1 - Month`;
+- `3 - Month`;
+- `6 - Month`;
+- `9 - Month`;
+- `1 - Year`.
+
+The published value field is:
+
+`PKISRV Rates (Yields)`
+
+Nine audited physical source-layout signatures occur across the accepted
+archive. Although their absolute CSV column positions and row widths differ,
+all preserve the same deterministic semantic structure:
+
+- five contiguous benchmark-tenor rows;
+- one unique canonical tenor per row;
+- the published yield immediately adjacent to the tenor;
+- `Tenor` and `PKISRV Rates (Yields)` headers directly above the benchmark
+  block.
+
+The parser fails closed when those publication semantics change.
+
+The deterministic normalized artifact is:
+
+`data/interim/pkisrv_normalized_long.csv`
+
+with frozen SHA-256:
+
+`b581918c66e3d867f17d3f81672c665ab843196be7e2a5764189738c8d193b98`
+
+Independent validation reconciled all 2,015 normalized values directly to the
+raw MUFAP source files.
+
+Byte-for-byte regeneration produced the same SHA-256.
+
+Production SQLite verification confirmed:
+
+- first production load inserted all 2,015 PKISRV observations;
+- production ingestion run 13 wrote the 2,015 observations;
+- immediate production rerun inserted zero observations;
+- production ingestion run 14 validated all 2,015 existing observations;
+- all production PKISRV rows retain ingestion-run lineage to run 13;
+- 403 distinct raw source files remain represented;
+- all four source-level ABSENT dates remain absent;
+- PKRV and PKISRV observations may coexist on identical date-tenor pairs
+  because curve type remains part of the natural key;
+- all non-PKISRV production datasets remained byte-semantically unchanged
+  against the pre-load snapshot;
+- SQLite integrity validation returned `ok`;
+- foreign-key validation returned zero issues.
+
+The final Phase 5A5 project test suite contains 87 passing tests.
+
+Relevant tracked artifacts:
+
+- `scripts/build_pkisrv_normalized_long.py`
+- `scripts/load_pkisrv_database.py`
+- `tests/integration/test_pkisrv_normalized_long.py`
+- `tests/integration/test_pkisrv_database_load.py`
+
+The normalized CSV and production SQLite database remain outside Git according
+to the existing data-storage policy.
+
+Decision reference: D088.
 
