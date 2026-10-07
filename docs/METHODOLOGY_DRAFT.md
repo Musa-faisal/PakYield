@@ -1478,8 +1478,133 @@ Causal inference requires additional identification that is not assumed in the c
 
 # 69. Methodology Status
 
-**Status:** PROVISIONAL
+**Status:** ACTIVE / EVIDENCE-UPDATED
 
-This methodology defines the intended analytical framework before real-data feasibility is known.
+The Phase 1 methodology remains the conceptual baseline.
 
-It should be frozen as the Phase 1 baseline and revised only when actual source characteristics provide a documented reason.
+Evidence from completed feasibility, acquisition, normalization and Phase 5B
+transformation work has resolved several implementation choices that were
+intentionally deferred.
+
+Those evidence-based updates are documented rather than applied silently.
+
+---
+
+# 70. Phase 5B Deterministic Implementation Freeze
+
+The following implementation conventions are frozen for downstream analytical
+work.
+
+## Policy-rate state
+
+Official SBP effective-date observations remain the normalized source records.
+
+A separate daily analytical state persists the most recently effective
+official rate between effective dates.
+
+This state must not be described as an additional official daily SBP
+observation.
+
+## Daily yield changes
+
+For each curve and tenor:
+
+```text
+yield_change_bps_t
+=
+(yield_pct_t - previous_available_yield_pct) × 100
+```
+
+The predecessor is the previous available source-observed benchmark value for
+that same curve and tenor.
+
+Calendar gaps remain explicit.
+
+## PKRV / PKISRV comparison
+
+The accepted common tenor universe is:
+
+```text
+1M
+3M
+6M
+9M
+1Y
+```
+
+The comparison panel preserves the union of observed date-tenor cells.
+
+A spread exists only for exact same-date, same-tenor matches:
+
+```text
+pkisrv_minus_pkrv_bps
+=
+(PKISRV_m,t - PKRV_m,t) × 100
+```
+
+Unmatched rows retain their observed side and no counterpart or spread is
+manufactured.
+
+## Monthly CPI / yield alignment
+
+CPI remains monthly.
+
+For each curve and tenor, the monthly benchmark yield is the last actual
+available benchmark observation within that calendar month.
+
+The actual market observation date and its lag from calendar month end remain
+explicit.
+
+A monthly yield change exists only when the immediately preceding calendar
+month also contains an observed value:
+
+```text
+monthly_yield_change_bps
+=
+(month_end_yield_t - month_end_yield_t-1) × 100
+```
+
+A gap of two or more calendar months does not receive a manufactured one-month
+change.
+
+## Missingness
+
+Across Phase 5B transformations:
+
+```text
+missing != zero
+```
+
+Missing benchmark observations are not created through:
+
+```text
+interpolation
+nearest-date matching
+forward filling
+back filling
+cross-curve substitution
+cross-tenor substitution
+```
+
+## Extreme observations
+
+Large transformed values remain in the empirical dataset when their underlying
+observations reconcile to the authoritative raw publications.
+
+Extreme magnitude alone is not an exclusion rule.
+
+## Remaining unresolved analytical choices
+
+Phase 5B does not freeze:
+
+```text
+final MPC event-anchor implementation where intraday timing matters
+deterministic monetary-policy regime algorithm
+final econometric specification
+model-specific use of monthly yield levels versus monthly yield changes
+Nelson-Siegel eligibility threshold
+```
+
+These choices require their own evidence-based analytical contracts.
+
+Decision reference: D089.

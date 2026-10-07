@@ -10,8 +10,8 @@
 
 ## Current Status
 
-**Current Phase:** Phase 5 — Cleaning & Validation
-**Current Batch:** Phase 5A — Core Dataset Normalization Complete
+**Current Phase:** Phase 5 — Cleaning, Validation & Analytical Transformation
+**Current Batch:** Phase 5B — Derived Analytical States & Cross-Dataset Alignment Complete
 **Overall Status:** IN PROGRESS
 
 ---
@@ -107,7 +107,10 @@ Therefore:
 - no hypothesis has been supported or rejected;
 - no causal monetary-policy claim has been made;
 - no synthetic observation has been inserted into the empirical dataset;
-- core source normalization is complete; deterministic transformation, alignment and analytical processing remain in progress.
+- core source normalization and Phase 5B deterministic transformation and
+  cross-dataset alignment are complete;
+- substantive empirical analysis, MPC announcement-window aggregation,
+  regression estimation and hypothesis evaluation have not yet begun.
 
 ---
 
@@ -115,7 +118,7 @@ Therefore:
 
 How does monetary policy transmit across Pakistan's sovereign yield curve, and how do conventional and Shariah-compliant sovereign benchmark rates behave across maturities and monetary-policy regimes?
 
-This wording remains provisional until Phase 1 is formally completed.
+This remains the accepted central research question established in Phase 1.
 
 ---
 
@@ -231,20 +234,24 @@ Expected during Phase 1:
 
 ## Next Action
 
-Begin the next Phase 5 transformation and cross-dataset alignment batch.
+Begin the next analytical-preparation batch using the frozen Phase 5B derived
+datasets.
 
-Before substantive empirical analysis, construct and validate the derived
-analytical states required by the methodology, including:
+Before substantive empirical findings are produced, define and validate the
+remaining analytical contracts required for:
 
-- daily policy-rate state from the official change observations;
-- previous-available-market-observation yield changes by curve and tenor;
-- same-date PKRV/PKISRV matching for 1M, 3M, 6M, 9M and 1Y;
-- explicit preservation of unmatched or missing observations;
-- lower-frequency yield alignment required for monthly CPI analysis.
+- MPC announcement-window observation selection;
+- event-anchor handling where announcement timing and benchmark timing matter;
+- term-spread construction;
+- deterministic monetary-policy regime classification;
+- descriptive and statistical analysis inputs.
 
-Do not begin hypothesis evaluation, MPC event-study aggregation, regression
-estimation or economic interpretation until the required derived datasets have
-their own deterministic validation contracts.
+The Phase 5B derived artifacts are reproducible analytical inputs and should
+not be reconstructed ad hoc inside notebooks.
+
+Do not classify hypotheses as supported or unsupported, estimate final
+regressions, or make causal monetary-policy claims until the relevant
+analytical contracts and diagnostics are complete.
 
 ## Phase 1 Acceptance Criteria
 
@@ -674,4 +681,174 @@ The normalized CSV and production SQLite database remain outside Git according
 to the existing data-storage policy.
 
 Decision reference: D088.
+
+## Phase 5B — Derived Analytical States & Cross-Dataset Alignment
+
+**Status:** COMPLETE
+
+**Accepted:** 2026-10-07
+
+Phase 5B converted normalized source observations into deterministic,
+lineage-preserving analytical states required by the research methodology.
+
+### 5B1 — Daily policy-rate state
+
+The official SBP policy-rate observations were expanded into a calendar-daily
+analytical state while retaining the effective-date source observation.
+
+Frozen state:
+
+- rows: 1,731;
+- coverage: 2022-01-04 through 2026-09-30;
+- official policy states represented: 18;
+- in-range source-effective dates: 17;
+- all observed PKRV/PKISRV union market dates have a resolvable policy state.
+
+Artifact:
+
+`data/interim/policy_rate_daily_state.csv`
+
+Frozen SHA-256:
+
+`7655ddc7fd5cfd051ce628f006d8c4851b54ee47d4cbd90760e86cf9ebfd368a`
+
+### 5B2 — Previous-available yield changes
+
+Yield changes are calculated separately within each curve and tenor against
+the previous available source-observed market observation rather than against
+the previous calendar day.
+
+Frozen state:
+
+- total rows: 24,815;
+- PKRV rows: 22,800;
+- PKISRV rows: 2,015;
+- curve-tenor series: 25;
+- first-series rows without predecessors: 25;
+- valid previous-available changes: 24,790.
+
+Artifact:
+
+`data/interim/yield_changes_long.csv`
+
+Frozen SHA-256:
+
+`96dcc5c05b09221c18d030929a1be5f7a879cae57a0390448fed4a9f19160090`
+
+The largest absolute changes were independently reconciled to raw MUFAP
+publications before acceptance.
+
+### 5B3 — PKRV / PKISRV same-date comparison
+
+The comparison universe is restricted to:
+
+- 1M;
+- 3M;
+- 6M;
+- 9M;
+- 1Y.
+
+Frozen state:
+
+- union rows: 2,035;
+- dates: 407;
+- coverage: 2025-02-03 through 2026-09-30;
+- exact same-date matches: 2,005;
+- PKRV-only rows: 20;
+- PKISRV-only rows: 10.
+
+The comparison spread is:
+
+`(PKISRV - PKRV) × 100`
+
+basis points.
+
+No nearest-date match, interpolation, forward fill, backfill, or synthetic
+counterpart is created.
+
+Artifact:
+
+`data/interim/pkrv_pkisrv_same_date_panel.csv`
+
+Frozen SHA-256:
+
+`9d17eda88a23c6106b3bab51bd56b2f64626488c533af0436e133b334dc32641`
+
+The 15 largest absolute spreads were independently reconciled to both raw
+MUFAP publications.
+
+### 5B4 — Monthly CPI / yield alignment
+
+Monthly CPI remains monthly and is not repeated across daily observations to
+create artificial statistical sample size.
+
+The monthly yield measure is the last actual source-observed benchmark value
+available within each calendar month for the corresponding curve and tenor.
+
+Frozen state:
+
+- tenor-month rows: 1,234;
+- PKRV rows: 1,134;
+- PKISRV rows: 100;
+- CPI periods: 57;
+- valid consecutive-calendar-month yield changes: 1,203;
+- PKRV valid monthly changes: 1,108;
+- PKISRV valid monthly changes: 95.
+
+For PKRV 1M, 2M, 3M, 4M, 6M and 9M, July 2023 contains no source observation.
+
+Therefore:
+
+- June 2023 retains the actual 2023-06-15 observation for those tenors;
+- its 15-day lag from calendar month end remains explicit;
+- July 2023 is not manufactured;
+- August 2023 records June as the previous available period;
+- the observed period gap is two months;
+- no June-to-August one-month change is calculated.
+
+Artifact:
+
+`data/interim/monthly_cpi_yield_panel.csv`
+
+Frozen SHA-256:
+
+`978734c701969e049b4bd78c3a7c3d15b6534f530c19971c1b6df8efd6f370c7`
+
+The 15 largest absolute valid monthly changes were independently reconciled
+to raw MUFAP publications.
+
+### Phase 5B validation state
+
+All four derived artifacts passed:
+
+- complete reconciliation to normalized SQLite inputs;
+- byte-for-byte deterministic regeneration;
+- source-lineage validation;
+- SQLite integrity validation;
+- foreign-key validation;
+- explicit missingness checks;
+- permanent integration tests.
+
+The complete repository test suite contains:
+
+`107 passed`
+
+No interpolation, zero filling, nearest-date matching, hidden forward filling,
+back filling, or synthetic empirical benchmark observation was introduced.
+
+Relevant tracked implementation files:
+
+- `scripts/build_daily_policy_rate_state.py`;
+- `scripts/build_yield_changes.py`;
+- `scripts/build_pkrv_pkisrv_comparison.py`;
+- `scripts/build_monthly_cpi_yield_panel.py`;
+- `tests/integration/test_daily_policy_rate_state.py`;
+- `tests/integration/test_yield_changes.py`;
+- `tests/integration/test_pkrv_pkisrv_comparison.py`;
+- `tests/integration/test_monthly_cpi_yield_panel.py`.
+
+Generated Phase 5B CSV artifacts remain outside Git under the existing
+data-storage policy.
+
+Decision reference: D089.
 

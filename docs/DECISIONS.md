@@ -3955,3 +3955,156 @@ Accordingly:
 10. Phase 5A5 establishes normalized PKISRV source data only; it does not
     establish yield-curve, monetary-policy, event-study, econometric or causal
     findings.
+
+# 94. D089 — Phase 5B Derived Analytical State and Alignment Contracts
+
+**Date:** 2026-10-07
+
+**Status:** ACCEPTED
+
+Decision:
+
+Freeze the Phase 5B transformation and cross-dataset alignment contracts as
+deterministic inputs for subsequent PakYield analytical work.
+
+The accepted derived datasets are:
+
+1. calendar-daily SBP policy-rate state;
+2. previous-available-observation yield changes;
+3. same-date PKRV/PKISRV union comparison panel;
+4. monthly CPI/yield alignment panel.
+
+## Daily policy-rate state
+
+The daily policy-rate series is a derived state representation of official SBP
+effective-date observations.
+
+The state persists between effective-date changes but does not create or imply
+additional official SBP observations.
+
+Frozen artifact:
+
+`data/interim/policy_rate_daily_state.csv`
+
+Frozen SHA-256:
+
+`7655ddc7fd5cfd051ce628f006d8c4851b54ee47d4cbd90760e86cf9ebfd368a`
+
+## Previous-available yield changes
+
+For each curve and tenor, the predecessor is the previous available
+source-observed benchmark observation for the same series.
+
+It is not automatically the previous calendar day.
+
+Frozen artifact:
+
+`data/interim/yield_changes_long.csv`
+
+Frozen SHA-256:
+
+`96dcc5c05b09221c18d030929a1be5f7a879cae57a0390448fed4a9f19160090`
+
+## PKRV / PKISRV same-date comparison
+
+The accepted directly comparable maturities are:
+
+- 1M;
+- 3M;
+- 6M;
+- 9M;
+- 1Y.
+
+The PKISRV-PKRV spread is calculated only when both observations exist on the
+exact same date and tenor.
+
+PKRV-only and PKISRV-only observations remain explicit in the union panel.
+
+No nearest-date matching, interpolation, forward fill, backfill, or synthetic
+counterpart is permitted.
+
+Frozen artifact:
+
+`data/interim/pkrv_pkisrv_same_date_panel.csv`
+
+Frozen SHA-256:
+
+`9d17eda88a23c6106b3bab51bd56b2f64626488c533af0436e133b334dc32641`
+
+## Monthly CPI / yield alignment
+
+Monthly CPI remains at monthly frequency.
+
+The accepted monthly yield measure is the last actual available source
+observation within the corresponding calendar month for each curve and tenor.
+
+A monthly yield change exists only when the immediately preceding calendar
+month also contains an observed value for that curve and tenor.
+
+If the previous available observation skips a calendar month, the gap remains
+explicit and the monthly change remains missing.
+
+This rule preserves the July 2023 source absence for PKRV 1M, 2M, 3M, 4M, 6M
+and 9M and prevents a June-to-August movement from being represented as a
+one-month change.
+
+Frozen artifact:
+
+`data/interim/monthly_cpi_yield_panel.csv`
+
+Frozen SHA-256:
+
+`978734c701969e049b4bd78c3a7c3d15b6534f530c19971c1b6df8efd6f370c7`
+
+Reasoning:
+
+These transformations implement accepted methodology while preventing hidden
+alignment or missing-data assumptions from entering later event studies,
+regressions, notebooks, or application calculations.
+
+Evidence:
+
+- policy-rate daily state: 1,731 rows;
+- yield-change artifact: 24,815 rows;
+- valid previous-available yield changes: 24,790;
+- PKRV/PKISRV union panel: 2,035 rows;
+- exact PKRV/PKISRV matches: 2,005;
+- monthly CPI/yield panel: 1,234 rows;
+- valid consecutive monthly changes: 1,203;
+- extreme daily changes reconciled to raw MUFAP publications;
+- extreme comparison spreads reconciled to both raw MUFAP publications;
+- extreme monthly changes reconciled to raw MUFAP publications;
+- all four artifacts regenerate byte-for-byte;
+- SQLite integrity validation returns `ok`;
+- foreign-key validation reports zero issues;
+- complete repository suite contains 107 passing tests.
+
+Implications:
+
+- downstream analysis should consume these deterministic derived artifacts;
+- daily CPI duplication is prohibited for macroeconomic regression;
+- comparative spreads require exact same-date maturity matches;
+- monthly changes require consecutive calendar months;
+- missing empirical benchmark values remain missing rather than becoming zero;
+- source-verified extreme observations remain in the empirical dataset;
+- later analytical code must not silently redefine these transformations.
+
+Affected Components:
+
+- RQ1;
+- RQ2;
+- RQ3;
+- RQ4;
+- H1;
+- H2;
+- H3;
+- H4;
+- MPC announcement-window analysis;
+- PKRV/PKISRV comparative analysis;
+- macroeconomic analysis;
+- monetary-policy regime construction;
+- research notebooks;
+- Streamlit analytics;
+- research paper.
+
+Supersedes: None
