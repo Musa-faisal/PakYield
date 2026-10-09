@@ -5200,3 +5200,258 @@ It does not itself establish:
 Any later descriptive, statistical, econometric, or event-study result must
 state the exact frozen input family, sample filter, missing-data rule,
 variable definition, and inferential assumptions used.
+
+# 103. D098 — Phase 6A Descriptive Empirical Baseline Contract
+
+**Date:** 2026-10-09
+**Status:** ACCEPTED
+**Depends on:** D097
+
+## Decision
+
+Phase 6A begins empirical analysis using the frozen Phase 5C analytical
+inputs.
+
+The purpose of Phase 6A is to establish reproducible descriptive baselines
+before hypothesis evaluation, inferential testing, regression estimation, or
+causal interpretation.
+
+Phase 6A does not assign supported, unsupported, partially supported, or
+inconclusive labels to any project hypothesis.
+
+## Frozen inputs
+
+Phase 6A consumes the Phase 5C analysis families without modifying them.
+
+The principal inputs are:
+
+- `data/interim/yield_regime_analysis_panel.csv`;
+- `data/interim/term_spread_regime_analysis_panel.csv`;
+- `data/interim/cross_curve_regime_analysis_panel.csv`;
+- `data/interim/mpc_event_window_panel.csv`;
+- `data/interim/monthly_cpi_yield_panel.csv`;
+- `data/interim/analysis_input_manifest.csv`.
+
+All input SHA-256 values must match the Phase 5C freeze before descriptive
+analysis is generated.
+
+## Descriptive families
+
+Phase 6A produces separate descriptive outputs for:
+
+1. sovereign yield levels by curve, directional regime, and tenor;
+2. yield changes by curve, directional regime, and tenor;
+3. PKRV term spreads by spread definition and directional regime;
+4. exact-date PKISRV-minus-PKRV numerical differences by comparable tenor
+   and directional regime;
+5. MPC event-window yield changes by curve, tenor, event half-window, and
+   decision type;
+6. monthly CPI/yield sample coverage by curve and tenor.
+
+These families remain separate.
+
+No universal merged empirical table is created.
+
+## Eligibility
+
+Only observations explicitly eligible for the relevant Phase 5C analysis
+family enter numerical descriptive statistics.
+
+Rows excluded from one descriptive variable remain preserved in the frozen
+upstream artifact.
+
+No missing observation is treated as zero.
+
+No interpolation, nearest-date substitution, forward fill, backfill, or
+synthetic observation is permitted.
+
+## Descriptive statistics
+
+For continuous empirical variables, Phase 6A may report:
+
+- observation count;
+- arithmetic mean;
+- median;
+- sample standard deviation;
+- minimum;
+- maximum.
+
+For variables naturally centered around zero, Phase 6A may additionally
+report:
+
+- negative observation count;
+- zero observation count;
+- positive observation count.
+
+The calculations are descriptive only.
+
+## Cross-curve language
+
+`pkisrv_minus_pkrv_bps` remains a numerical same-date difference.
+
+Phase 6A must not describe this quantity as an Islamic, Sukuk, or Shariah
+premium or discount.
+
+## MPC event-study language
+
+Event-window statistics describe observed benchmark-yield changes surrounding
+validated MPC announcement dates under the frozen observation-position
+contract.
+
+They are not automatically causal event-study estimates.
+
+No market-expectations or policy-surprise measure is available in Phase 6A.
+
+## Monthly macroeconomic treatment
+
+The monthly CPI/yield input remains at monthly frequency.
+
+Phase 6A records monthly sample coverage and missingness without mechanically
+replicating monthly CPI observations into daily data.
+
+Regression specification is explicitly deferred.
+
+## Statistical boundary
+
+Phase 6A does not perform:
+
+- t-tests;
+- nonparametric tests;
+- confidence intervals;
+- p-values;
+- correlation hypothesis tests;
+- regressions;
+- causal inference;
+- forecast estimation;
+- hypothesis verdicts.
+
+Those procedures require separate contracts after the descriptive baseline is
+reviewed.
+
+# 104. D099 — Phase 6A Descriptive Baseline Artifact Freeze
+
+**Date:** 2026-10-10
+**Status:** ACCEPTED / FROZEN
+**Depends on:** D098
+
+## Decision
+
+Phase 6A deterministic descriptive empirical baseline construction is complete
+and frozen.
+
+The frozen outputs are:
+
+`data/interim/descriptive_yield_levels.csv`
+
+SHA-256:
+
+`88ce5b39d4dd29f4749be6bc75aaee9cd0f7cadce37c22c54c1fb6bf3db633a6`
+
+`data/interim/descriptive_yield_changes.csv`
+
+SHA-256:
+
+`a3a785b0c12ece10564ad3e2c0aea76e8cec100abbe34a83841f5276adb6f978`
+
+`data/interim/descriptive_term_spreads.csv`
+
+SHA-256:
+
+`97f586c77e9636e09fd40d5fcc2f8049cee0fd95eb9b98eb66f4f5055f2cbf69`
+
+`data/interim/descriptive_cross_curve_differences.csv`
+
+SHA-256:
+
+`ec59b6148d5a5f2aa02b38cddfe3aeebb5bfa0f173e58e522b5df70961634477`
+
+`data/interim/descriptive_mpc_event_windows.csv`
+
+SHA-256:
+
+`92c6af99dd2cbf445eef3c8964f3b4316778a81424ee04b74e4b2540a0fb11d3`
+
+`data/interim/descriptive_monthly_sample_census.csv`
+
+SHA-256:
+
+`d6a427f5580da4b99ea21ae64902da9494fed6325b4b674b71d9a08eca071d33`
+
+The Phase 6A manifest is:
+
+`data/interim/descriptive_analysis_manifest.csv`
+
+SHA-256:
+
+`129b4e4fde84db27f1f447174dbf7a671d56dbef98e691699c8b8051f4d9c3e0`
+
+## Frozen table census
+
+The descriptive baseline contains:
+
+- 50 yield-level groups;
+- 50 yield-change groups;
+- 8 term-spread groups;
+- 10 cross-curve comparison groups;
+- 72 MPC event-window groups;
+- 25 monthly sample-census groups.
+
+The corresponding represented eligible observations are:
+
+- yield levels: 22,742;
+- yield changes: 22,737;
+- term spreads: 4,164;
+- exact-date cross-curve differences: 1,940;
+- eligible MPC event-window observations: 688.
+
+## Scope
+
+Phase 6A summarizes the deterministic, eligibility-filtered analytical inputs
+created in Phase 5C.
+
+It does not modify the underlying observation-level analytical artifacts.
+
+The monthly output is a sample census and does not assign a daily monetary-
+policy regime to monthly CPI/yield observations.
+
+## Statistical boundary
+
+Phase 6A is descriptive only.
+
+It does not perform or report:
+
+- null-hypothesis tests;
+- p-values;
+- confidence intervals;
+- regression coefficients;
+- causal estimates;
+- policy-surprise estimates;
+- forecasting models;
+- structural term-premium estimates.
+
+Numerical group differences remain descriptive and do not by themselves
+establish statistical or economic significance.
+
+Cross-curve numerical differences remain descriptive and must not be labeled
+as Islamic, Sukuk, or Shariah premia or discounts.
+
+## Verification
+
+The seven outputs were generated twice consecutively with byte-identical
+results before freeze.
+
+Five dedicated integration tests verify:
+
+- frozen artifact shapes and SHA-256 hashes;
+- represented source-observation counts;
+- manifest reconciliation to all six descriptive table families;
+- preservation of the descriptive-only inferential boundary;
+- deterministic regeneration.
+
+At Phase 6A freeze:
+
+- dedicated Phase 6A integration tests: 5 passed;
+- complete project test suite: 132 passed;
+- SQLite integrity: `ok`;
+- SQLite foreign-key issues: 0;
+- Phase 6A source lint, formatting, and compilation checks: clean.

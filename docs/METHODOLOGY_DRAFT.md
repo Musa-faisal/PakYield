@@ -2005,3 +2005,86 @@ is fully reconciled.
 
 Phase 5C therefore closes the deterministic data-preparation stage for later
 descriptive and statistical analysis.
+
+# 79. Phase 6A Descriptive Empirical Baseline
+
+**Status:** ACTIVE / CONTRACT-FROZEN
+**Decision reference:** D098
+
+Phase 6A is the first empirical-analysis layer after the frozen Phase 5C
+transformation chain.
+
+It produces deterministic descriptive summaries from the five frozen
+analytical families while preserving their separate grains.
+
+Eligible daily yield-level observations are summarized by curve, directional
+regime, and tenor.
+
+Eligible daily yield changes are summarized independently by curve,
+directional regime, and tenor.
+
+Eligible PKRV term spreads are summarized by spread definition and directional
+regime.
+
+Eligible exact-date PKISRV-minus-PKRV numerical differences are summarized by
+comparable tenor and directional regime.
+
+Eligible MPC event-window changes are summarized by curve, tenor, half-window,
+and validated MPC decision type.
+
+The monthly CPI/yield panel remains at monthly frequency. Phase 6A summarizes
+sample availability and missingness but does not construct a daily
+macroeconomic panel.
+
+Continuous summaries report count, mean, median, sample standard deviation,
+minimum, and maximum. Change and difference variables may additionally report
+negative, zero, and positive counts.
+
+Phase 6A is descriptive. It does not perform inferential tests, regression,
+causal estimation, policy-surprise measurement, or hypothesis classification.
+
+# 80. Phase 6A Descriptive Baseline Artifact Freeze
+
+**Status:** FROZEN
+**Decision references:** D098, D099
+
+Phase 6A freezes six descriptive table families and one manifest.
+
+The frozen group counts are:
+
+- yield levels: 50 groups;
+- yield changes: 50 groups;
+- term spreads: 8 groups;
+- exact-date cross-curve differences: 10 groups;
+- MPC event windows: 72 groups;
+- monthly sample census: 25 groups.
+
+The eligible observations represented by the first five families are 22,742,
+22,737, 4,164, 1,940, and 688 respectively.
+
+Frozen SHA-256 values are:
+
+- yield levels:
+  `88ce5b39d4dd29f4749be6bc75aaee9cd0f7cadce37c22c54c1fb6bf3db633a6`;
+- yield changes:
+  `a3a785b0c12ece10564ad3e2c0aea76e8cec100abbe34a83841f5276adb6f978`;
+- term spreads:
+  `97f586c77e9636e09fd40d5fcc2f8049cee0fd95eb9b98eb66f4f5055f2cbf69`;
+- cross-curve differences:
+  `ec59b6148d5a5f2aa02b38cddfe3aeebb5bfa0f173e58e522b5df70961634477`;
+- MPC event windows:
+  `92c6af99dd2cbf445eef3c8964f3b4316778a81424ee04b74e4b2540a0fb11d3`;
+- monthly sample census:
+  `d6a427f5580da4b99ea21ae64902da9494fed6325b4b674b71d9a08eca071d33`;
+- descriptive manifest:
+  `129b4e4fde84db27f1f447174dbf7a671d56dbef98e691699c8b8051f4d9c3e0`.
+
+Phase 6A is descriptive only. It does not perform inferential statistics,
+regression analysis, causal inference, forecasting, or policy-surprise
+estimation.
+
+The observation-level Phase 5C analytical inputs remain the authoritative
+inputs for any later statistical procedure.
+
+At freeze time, five dedicated Phase 6A tests and 132 total project tests
+pass.
