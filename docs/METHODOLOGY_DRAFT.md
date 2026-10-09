@@ -1608,3 +1608,400 @@ Nelson-Siegel eligibility threshold
 These choices require their own evidence-based analytical contracts.
 
 Decision reference: D089.
+
+# 71. MPC Event-Window Observation-Position Contract
+
+**Status:** ACTIVE / EVIDENCE-FROZEN
+**Decision reference:** D090
+
+Phase 5C freezes the event-window selection rule before any event-study
+aggregation or hypothesis evaluation.
+
+For every normalized MPC `event_date`, each curve is ordered by its distinct
+observed benchmark dates. For configured half-window `h ∈ {1,3,5}`, the left
+endpoint is the `h`-th observed curve date strictly before the event date and
+the right endpoint is the `h`-th observed curve date strictly after the event
+date.
+
+A benchmark observation on the MPC event date is metadata only and is not an
+endpoint. This avoids assigning pre- or post-announcement meaning to a same-day
+benchmark when the validated MPC source contains no intraday announcement
+timestamp.
+
+The endpoint dates are common across tenors within a curve. A
+curve × tenor × event × window cell is valid only when the exact tenor is
+observed on both selected endpoint dates. Tenors are not independently
+re-anchored to different dates.
+
+For an eligible cell:
+
+`window_change_bps = (yield_right_pct - yield_left_pct) × 100`
+
+Missing endpoint observations remain missing. PakYield does not interpolate,
+shift to a nearest date, substitute a nearby tenor, forward-fill, backfill, or
+construct synthetic endpoint yields.
+
+Current evidence establishes the following support:
+
+- PKRV `1Y`, `5Y`, `10Y`: complete for all 39 MPC events at `h=1,3,5`;
+- PKRV `3M`, `6M`: 37/39 at `h=1`, 37/39 at `h=3`, 36/39 at `h=5`;
+- PKISRV `3M`, `6M`, `1Y`: 13/39 at `h=1,3,5`, beginning 2025-03-10;
+- PKISRV has no observed `5Y` or `10Y` tenor and those cells are structurally
+  ineligible;
+- the 2024-06-10 PKRV event is handled by the general position rule without a
+  special-case override;
+- no eligible audited event window contains another MPC event.
+
+Cross-curve MPC comparison is restricted to exact-tenor eligible observations
+for `3M`, `6M`, and `1Y`. PKRV `5Y` and `10Y` may be analyzed separately as
+longer-end conventional benchmark responses.
+
+This remains descriptive announcement-window analysis. Causal interpretation
+and monetary-policy-surprise terminology remain out of scope unless later
+identification and expectations data justify them.
+
+# 72. Sovereign Term-Spread Construction Contract
+
+**Status:** ACTIVE / EVIDENCE-FROZEN
+**Decision reference:** D091
+
+Phase 5C constructs sovereign term spreads from observed benchmark yields
+without interpolating either maturity or date.
+
+Configured spreads are:
+
+- `10Y-2Y`;
+- `10Y-1Y`;
+- `5Y-1Y`;
+- `3Y-3M`.
+
+Each configured spread is defined as:
+
+`(longer_tenor_yield_pct - shorter_tenor_yield_pct) × 100`
+
+and is expressed in basis points.
+
+Both legs must belong to the same curve and the exact same observation date.
+The configured tenor labels themselves must be observed. A spread is not
+constructed from nearest available dates or substitute maturities.
+
+The current normalized PKRV universe supports all four configured spreads.
+For `10Y-2Y`, `10Y-1Y`, and `5Y-1Y`, both configured legs have complete date
+support under the current normalized PKRV sample.
+
+The `3Y-3M` pair is different because the PKRV `3M` series has partial-date
+coverage relative to `3Y`. Therefore only their exact date intersection is
+eligible. Dates containing `3Y` but no `3M` remain missing for `3Y-3M`; the
+`3Y` value is never moved to a different date and the missing `3M` leg is
+never interpolated.
+
+The current normalized PKISRV tenor universe ends at `1Y`. Therefore none of
+the four configured project term spreads is eligible for PKISRV. Longer
+PKISRV tenors must not be manufactured for the purpose of constructing these
+spreads.
+
+Missing spread observations are analytically distinct from a spread value of
+zero.
+
+Term-spread signs are numerical descriptions only. Economic interpretation,
+policy-regime comparison, statistical testing, regression specification, and
+causal claims occur only in later explicitly defined analytical stages.
+
+# 73. Phase 5C2 Term-Spread Artifact Freeze
+
+**Status:** FROZEN
+**Decision references:** D091, D092
+
+Phase 5C2 produces one deterministic term-spread analytical artifact:
+
+`data/interim/term_spread_panel.csv`
+
+Frozen SHA-256:
+
+`5123ff3d4abe4a667d0854f3e9a8a8f9bf208368b8227bd3d31da2f011adb0ed`
+
+The frozen panel contains 4,596 PKRV date-spread rows across 1,149 distinct
+PKRV observation dates.
+
+Of these rows:
+
+- 4,566 contain eligible exact same-date observed term spreads;
+- 30 are explicitly ineligible because the `3M` short leg is absent;
+- none contain fabricated or interpolated observations.
+
+Eligible counts are:
+
+- `10Y-2Y`: 1,149;
+- `10Y-1Y`: 1,149;
+- `5Y-1Y`: 1,149;
+- `3Y-3M`: 1,119.
+
+All 30 ineligible observations belong to `3Y-3M` and are labeled
+`MISSING_SHORT_LEG`.
+
+The available `3Y` observation is retained for lineage, while the absent
+`3M` value and derived spread remain blank.
+
+PKISRV contributes no rows to this artifact because none of the four
+configured term spreads has both required observed tenors in the normalized
+PKISRV universe. This structural limitation must not be treated as a zero
+spread or repaired through interpolation.
+
+The artifact has been verified as byte-deterministic and reconciled directly
+to the normalized production database.
+
+At freeze time, five dedicated integration tests passed and the complete
+project suite contained 117 passing tests.
+
+This artifact is an analytical input. Economic interpretation, regime
+comparison, hypothesis testing, regression analysis, and causal inference
+remain separate later-stage tasks.
+
+# 74. Monetary-Policy Directional-Regime Classification Contract
+
+**Status:** ACTIVE / CONTRACT-FROZEN
+**Decision reference:** D093
+
+Monetary-policy regimes are derived from the validated SBP MPC event sequence.
+
+A prior `HIKE` establishes `TIGHTENING`, while a prior `CUT` establishes
+`EASING`.
+
+A `HOLD` inherits the most recent directional state and does not become a
+separate directional-regime category.
+
+Regime classification uses only MPC decisions strictly before the benchmark
+observation date.
+
+This strict-before rule prevents an MPC-date yield observation from being
+silently treated as post-announcement when no compatible intraday timestamps
+exist.
+
+Observations falling on an MPC decision date remain present for lineage but
+are ineligible for ordinary regime comparisons and receive
+`MPC_EVENT_DATE_NO_INTRADAY_TIMESTAMP`.
+
+Dates before the first prior `HIKE` or `CUT` receive `UNCLASSIFIED` and
+`PRE_DIRECTIONAL_HISTORY`.
+
+For each normalized curve-date observation, the regime panel records both:
+
+- the latest MPC event strictly before the observation date; and
+- the latest directional `HIKE` or `CUT` strictly before the observation
+  date that determines the inherited regime.
+
+This permits a `HOLD` to remain visible as the latest meeting while retaining
+the earlier directional event as the regime origin.
+
+Classification is performed independently of yield magnitude or tenor.
+Identical calendar dates across PKRV and PKISRV must receive identical regime
+metadata.
+
+The labels are descriptive analytical states. They do not by themselves
+constitute causal, structural, predictive, or statistical findings.
+
+# 75. Phase 5C3 Monetary-Policy Regime Artifact Freeze
+
+**Status:** FROZEN
+**Decision references:** D093, D094
+
+Phase 5C3 produces:
+
+`data/interim/monetary_policy_regime_panel.csv`
+
+Frozen SHA-256:
+
+`d53f6301048f2261551d467e322fe820970a0db7eea145fe0221a45142d9ff4b`
+
+The production MPC direction field is `decision_type`.
+
+The panel contains 1,552 unique curve-date rows over 1,151 calendar dates:
+1,149 PKRV rows and 403 PKISRV rows.
+
+Complete directional-regime counts are:
+
+- `UNCLASSIFIED`: 66;
+- `TIGHTENING`: 724;
+- `EASING`: 762.
+
+There are 1,438 eligible rows and 114 ineligible rows.
+
+Ineligibility consists of 63 `PRE_DIRECTIONAL_HISTORY` rows and 51
+`MPC_EVENT_DATE_NO_INTRADAY_TIMESTAMP` rows.
+
+Eligible curve-regime counts are:
+
+- PKISRV / `EASING`: 290;
+- PKISRV / `TIGHTENING`: 100;
+- PKRV / `EASING`: 447;
+- PKRV / `TIGHTENING`: 601.
+
+Classification always uses MPC events strictly before the benchmark
+observation date.
+
+All 51 normalized curve-date observations falling on MPC announcement dates
+remain ineligible for ordinary regime comparison because compatible intraday
+timing is unavailable.
+
+A `HOLD` inherits the latest prior directional `HIKE` or `CUT`. Among eligible
+rows whose latest prior meeting is a `HOLD`, 415 inherit `TIGHTENING` and 433
+inherit `EASING`.
+
+The artifact is byte-deterministic and is protected by five dedicated
+integration tests. At freeze time, the complete project suite contains 122
+passing tests.
+
+These regime labels are deterministic descriptive analytical inputs and do
+not themselves constitute causal, structural, predictive, or statistical
+findings.
+
+# 76. Descriptive and Statistical Analysis Input Contract
+
+**Status:** ACTIVE / CONTRACT-FROZEN
+**Decision reference:** D095
+
+PakYield maintains separate analytical grains rather than merging all
+transformed data into one table.
+
+The analytical families are:
+
+- daily yield level/change:
+  `curve_type × observation_date × tenor`;
+- daily PKRV term spread:
+  `observation_date × spread_name`;
+- exact-date PKRV/PKISRV comparison:
+  `observation_date × comparable tenor`;
+- MPC event window:
+  `event_date × curve_type × tenor × half_window`;
+- monthly CPI/yield:
+  `period × curve_type × tenor`.
+
+Daily yield, term-spread, and cross-curve inputs may receive exact-date policy
+metadata and compatible regime metadata.
+
+No fuzzy date join, interpolation, nearest observation, forward fill,
+backfill, or synthetic value construction is allowed.
+
+The MPC event-study panel remains isolated from ordinary regime analysis
+because an announcement-date benchmark observation cannot be assigned safely
+to a post-announcement state without compatible intraday timestamps.
+
+The monthly CPI/yield panel remains monthly and does not inherit daily regime
+labels without a separately approved monthly anchoring rule.
+
+Analysis eligibility is variable-specific. Missing changes, missing spread
+legs, unmatched cross-curve pairs, MPC announcement dates, and pre-directional
+regime history remain explicit.
+
+The construction phase creates inputs for later descriptive and statistical
+work but does not itself perform inference or causal analysis.
+
+# 77. Phase 5C4 Analysis Input Artifact Freeze
+
+**Status:** FROZEN
+**Decision references:** D095, D096
+
+Phase 5C4 freezes three derived daily analytical panels and one analysis-family
+manifest.
+
+Frozen outputs are:
+
+- `yield_regime_analysis_panel.csv`
+  — SHA-256
+  `f8583955e1f30953b13d7a054c2df4e146063c7fcfcabe205fd9cc9b42158a30`;
+- `term_spread_regime_analysis_panel.csv`
+  — SHA-256
+  `d9fd6633941ab2d8932200ba45ac2e8e2619c1d77cbe30e751458d75e75311dd`;
+- `cross_curve_regime_analysis_panel.csv`
+  — SHA-256
+  `2a286e2847081c6df654b6e13e71e3e07ce2e5249a4a2cef61f7e6fd5400c384`;
+- `analysis_input_manifest.csv`
+  — SHA-256
+  `ec0fe1e6c43f2dfbf246e8120a777720858b82498beb741f08d11cdb8df17aa4`.
+
+Frozen row counts are 24,815, 4,596, 2,035, and 5 respectively.
+
+Yield-level regime analysis has 22,742 eligible observations. Yield-change
+regime analysis has 22,737 eligible observations.
+
+The term-spread/regime panel has 4,164 jointly eligible observations.
+
+The exact-date cross-curve/regime panel has 1,940 eligible paired-comparison
+observations.
+
+The MPC event-study input remains the canonical 936-row Phase 5C1 artifact.
+
+The monthly CPI/yield input remains the canonical 1,234-row Phase 5B artifact
+and receives no daily regime classification.
+
+All daily policy and regime enrichment uses exact dates. Missing observations
+remain explicit.
+
+No inference, regression, hypothesis testing, causal claim, or economic
+interpretation is produced by Phase 5C4.
+
+At freeze time, five dedicated Phase 5C4 integration tests and 127 total
+project tests pass.
+
+# 78. Phase 5C Analytical Transformation Chain Freeze
+
+**Status:** FROZEN
+**Decision reference:** D097
+
+Phase 5C freezes the complete deterministic analytical transformation chain.
+
+The canonical Phase 5C outputs are:
+
+- `mpc_event_window_panel.csv`
+  — 936 rows
+  — SHA-256
+  `b99224391fd254d3404ca7e0ce27073b2fdceee12cc0703a54af9b32e125472f`;
+- `term_spread_panel.csv`
+  — 4,596 rows
+  — SHA-256
+  `5123ff3d4abe4a667d0854f3e9a8a8f9bf208368b8227bd3d31da2f011adb0ed`;
+- `monetary_policy_regime_panel.csv`
+  — 1,552 rows
+  — SHA-256
+  `d53f6301048f2261551d467e322fe820970a0db7eea145fe0221a45142d9ff4b`;
+- `yield_regime_analysis_panel.csv`
+  — 24,815 rows
+  — SHA-256
+  `f8583955e1f30953b13d7a054c2df4e146063c7fcfcabe205fd9cc9b42158a30`;
+- `term_spread_regime_analysis_panel.csv`
+  — 4,596 rows
+  — SHA-256
+  `d9fd6633941ab2d8932200ba45ac2e8e2619c1d77cbe30e751458d75e75311dd`;
+- `cross_curve_regime_analysis_panel.csv`
+  — 2,035 rows
+  — SHA-256
+  `2a286e2847081c6df654b6e13e71e3e07ce2e5249a4a2cef61f7e6fd5400c384`;
+- `analysis_input_manifest.csv`
+  — 5 rows
+  — SHA-256
+  `ec0fe1e6c43f2dfbf246e8120a777720858b82498beb741f08d11cdb8df17aa4`.
+
+The preserved Phase 5B inputs remain byte-identical.
+
+Phase 5C maintains separate daily yield, daily term-spread, exact-date
+cross-curve, MPC event-study, and monthly CPI/yield analytical grains.
+
+Daily regime and policy enrichment uses exact dates only.
+
+MPC announcement-date observations remain isolated from ordinary regime
+classification where intraday ordering is unknown.
+
+Monthly CPI/yield observations remain monthly and receive no replicated daily
+regime classification.
+
+Missing analytical values remain missing rather than zero.
+
+No interpolation or synthetic observation is introduced.
+
+At freeze time, the complete project suite contains 127 passing tests, the
+production SQLite database passes integrity and foreign-key checks, all active
+Phase 5C source files pass lint/format/compile checks, and the artifact chain
+is fully reconciled.
+
+Phase 5C therefore closes the deterministic data-preparation stage for later
+descriptive and statistical analysis.
