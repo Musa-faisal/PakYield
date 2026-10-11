@@ -5455,3 +5455,361 @@ At Phase 6A freeze:
 - SQLite integrity: `ok`;
 - SQLite foreign-key issues: 0;
 - Phase 6A source lint, formatting, and compilation checks: clean.
+
+# 105. D100 — Phase 6B Statistical Inference Design Contract
+
+**Date:** 2026-10-11
+**Status:** ACCEPTED / CONTRACT-FROZEN
+**Depends on:** D095, D096, D098, D099
+
+## Purpose
+
+Phase 6B introduces inferential statistical analysis only after the
+deterministic Phase 5C analytical inputs and Phase 6A descriptive baseline
+have been frozen.
+
+The objective is to test narrowly defined numerical relationships while
+preserving the time-series, paired-observation, event-level, and
+multiple-comparison structure of the data.
+
+Phase 6B does not convert observational comparisons into causal claims.
+
+## General inference principles
+
+The following rules apply to every inferential family.
+
+1. Only observations explicitly marked eligible by the frozen analytical
+   contracts may enter a test.
+
+2. Missing values remain missing and are never converted to zero.
+
+3. No interpolation, nearest-date substitution, forward fill, backfill, or
+   synthetic observation is permitted.
+
+4. Repeated maturities observed on the same calendar date are not treated as
+   independent replications.
+
+5. Daily observations may be serially dependent.
+
+6. Event-window observations are grouped by MPC event and are not treated as
+   unrelated cross-sectional observations.
+
+7. Every reported inferential result must include:
+   - analysis family;
+   - variable tested;
+   - comparison or null hypothesis;
+   - sample size;
+   - estimator or test procedure;
+   - effect estimate;
+   - confidence interval where defined;
+   - raw p-value where defined;
+   - multiplicity-adjusted p-value where applicable;
+   - explicit eligibility rule.
+
+8. Statistical significance does not establish economic significance.
+
+9. Observational regime comparisons do not establish monetary-policy
+   causality.
+
+10. No policy-surprise interpretation is allowed without market-expectations
+    data.
+
+11. `PKISRV - PKRV` remains a numerical benchmark-rate difference only and
+    must not be labeled an Islamic, Sukuk, Shariah, liquidity, tax, credit,
+    or structural premium or discount.
+
+## Family A — Daily yield levels by directional regime
+
+Frozen source:
+
+`data/interim/yield_regime_analysis_panel.csv`
+
+Outcome:
+
+`yield_pct`
+
+Eligibility:
+
+`yield_level_regime_analysis_status = ELIGIBLE`
+
+Comparison:
+
+`TIGHTENING` versus `EASING`
+
+Unit of estimation:
+
+one `curve_type × tenor` time series at a time.
+
+The two regime samples are not analyzed using a naive independent-samples
+t-test because observations are ordered in time and may be serially
+dependent.
+
+The primary procedure is an OLS mean-difference model:
+
+`yield_pct = intercept + beta * I[TIGHTENING] + error`
+
+where `beta` is the descriptive/inferential mean difference between
+TIGHTENING and EASING observations.
+
+Inference uses heteroskedasticity-and-autocorrelation-consistent covariance
+with Newey-West / HAC standard errors.
+
+The HAC lag is deterministic and must be recorded in the output.
+
+Phase 6B uses the automatic lag rule:
+
+`floor(4 * (n / 100)^(2/9))`
+
+with a minimum of 1 and capped below `n`.
+
+This family is inferential only where both regime groups contain at least 30
+eligible observations.
+
+## Family B — Daily yield changes by directional regime
+
+Frozen source:
+
+`data/interim/yield_regime_analysis_panel.csv`
+
+Outcome:
+
+`yield_change_bps`
+
+Eligibility:
+
+`yield_change_regime_analysis_status = ELIGIBLE`
+
+Comparison:
+
+`TIGHTENING` versus `EASING`
+
+Unit of estimation:
+
+one `curve_type × tenor` time series at a time.
+
+Primary procedure:
+
+OLS regime-indicator mean-difference model with HAC/Newey-West covariance,
+using the same deterministic lag rule as Family A.
+
+Both regime groups must contain at least 30 eligible observations.
+
+The test concerns the numerical distribution of observed benchmark-rate
+changes across the two directional regimes. It does not identify a causal
+policy effect.
+
+## Family C — PKRV term spreads by directional regime
+
+Frozen source:
+
+`data/interim/term_spread_regime_analysis_panel.csv`
+
+Outcome:
+
+`term_spread_bps`
+
+Eligibility:
+
+`joint_analysis_status = ELIGIBLE`
+
+Comparison:
+
+`TIGHTENING` versus `EASING`
+
+Unit of estimation:
+
+one configured `spread_name` time series at a time.
+
+Primary procedure:
+
+OLS regime-indicator mean-difference model with HAC/Newey-West covariance.
+
+Both regime groups must contain at least 30 eligible observations.
+
+A positive or negative regime coefficient describes a numerical difference
+between regime-conditioned term-spread observations only.
+
+It does not by itself establish policy-driven steepening, flattening,
+expectations, term-premium changes, or causality.
+
+## Family D — Exact-date PKISRV minus PKRV differences
+
+Frozen source:
+
+`data/interim/cross_curve_regime_analysis_panel.csv`
+
+Outcome:
+
+`pkisrv_minus_pkrv_bps`
+
+Eligibility:
+
+`paired_comparison_status = ELIGIBLE`
+
+The cross-curve quantity is already an exact-date paired difference.
+
+Two distinct inferential questions are permitted.
+
+### D1. Difference relative to zero
+
+For each comparable tenor separately, test whether the mean exact-date
+numerical difference differs from zero.
+
+Primary estimator:
+
+intercept-only OLS on `pkisrv_minus_pkrv_bps` with HAC/Newey-West covariance.
+
+Minimum eligible sample size:
+
+30 observations.
+
+### D2. Difference across directional regimes
+
+For each comparable tenor separately:
+
+`pkisrv_minus_pkrv_bps =
+ intercept + beta * I[TIGHTENING] + error`
+
+with HAC/Newey-West covariance.
+
+Both regime groups must contain at least 30 observations.
+
+These tests remain numerical benchmark comparisons only.
+
+## Family E — MPC announcement windows
+
+Frozen source:
+
+`data/interim/mpc_event_window_panel.csv`
+
+Outcome:
+
+`window_change_bps`
+
+Eligibility:
+
+`eligibility_status = ELIGIBLE`
+
+Unit of inference:
+
+one exact
+
+`curve_type × tenor × half_window × decision_type`
+
+group at a time.
+
+Each eligible row represents one MPC event contribution to that group.
+
+Because event counts are small in several groups and normality cannot be
+assumed, the default event-window inference is an exact or exhaustive
+sign-flip randomization test of a zero-centered event response where
+computationally feasible.
+
+For larger groups, deterministic Monte Carlo sign-flip inference may be used
+only if a fixed project seed is frozen before implementation.
+
+Phase 6B will not run an event-window significance test for groups with fewer
+than 5 eligible MPC events.
+
+Groups below the threshold remain descriptive-only.
+
+The effect estimate reported remains the observed mean
+`window_change_bps`.
+
+No result is labeled a policy surprise because no expectations series exists.
+
+## Family F — Monthly CPI and yield relationships
+
+Frozen source:
+
+`data/interim/monthly_cpi_yield_panel.csv`
+
+Phase 6B does not yet run CPI/yield regression inference.
+
+The monthly panel has a distinct frequency and serial structure and requires
+a separate econometric specification covering:
+
+- level versus change outcomes;
+- contemporaneous versus lagged CPI;
+- trend and persistence;
+- autocorrelation;
+- potential non-stationarity;
+- model diagnostics.
+
+Until that contract exists, the monthly family remains descriptive in
+Phase 6B.
+
+## Multiple-comparison control
+
+Tenor-level and spread-level tests create families of related hypotheses.
+
+Phase 6B uses Benjamini-Hochberg false-discovery-rate adjustment within each
+explicit inferential family.
+
+Adjustment is performed separately for:
+
+- yield-level regime comparisons;
+- yield-change regime comparisons;
+- term-spread regime comparisons;
+- cross-curve zero-difference tests;
+- cross-curve regime comparisons;
+- MPC event-window tests.
+
+Both raw and adjusted p-values are retained.
+
+No global p-value pooling across analytically different families is allowed.
+
+The default FDR threshold is 0.05.
+
+## Confidence intervals and effect sizes
+
+For HAC regression families, report:
+
+- coefficient / mean-difference estimate;
+- HAC standard error;
+- 95 percent confidence interval;
+- raw two-sided p-value;
+- Benjamini-Hochberg adjusted p-value.
+
+For cross-curve intercept-only tests, the coefficient is the mean numerical
+PKISRV-minus-PKRV difference.
+
+For event sign-flip tests, report:
+
+- observed mean event-window change;
+- event count;
+- two-sided randomization p-value;
+- adjusted p-value.
+
+No standardized effect-size transformation is required where the native unit
+in basis points is already directly interpretable.
+
+## Direction of hypotheses
+
+All Phase 6B inferential tests are two-sided unless a later preregistered
+decision explicitly freezes a directional alternative before examining the
+inferential output.
+
+## Reproducibility boundary
+
+The Phase 6B implementation must produce deterministic machine-readable
+tables.
+
+Any stochastic statistical method requires an explicitly fixed project seed.
+
+Input SHA-256 values must be validated before analysis.
+
+The implementation must not alter Phase 5C or Phase 6A frozen artifacts.
+
+## MPC event-window minimum-sample guardrail
+
+Any MPC event-window subgroup with fewer than 5 eligible MPC events is
+descriptive only and must not receive an inferential test, p-value,
+confidence interval, or statistical-significance label.
+
+This threshold is applied separately to each exact
+`curve_type × tenor × half_window × decision_type` subgroup after the frozen
+Phase 5C1 eligibility filter has been applied.
+
+Groups below the threshold remain visible in descriptive summaries and sample
+censuses rather than being deleted or pooled into another subgroup.

@@ -2088,3 +2088,59 @@ inputs for any later statistical procedure.
 
 At freeze time, five dedicated Phase 6A tests and 132 total project tests
 pass.
+
+# 81. Phase 6B Statistical Inference Design
+
+**Status:** CONTRACT-FROZEN
+**Decision reference:** D100
+
+Phase 6B introduces narrowly scoped inferential procedures after the frozen
+descriptive baseline.
+
+Daily yield levels, daily yield changes, and PKRV term spreads are analyzed
+within their own time series using regime-indicator OLS models with
+Newey-West/HAC covariance.
+
+The automatic HAC lag is:
+
+`floor(4 * (n / 100)^(2/9))`
+
+with a minimum of one lag and capped below the sample size.
+
+Each daily regime comparison requires at least 30 eligible observations in
+both TIGHTENING and EASING.
+
+Exact-date `PKISRV - PKRV` observations remain paired numerical benchmark
+differences. They may be tested against zero or compared across directional
+regimes using HAC inference, tenor by tenor.
+
+MPC event windows use event-level zero-centered sign-flip inference. Groups
+with fewer than five eligible MPC events remain descriptive-only.
+
+Monthly CPI/yield relationships remain outside Phase 6B inferential testing
+pending a separate time-series econometric specification.
+
+Benjamini-Hochberg false-discovery-rate adjustment is applied separately
+within each inferential family.
+
+All alternatives are two-sided.
+
+Native basis-point effect estimates, confidence intervals, raw p-values, and
+adjusted p-values are retained where defined.
+
+The procedures are inferential associations, not causal estimates. No
+policy-surprise claim is permitted without expectations data, and numerical
+PKISRV-minus-PKRV differences are not interpreted as Islamic, Sukuk, Shariah,
+liquidity, tax, credit, or structural premia or discounts.
+
+### MPC event-window minimum-sample guardrail
+
+Any exact MPC event-window subgroup with fewer than 5 eligible MPC events is
+treated as descriptive only in Phase 6B.
+
+No inferential p-value, confidence interval, or statistical-significance
+classification is produced for such a subgroup.
+
+The threshold is evaluated after the frozen event-window eligibility rules
+and is not repaired by pooling maturities, decision types, window widths, or
+curve families.
