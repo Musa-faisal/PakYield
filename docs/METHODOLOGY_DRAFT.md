@@ -2144,3 +2144,248 @@ classification is produced for such a subgroup.
 The threshold is evaluated after the frozen event-window eligibility rules
 and is not repaired by pooling maturities, decision types, window widths, or
 curve families.
+
+# 82. Phase 6B Inferential Analysis Artifact Freeze
+
+**Status:** FROZEN
+**Decision reference:** D101
+
+Phase 6B freezes the deterministic inferential-analysis outputs and manifest.
+
+The inferential manifest is:
+
+`data/interim/inferential_analysis_manifest.csv`
+
+SHA-256:
+
+`ec0dea0f785cb0a4f6a9ca5db684da21805701746c4160bb694bd739ab56bc10`
+
+The frozen inferential families are:
+
+- yield-level regime comparison:
+  25 inferential tests,
+  SHA-256
+  `4c9ba3fdd6e920e905db3dc118e645ad904e2cbf0682c33d0c5228998790b1a4`;
+- yield-change regime comparison:
+  25 inferential tests,
+  SHA-256
+  `4baf694f635fb183ef4072dde24b10924bd280241276940b83d19b2c3c2f9501`;
+- term-spread regime comparison:
+  4 inferential tests,
+  SHA-256
+  `17f7222dda8f17e14830d64f268b076ac365e66012b4fdf6aa38527a835e1349`;
+- exact-date cross-curve zero comparison:
+  5 inferential tests,
+  SHA-256
+  `14a906144b79f4a81dbe8b2df752a607600871bfc9de7e098e079b44e31f75de`;
+- cross-curve regime comparison:
+  5 inferential tests,
+  SHA-256
+  `f3cca17f6cf658828a9ac613d7fdf7764126e9da0a74760749a9109a8717a6a5`;
+- MPC event-window analysis:
+  72 total rows, of which 54 are inferential and 18 are descriptive-only,
+  SHA-256
+  `13673445d98051044a1fe5b019d712fadf6b4b544dde2c6cc64a8ca48441f2f1`.
+
+The total Phase 6B inferential-test count is 118.
+
+Monthly CPI/yield analysis remains descriptive-only in Phase 6B and therefore
+contributes zero inferential tests.
+
+Regime-family inference uses OLS with HAC/Newey-West covariance.
+
+Cross-curve zero testing uses intercept-only OLS with HAC/Newey-West
+covariance.
+
+MPC event-window testing uses one-sample t-tests only where sample size is at
+least five.
+
+Benjamini-Hochberg adjustment is applied within inferential families.
+
+These procedures provide statistical comparisons under the frozen analytical
+contracts. They do not by themselves establish causality, policy surprise,
+predictive power, economic significance, or structural monetary transmission.
+
+At freeze time, the complete project suite contains 137 passing tests.
+
+# 83. Phase 6C Inferential Diagnostics Artifact Freeze
+
+**Status:** FROZEN
+
+Phase 6C validates the inferential-output contract using a deterministic
+diagnostic manifest:
+
+`data/interim/inferential_diagnostics_manifest.csv`
+
+Frozen SHA-256:
+
+`e059f18c249746136c02b20c593504408df4e873eca2b888209add7465473420`
+
+The diagnostic layer uses the canonical fields `sample_n`, `p_value_raw`,
+`p_value_bh`, and `reject_bh_0_05`.
+
+Seven analytical families are reconciled.
+
+The frozen Benjamini-Hochberg decision census is:
+
+- yield levels: 24 reject, 1 do not reject;
+- yield changes: 10 reject, 15 do not reject;
+- term spreads: 4 reject, 0 do not reject;
+- exact cross-curve zero tests: 5 reject, 0 do not reject;
+- cross-curve regime tests: 4 reject, 1 do not reject;
+- MPC event windows: 0 reject, 54 do not reject;
+- monthly CPI/yield: descriptive only.
+
+Adjusted p-values are recomputed independently and must reconcile with the
+stored values and rejection flags.
+
+The diagnostic layer validates statistical bookkeeping and field integrity.
+It does not independently establish causality, policy surprise, economic
+significance, or predictive validity.
+
+At freeze time, five dedicated Phase 6C integration tests and 142 total
+project tests pass.
+
+# 84. Phase 6D Research-Evidence Synthesis Contract
+
+**Status:** ACTIVE / CONTRACT-FROZEN
+**Decision reference:** D103
+
+Phase 6D maps frozen Phase 6A–6C evidence to the project's pre-specified
+research questions and hypotheses.
+
+The process uses four evidence classes:
+
+- descriptive;
+- inferential;
+- diagnostic;
+- data limitation.
+
+The evidence map records which frozen artifact informs each research question
+or hypothesis and the role that evidence may legitimately play.
+
+Hypothesis outcomes are synthesis labels rather than statistical tests.
+A single p-value below 0.05 does not automatically imply support.
+
+The existing inferential families cover yield levels, yield changes, term
+spreads, numerical PKISRV-PKRV benchmark differences, and MPC event windows.
+
+The monthly CPI/yield family remains descriptive-only.
+
+The existing cross-curve tests concern numerical benchmark differences and
+regime variation; they must not be silently relabeled as a direct correlation
+or co-movement test.
+
+MPC event-window evidence must not be interpreted as policy surprise because
+no expectations series exists.
+
+All inferential evidence included in synthesis must retain a passing Phase 6C
+diagnostic status.
+
+Phase 6D does not modify empirical estimates and does not create causal
+identification.
+
+<!-- 6D_CANONICAL_EVIDENCE_MAP_START -->
+## Canonical Phase 6D research-evidence map
+
+Canonical artifact:
+
+`data/interim/research_evidence_map.csv`
+
+Verified row count:
+
+`24`
+
+Verified SHA-256:
+
+`50f0ca2f897c6a986e908854f7a75d8186ed07bc2f5fcab7ead83bf7d087f002`
+
+Canonical builder:
+
+`scripts/build_research_evidence_map.py`
+
+Canonical integration test:
+
+`tests/integration/test_research_evidence_map.py`
+
+These references identify the deterministic Phase 6D research-evidence map.
+They do not replace the underlying analytical artifacts or relax any earlier
+eligibility, grain, timing, missingness, or interpretation contracts.
+<!-- 6D_CANONICAL_EVIDENCE_MAP_END -->
+# Phase 6D Research-Evidence Map Freeze
+
+The Phase 6D research-evidence map contains 24 frozen rows with SHA-256:
+
+`50f0ca2f897c6a986e908854f7a75d8186ed07bc2f5fcab7ead83bf7d087f002`
+
+Coverage spans RQ1-RQ4 and H1-H4.
+
+The frozen evidence classes are:
+
+- 10 `DESCRIPTIVE`;
+- 10 `INFERENTIAL`;
+- 4 `DATA_LIMITATION`.
+
+The evidence map is an evidence-routing artifact. It links research targets
+to available analytical evidence while preserving the distinction between
+descriptive results, inferential results, and explicit data limitations.
+
+It does not convert evidence into a causal claim or hypothesis verdict.
+
+At freeze time, five dedicated evidence-map integration tests pass and the
+complete project suite contains 147 passing tests.
+
+# 85. Phase 6D Research-Evidence Map Freeze
+
+**Status:** FROZEN
+**Decision references:** D103, D104
+
+Phase 6D freezes the canonical research-evidence synthesis artifact:
+
+`data/interim/research_evidence_map.csv`
+
+Frozen SHA-256:
+
+`50f0ca2f897c6a986e908854f7a75d8186ed07bc2f5fcab7ead83bf7d087f002`
+
+The artifact contains 24 evidence-map rows covering RQ1–RQ4 and H1–H4.
+
+Target counts are:
+
+- RQ1: 6;
+- RQ2: 3;
+- RQ3: 3;
+- RQ4: 2;
+- H1: 3;
+- H2: 2;
+- H3: 3;
+- H4: 2.
+
+Evidence-class counts are:
+
+- descriptive: 10;
+- inferential: 10;
+- data limitation: 4.
+
+The evidence map is metadata. It does not recompute empirical results.
+
+Inferential evidence remains subject to the Phase 6C diagnostic gate.
+
+H1 remains announcement-window maturity-comparison evidence rather than a
+policy-surprise test.
+
+H2 must not be treated as directly inferentially tested for co-movement unless
+a dedicated frozen co-movement statistic exists.
+
+H3 remains a numerical PKISRV-minus-PKRV benchmark-difference question and
+does not imply a structural premium or discount.
+
+H4 remains an observational comparison of selected PKRV term spreads across
+directional policy regimes.
+
+RQ4 remains only partially covered because the current monthly CPI/yield
+family is descriptive-only and no frozen macroeconomic regression result may
+be invented.
+
+At freeze time, the Phase 6D targeted suite contains 10 passing tests and the
+complete project suite contains 147 passing tests.
