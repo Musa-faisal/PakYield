@@ -508,7 +508,7 @@ For date `t`, the observed yield curve consists of available maturity/yield pair
 ```text
 (maturity_1, yield_1)
 (maturity_2, yield_2)
-...
+⋮
 (maturity_n, yield_n)
 ```
 

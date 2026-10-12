@@ -281,7 +281,7 @@ def parse_human_date(
                 fmt,
             ).date()
         except ValueError:
-            pass
+            continue
 
     raise ValueError(f"Unsupported explicit effective date: {raw}")
 
@@ -364,7 +364,7 @@ def parse_policy_date(
                 fmt,
             ).date()
         except ValueError:
-            pass
+            continue
 
     raise ValueError(f"Unsupported EasyData date: {raw!r}")
 
