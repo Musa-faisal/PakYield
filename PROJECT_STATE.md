@@ -10,8 +10,8 @@
 
 ## Current Status
 
-**Current Phase:** Phase 7 — Presentation, Dashboard & Research Delivery
-**Current Batch:** Phase 7F — Delivery, Deployment Readiness & Project Handoff
+**Current Phase:** Phase 8 — Research Publication & Final Portfolio Packaging
+**Current Batch:** Phase 8A — Publication Evidence Packet & Research Architecture
 **Overall Status:** IN PROGRESS
 
 ---
@@ -1005,3 +1005,40 @@ Final closure verified:
 - Phase 7F final working-tree scope contained documentation only.
 
 The next project phase must begin from a clean committed Phase 7F baseline.
+
+## Phase 8 — Research Publication & Final Portfolio Packaging
+
+**Status:** ACTIVE
+
+### Objective
+
+Convert PakYield Lab's frozen analytical and research evidence into
+publication-quality and portfolio-ready deliverables without changing the
+underlying empirical methodology or frozen evidence.
+
+### Phase 8A — Publication Evidence Packet & Research Architecture
+
+**Status:** ACTIVE
+
+Phase 8A begins from the clean, published Phase 7F baseline.
+
+Its purpose is to:
+
+- verify the frozen Phase 6D research evidence map;
+- create a deterministic publication source packet;
+- define the research-paper architecture;
+- define the two-page research-brief architecture;
+- preserve evidence traceability and interpretation boundaries;
+- identify remaining v1.0 outputs that still require implementation or an
+  explicit deferral decision.
+
+The frozen Phase 6D evidence map is:
+
+`data/interim/research_evidence_map.csv`
+
+with 24 evidence rows and SHA-256:
+
+`50f0ca2f897c6a986e908854f7a75d8186ed07bc2f5fcab7ead83bf7d087f002`
+
+Publication work must not modify frozen analytical artifacts or convert
+descriptive evidence into stronger inferential or causal claims.
