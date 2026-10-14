@@ -10,8 +10,8 @@
 
 ## Current Status
 
-**Current Phase:** Phase 5 — Cleaning, Validation & Analytical Transformation
-**Current Batch:** Phase 5B — Derived Analytical States & Cross-Dataset Alignment Complete
+**Current Phase:** Phase 7 — Presentation, Dashboard & Research Delivery
+**Current Batch:** Phase 7F — Delivery, Deployment Readiness & Project Handoff
 **Overall Status:** IN PROGRESS
 
 ---
@@ -234,24 +234,25 @@ Expected during Phase 1:
 
 ## Next Action
 
-Begin the next analytical-preparation batch using the frozen Phase 5B derived
-datasets.
+Phase 7E should close the presentation/state-reconciliation checkpoint.
 
-Before substantive empirical findings are produced, define and validate the
-remaining analytical contracts required for:
+The repository currently contains:
 
-- MPC announcement-window observation selection;
-- event-anchor handling where announcement timing and benchmark timing matter;
-- term-spread construction;
-- deterministic monetary-policy regime classification;
-- descriptive and statistical analysis inputs.
+- the frozen Phase 5C analytical transformation chain;
+- frozen Phase 6A descriptive analysis outputs;
+- frozen Phase 6B inferential analysis outputs;
+- frozen Phase 6C inferential diagnostics;
+- the frozen Phase 6D research-evidence map;
+- the Phase 7 presentation foundation;
+- the Phase 7D Streamlit research dashboard.
 
-The Phase 5B derived artifacts are reproducible analytical inputs and should
-not be reconstructed ad hoc inside notebooks.
+The immediate next action is to complete the Phase 7E documentation
+reconciliation, verify the Streamlit presentation layer against the frozen
+research evidence and analytical artifacts, and then freeze the presentation
+checkpoint before beginning any subsequent delivery or deployment work.
 
-Do not classify hypotheses as supported or unsupported, estimate final
-regressions, or make causal monetary-policy claims until the relevant
-analytical contracts and diagnostics are complete.
+No frozen analytical artifact should be recomputed or reinterpreted during
+this documentation reconciliation.
 
 ## Phase 1 Acceptance Criteria
 
@@ -852,3 +853,155 @@ data-storage policy.
 
 Decision reference: D089.
 
+## Phase 7E — Project State Reconciliation & Presentation Validation
+
+Phase 7E reconciles the live project-state documentation with the actual
+repository history after completion of the analytical, research-synthesis,
+and presentation layers.
+
+### Verified repository checkpoint
+
+At the Phase 7E audit checkpoint:
+
+- branch: `main`;
+- local `HEAD` and `origin/main` are synchronized;
+- current dashboard commit:
+  `2b291398397143e3ccae329c0a6b68b66c1b6e1b`;
+- working tree was clean before reconciliation;
+- targeted dashboard tests: 10 passed;
+- complete project test suite: 168 passed;
+- Streamlit version: 1.64.0;
+- Streamlit entry point:
+  `app/streamlit_app.py`;
+- the Streamlit application boots successfully in headless mode;
+- dashboard data-service imports resolve successfully.
+
+### Completed analytical and research layers
+
+The repository history confirms completion of:
+
+- Phase 5C analytical transformation chain;
+- Phase 6A descriptive analysis tables;
+- Phase 6B inferential analysis tables;
+- Phase 6C inferential diagnostics;
+- Phase 6D research-evidence synthesis;
+- Phase 7 presentation foundation;
+- Phase 7D Streamlit research dashboard.
+
+The frozen Phase 6D evidence map remains:
+
+`data/interim/research_evidence_map.csv`
+
+with 24 evidence rows and SHA-256:
+
+`50f0ca2f897c6a986e908854f7a75d8186ed07bc2f5fcab7ead83bf7d087f002`
+
+### Presentation boundary
+
+The Streamlit dashboard is a presentation layer over frozen analytical and
+research artifacts.
+
+It must not:
+
+- manufacture missing analytical observations;
+- bypass eligibility rules;
+- convert descriptive evidence into inferential evidence;
+- reinterpret event-window results as policy surprise;
+- convert numerical PKISRV-PKRV differences into structural, Islamic,
+  Sukuk, Shariah, liquidity, credit, or tax premia;
+- create causal monetary-policy claims from observational comparisons.
+
+### Documentation reconciliation rule
+
+Historical methodology, feasibility, and decision records retain the phase
+labels that describe the work performed when those sections were created.
+
+`PROJECT_STATE.md` is the live project-state source and therefore carries the
+current project phase and next action.
+
+Phase 7E updates live state documentation only; it does not rewrite the
+historical analytical record.
+
+## Phase 7F — Delivery, Deployment Readiness & Project Handoff
+
+**Status:** COMPLETE
+
+### Objective
+
+Prepare PakYield Lab for reproducible delivery and deployment without changing
+the frozen research methodology or analytical evidence.
+
+### Phase 7F Batch 1 — Deployment Preflight
+
+Verified:
+
+- Python 3.12.10;
+- Streamlit 1.64.0;
+- `app/streamlit_app.py` compiles;
+- Streamlit configuration exists and is valid;
+- Streamlit is declared in `pyproject.toml`;
+- presentation-layer imports resolve;
+- no unresolved literal app data-file references were detected;
+- frozen research evidence-map SHA remains exact;
+- 21 dashboard tests pass;
+- 168 total project tests pass;
+- repository Python source passes Ruff and format checks;
+- production SQLite integrity is `ok`;
+- SQLite foreign-key issues are zero;
+- no obvious tracked secret-like files were detected;
+- no obvious hardcoded credential tokens were detected;
+- no external network libraries are imported by the application layer;
+- Streamlit completed a successful headless boot smoke test;
+- no `.part` files remain;
+- repository anchor remained unchanged during the preflight.
+
+### Phase 7F Batch 2 — Delivery Documentation
+
+This batch establishes:
+
+- reproducible local installation instructions;
+- the canonical Streamlit entrypoint;
+- local execution instructions;
+- deployment prerequisites;
+- data and persistence expectations;
+- verification commands;
+- a delivery checklist.
+
+No analytical methodology, frozen artifact, or research result is modified by
+this documentation work.
+
+### Deployment boundary
+
+Deployment packaging must not:
+
+- modify frozen research artifacts;
+- regenerate evidence using different methodological rules;
+- introduce hidden interpolation or synthetic observations;
+- expose credentials;
+- add runtime network dependencies without explicit review;
+- change the canonical analytical contracts solely for presentation reasons.
+
+The production Streamlit entrypoint remains:
+
+`app/streamlit_app.py`
+
+### Phase 7F Final Closure
+
+Phase 7F is complete.
+
+Final closure verified:
+
+- delivery and deployment documentation is present;
+- canonical Streamlit entrypoint remains `app/streamlit_app.py`;
+- deployment work does not modify frozen analytical methodology or evidence;
+- 21 dashboard tests passed at deployment preflight;
+- 168 total project tests passed at deployment preflight;
+- production SQLite integrity was `ok`;
+- SQLite foreign-key issues were zero;
+- repository Python source passed Ruff and formatting checks;
+- Streamlit completed a successful headless boot smoke test;
+- no `.part` files remained;
+- no analytical artifact was modified by Phase 7F;
+- Phase 7F final working-tree scope contained documentation only.
+
+The next project phase must begin from a clean committed Phase 7F baseline.
