@@ -9,37 +9,37 @@ from pathlib import Path
 from typing import Final
 
 PROJECT_ROOT: Final = Path(__file__).resolve().parents[2]
-INTERIM_DIR: Final = PROJECT_ROOT / "data" / "interim"
+RUNTIME_DIR: Final = PROJECT_ROOT / "data" / "runtime"
 
 
 ARTIFACTS: Final = {
     "yield": {
-        "path": INTERIM_DIR / "yield_regime_analysis_panel.csv",
+        "path": RUNTIME_DIR / "yield_regime_analysis_panel.csv",
         "rows": 24815,
         "sha256": ("f8583955e1f30953b13d7a054c2df4e146063c7fcfcabe205fd9cc9b42158a30"),
     },
     "term_spread": {
-        "path": INTERIM_DIR / "term_spread_regime_analysis_panel.csv",
+        "path": RUNTIME_DIR / "term_spread_regime_analysis_panel.csv",
         "rows": 4596,
         "sha256": ("d9fd6633941ab2d8932200ba45ac2e8e2619c1d77cbe30e751458d75e75311dd"),
     },
     "cross_curve": {
-        "path": INTERIM_DIR / "cross_curve_regime_analysis_panel.csv",
+        "path": RUNTIME_DIR / "cross_curve_regime_analysis_panel.csv",
         "rows": 2035,
         "sha256": ("2a286e2847081c6df654b6e13e71e3e07ce2e5249a4a2cef61f7e6fd5400c384"),
     },
     "mpc_event": {
-        "path": INTERIM_DIR / "mpc_event_window_panel.csv",
+        "path": RUNTIME_DIR / "mpc_event_window_panel.csv",
         "rows": 936,
         "sha256": ("b99224391fd254d3404ca7e0ce27073b2fdceee12cc0703a54af9b32e125472f"),
     },
     "monthly_cpi": {
-        "path": INTERIM_DIR / "monthly_cpi_yield_panel.csv",
+        "path": RUNTIME_DIR / "monthly_cpi_yield_panel.csv",
         "rows": 1234,
         "sha256": ("978734c701969e049b4bd78c3a7c3d15b6534f530c19971c1b6df8efd6f370c7"),
     },
     "manifest": {
-        "path": INTERIM_DIR / "analysis_input_manifest.csv",
+        "path": RUNTIME_DIR / "analysis_input_manifest.csv",
         "rows": 5,
         "sha256": ("ec0fe1e6c43f2dfbf246e8120a777720858b82498beb741f08d11cdb8df17aa4"),
     },
