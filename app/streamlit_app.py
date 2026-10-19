@@ -2,11 +2,19 @@
 
 from __future__ import annotations
 
+import sys
 from collections.abc import Iterable
+from pathlib import Path
 from typing import Final
 
 import streamlit as st
-from app.services import data
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from app.services import data  # noqa: E402
 
 APP_TITLE: Final = "PakYield Lab"
 
