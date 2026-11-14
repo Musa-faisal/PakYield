@@ -43,6 +43,16 @@ ARTIFACTS: Final = {
         "rows": 5,
         "sha256": ("ec0fe1e6c43f2dfbf246e8120a777720858b82498beb741f08d11cdb8df17aa4"),
     },
+    "nelson_siegel_date_fits": {
+        "path": RUNTIME_DIR / "nelson_siegel_date_fits.csv",
+        "rows": 1552,
+        "sha256": ("6a8c9736061cedf41597f0757f1f58d5b283be637b97b4e89d1ee87ef352ff3a"),
+    },
+    "nelson_siegel_fitted_yields": {
+        "path": RUNTIME_DIR / "nelson_siegel_fitted_yields.csv",
+        "rows": 24815,
+        "sha256": ("869444d4d6203d5add2978de3e7ff5d21537f570b87a291971d9d7529092c9cd"),
+    },
 }
 
 
@@ -134,6 +144,85 @@ def load_analysis_manifest() -> tuple[dict[str, str], ...]:
     """Return the frozen five-family analysis manifest."""
 
     return load_rows("manifest")
+
+
+def load_nelson_siegel_date_fits() -> tuple[dict[str, str], ...]:
+    """Return frozen Nelson-Siegel date-level fit metadata."""
+
+    return load_rows("nelson_siegel_date_fits")
+
+
+def load_nelson_siegel_fitted_yields() -> tuple[dict[str, str], ...]:
+    """Return frozen observed-versus-fitted Nelson-Siegel points."""
+
+    return load_rows("nelson_siegel_fitted_yields")
+
+
+def latest_nelson_siegel_status(
+    curve_type: str,
+) -> dict[str, str] | None:
+    """Return latest frozen Nelson-Siegel fit-status row for one curve."""
+
+    rows = [
+        row for row in load_nelson_siegel_date_fits() if row["curve_type"] == curve_type
+    ]
+
+    if not rows:
+        return None
+
+    return max(
+        rows,
+        key=lambda row: row["observation_date"],
+    )
+
+
+def nelson_siegel_curve(
+    observation_date: str,
+    curve_type: str,
+) -> tuple[dict[str, str], ...]:
+    """Return one verified fitted curve without refitting in the app."""
+
+    rows = [
+        row
+        for row in load_nelson_siegel_fitted_yields()
+        if row["observation_date"] == observation_date
+        and row["curve_type"] == curve_type
+        and row["fit_status"] == "FIT"
+        and row["fitted_yield_pct"]
+    ]
+
+    return tuple(
+        sorted(
+            rows,
+            key=lambda row: float(row["tenor_years"]),
+        )
+    )
+
+
+def latest_nelson_siegel_curve(
+    curve_type: str,
+) -> tuple[dict[str, str], ...]:
+    """Return latest verified fitted Nelson-Siegel curve for one curve type."""
+
+    rows = [
+        row
+        for row in load_nelson_siegel_fitted_yields()
+        if row["curve_type"] == curve_type
+        and row["fit_status"] == "FIT"
+        and row["fitted_yield_pct"]
+    ]
+
+    if not rows:
+        return ()
+
+    latest_date = max(row["observation_date"] for row in rows)
+
+    return tuple(
+        sorted(
+            (row for row in rows if row["observation_date"] == latest_date),
+            key=lambda row: float(row["tenor_years"]),
+        )
+    )
 
 
 def latest_curve_snapshot(
@@ -274,3 +363,155 @@ def eligible_cross_curve_rows() -> tuple[dict[str, str], ...]:
         for row in load_cross_curve_rows()
         if row["paired_comparison_status"] == "ELIGIBLE"
     )
+
+
+# ---------------------------------------------------------------------------
+# Phase 13 — Fixed-income application service
+# ---------------------------------------------------------------------------
+
+_FIXED_INCOME_STANDARD_SHOCKS_BPS = (
+    -200,
+    -100,
+    -50,
+    0,
+    50,
+    100,
+    200,
+)
+
+
+def fixed_income_analysis(
+    *,
+    face_value: float,
+    coupon_rate_pct: float,
+    ytm_pct: float,
+    years_to_maturity: float,
+    coupon_frequency: int,
+    rate_shock_bps: int,
+) -> dict[str, object]:
+    """Return tested fixed-rate bullet valuation/risk results for the UI.
+
+    Percentage inputs are user-facing percentages. Financial valuation and
+    risk calculations are delegated entirely to ``pakyield.fixed_income``.
+    """
+
+    from pakyield.fixed_income import analyze_fixed_rate_bullet
+
+    coupon_rate = float(coupon_rate_pct) / 100.0
+    ytm = float(ytm_pct) / 100.0
+
+    selected_shock = int(rate_shock_bps)
+
+    shocks = tuple(sorted(set(_FIXED_INCOME_STANDARD_SHOCKS_BPS + (selected_shock,))))
+
+    result = analyze_fixed_rate_bullet(
+        face_value=float(face_value),
+        coupon_rate=coupon_rate,
+        ytm=ytm,
+        years_to_maturity=float(years_to_maturity),
+        coupon_frequency=int(coupon_frequency),
+        shocks_bps=shocks,
+    )
+
+    cash_flows = [
+        {
+            "period": flow.period,
+            "time_years": flow.time_years,
+            "coupon_cash_flow": flow.coupon_cash_flow,
+            "principal_cash_flow": flow.principal_cash_flow,
+            "total_cash_flow": flow.total_cash_flow,
+            "discount_factor": flow.discount_factor,
+            "present_value": flow.present_value,
+        }
+        for flow in result.cash_flows
+    ]
+
+    scenarios = [
+        {
+            "shock_bps": scenario.shock_bps,
+            "shocked_ytm_pct": (scenario.shocked_ytm * 100.0),
+            "duration_only_price": (scenario.duration_only_price),
+            "duration_convexity_price": (scenario.duration_convexity_price),
+            "actual_repriced_price": (scenario.actual_repriced_price),
+            "actual_price_change": (scenario.actual_price_change),
+            "duration_only_error": (scenario.duration_only_error),
+            "duration_convexity_error": (scenario.duration_convexity_error),
+        }
+        for scenario in result.scenarios
+    ]
+
+    return {
+        "face_value": result.face_value,
+        "coupon_rate_pct": (result.coupon_rate * 100.0),
+        "ytm_pct": (result.ytm * 100.0),
+        "years_to_maturity": (result.years_to_maturity),
+        "coupon_frequency": (result.coupon_frequency),
+        "price": result.price,
+        "macaulay_duration_years": (result.macaulay_duration_years),
+        "modified_duration_years": (result.modified_duration_years),
+        "dv01": result.dv01,
+        "convexity_years_squared": (result.convexity_years_squared),
+        "selected_shock_bps": (selected_shock),
+        "cash_flows": cash_flows,
+        "scenarios": scenarios,
+        "calculation_engine": ("pakyield.fixed_income.analyze_fixed_rate_bullet"),
+    }
+
+
+def fixed_income_price_curve(
+    *,
+    face_value: float,
+    coupon_rate_pct: float,
+    center_ytm_pct: float,
+    years_to_maturity: float,
+    coupon_frequency: int,
+    points: int = 41,
+    half_width_pct_points: float = 5.0,
+) -> list[dict[str, float]]:
+    """Build a display price/yield curve using the tested pricing backend."""
+
+    from pakyield.fixed_income import price_fixed_rate_bullet
+
+    if points < 2:
+        raise ValueError("points must be at least 2")
+
+    if half_width_pct_points <= 0:
+        raise ValueError("half_width_pct_points must be positive")
+
+    center = float(center_ytm_pct)
+
+    lower = max(
+        0.01,
+        center - float(half_width_pct_points),
+    )
+
+    upper = center + float(half_width_pct_points)
+
+    if upper <= lower:
+        raise ValueError("price-curve YTM range is invalid")
+
+    step = (upper - lower) / (points - 1)
+
+    coupon_rate = float(coupon_rate_pct) / 100.0
+
+    output = []
+
+    for index in range(points):
+        ytm_pct = lower + step * index
+
+        price = price_fixed_rate_bullet(
+            face_value=float(face_value),
+            coupon_rate=coupon_rate,
+            ytm=ytm_pct / 100.0,
+            years_to_maturity=float(years_to_maturity),
+            coupon_frequency=int(coupon_frequency),
+        )
+
+        output.append(
+            {
+                "ytm_pct": ytm_pct,
+                "price": price,
+            }
+        )
+
+    return output

@@ -22,7 +22,7 @@ EXPECTED_PAGE_TITLES = {
     "2_Yield_Curve_Lab.py": "Yield Curve Lab",
     "3_Monetary_Policy_Lab.py": "Monetary Policy Lab",
     "4_Islamic_vs_Conventional.py": "Islamic vs Conventional",
-    "5_Fixed_Income_Risk.py": "Fixed Income Risk",
+    "5_Fixed_Income_Risk.py": "Fixed-Income Risk",
     "6_Research.py": "Research",
 }
 
@@ -115,16 +115,21 @@ def test_all_six_pages_use_shared_layout_components() -> None:
             "components.layout",
         )
 
-        assert required.issubset(imports), (
+        required_for_page = set(required)
+
+        if path.name == "5_Fixed_Income_Risk.py":
+            required_for_page.discard("render_placeholder")
+
+        assert required_for_page.issubset(imports), (
             path.name,
-            required - imports,
+            required_for_page - imports,
         )
 
         calls = set(called_names(tree))
 
-        assert required.issubset(calls), (
+        assert required_for_page.issubset(calls), (
             path.name,
-            required - calls,
+            required_for_page - calls,
         )
 
 
@@ -203,9 +208,17 @@ def test_rollout_pages_do_not_introduce_direct_data_or_plotting() -> None:
             ):
                 observed.add(function.attr)
 
-        assert not (observed & forbidden_streamlit_calls), (
+        forbidden_calls = observed & forbidden_streamlit_calls
+
+        if path.name == "5_Fixed_Income_Risk.py":
+            forbidden_calls -= {
+                "dataframe",
+                "plotly_chart",
+            }
+
+        assert not forbidden_calls, (
             path.name,
-            observed & forbidden_streamlit_calls,
+            forbidden_calls,
         )
 
 

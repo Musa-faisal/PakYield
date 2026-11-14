@@ -1,6 +1,7 @@
-"""PakYield research workspace."""
+"""PakYield verified Research / Econometrics workspace."""
 
 import streamlit as st
+from app.components.presentation import apply_institutional_css, render_disclaimer
 
 from components.layout import (
     render_data_caption,
@@ -9,6 +10,8 @@ from components.layout import (
     render_section_header,
     render_terminal_bar,
 )
+from components.research import render_research_workspace
+from services import econometrics
 from styles.theme import apply_theme
 
 st.set_page_config(
@@ -17,36 +20,49 @@ st.set_page_config(
     layout="wide",
 )
 
+apply_institutional_css()
+
 apply_theme()
 
 render_terminal_bar(
     context="PAKISTAN SOVEREIGN FIXED INCOME",
-    status="RESEARCH",
+    status="RESEARCH / ECONOMETRICS",
 )
 
 render_page_header(
     "RESEARCH",
     "Research",
     (
-        "A controlled workspace for descriptive sovereign-yield, "
-        "policy-regime, event-window, and CPI analysis."
+        "Explore verified sovereign-yield inferential tests, "
+        "monetary-policy regime results, statistical "
+        "diagnostics, and observed macroeconomic series."
     ),
 )
 
-render_section_header("Analysis Families")
+render_section_header("Research / Econometrics Workbench")
 
-render_placeholder(
-    "Frozen analytical families and their eligibility filters will be surfaced here."
-)
+render_research_workspace(econometrics)
 
-render_section_header("Research Notes")
+render_section_header("Methodology & Research Controls")
 
-render_placeholder(
-    "Documented methodology, assumptions, and analysis outputs "
-    "will be connected here in later phases."
-)
+with st.expander(
+    "Analytical integrity and interpretation rules",
+    expanded=False,
+):
+    render_placeholder(
+        "Only frozen, SHA-verified research results are "
+        "displayed. Missing observations, exclusions, "
+        "non-significant results, and diagnostic warnings "
+        "remain visible in their recorded source fields. "
+        "This page does not estimate models or calculate "
+        "statistical significance."
+    )
 
 render_data_caption(
-    "Research views must preserve the frozen analytical grains "
-    "and explicit missing-data rules."
+    "Research outputs retain the approved analytical "
+    "grains, eligibility rules, HAC settings, "
+    "multiple-testing adjustments, and frozen "
+    "source-artifact provenance."
 )
+
+render_disclaimer()

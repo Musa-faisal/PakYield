@@ -2389,3 +2389,213 @@ be invented.
 
 At freeze time, the Phase 6D targeted suite contains 10 passing tests and the
 complete project suite contains 147 passing tests.
+
+# 79. Production-to-Analysis Reconciliation Contract
+
+**Status:** CONTRACT-FROZEN
+**Decision reference:** D098
+
+PakYield requires end-to-end reconciliation from the normalized production
+database through every frozen analytical input before substantive analysis
+proceeds.
+
+The production baseline contains 24,815 normalized yield observations,
+39 validated MPC events, 18 policy-rate observations, 57 CPI observations,
+and 14 ingestion runs.
+
+The yield-change source reconciles one-for-one to normalized yield
+observations. Across 25 curve-tenor series, 25 first observations correctly
+have no previous-observation change and 24,790 changes reconcile
+arithmetically.
+
+The term-spread panel contains 4,566 eligible rows and 30 explicit
+`MISSING_SHORT_LEG` rows.
+
+The exact-date PKRV/PKISRV panel contains 2,005 matched observations,
+20 `PKRV_ONLY` observations, and 10 `PKISRV_ONLY` observations.
+
+The MPC event-window panel contains 936 rows across 39 validated MPC events,
+of which 688 are eligible and 248 are ineligible.
+
+All 1,552 monetary-policy regime rows must obey the strict-before MPC
+classification rule.
+
+The three enriched daily analysis inputs contain 31,446 rows in aggregate and
+must receive policy state only through exact calendar-date joins.
+
+The five-family analysis manifest must reproduce each canonical artifact's
+exact row count and SHA-256.
+
+The MPC event-study family remains `NOT_JOINED` to ordinary regime metadata.
+
+The monthly CPI/yield family remains
+`NOT_JOINED_PENDING_MONTHLY_ANCHOR_CONTRACT`.
+
+Reconciliation failures are blocking quality failures. No interpolation,
+nearest-date substitution, forward fill, backfill, or synthetic repair is
+permitted.
+
+Passing reconciliation verifies deterministic consistency only. It is not a
+causal, statistical, predictive, or economic conclusion.
+
+# 80. Phase 10 VIF Diagnostic Implementation
+
+**Status:** FROZEN
+**Decision reference:** D099
+
+PakYield computes variance inflation factors for every current inferential
+regression containing a nonconstant explanatory variable.
+
+Detailed output:
+
+`data/interim/inferential_vif_diagnostics.csv`
+
+SHA-256:
+
+`e896b23b815a45379954830b4daa458429ef575fbe705172895510c092ce64a4`
+
+Applicability manifest:
+
+`data/interim/inferential_vif_manifest.csv`
+
+SHA-256:
+
+`f1224edf9111e3c8cdc2d71a4b69d827f5249891af0e208b87f74aa37f3c2b07`
+
+The current regime-comparison OLS/HAC design contains an intercept and one
+nonconstant binary explanatory variable,
+`regime_tightening_indicator`.
+
+For each model, the exact eligible analytical rows are reconstructed and
+reconciled to the frozen inferential sample counts before VIF is calculated.
+
+VIF is calculated with the Statsmodels variance-inflation-factor
+implementation. The intercept is not reported as an explanatory-variable VIF.
+
+There are 59 applicable current regression specifications: 25 yield-level,
+25 yield-change, four term-spread, and five cross-curve-regime models.
+
+Because each contains exactly one nonconstant predictor, the resulting VIF is
+1.0 for every applicable model.
+
+This is mathematically expected and should be interpreted as a trivial
+single-predictor multicollinearity result, not as evidence about hypothetical
+future multivariate specifications.
+
+Intercept-only models, one-sample t-tests, and descriptive-only analytical
+families are explicitly marked `NOT_APPLICABLE`.
+
+Any future regression with multiple nonconstant predictors must regenerate
+the VIF diagnostics.
+
+# 81. Fixed-Rate Bullet Bond Risk Engine
+
+**Status:** IMPLEMENTED
+**Decision reference:** D100
+
+PakYield implements a reusable fixed-rate bullet bond backend in:
+
+`src/pakyield/fixed_income.py`
+
+The engine accepts face value, annual coupon rate, annual YTM, years to
+maturity, and coupon frequency.
+
+Rates are decimal annual rates.
+
+Valuation occurs on a coupon boundary and the first cash flow occurs one full
+coupon period after valuation. The maturity must represent a whole number of
+coupon periods.
+
+The engine produces:
+
+- discounted contractual cash-flow schedule;
+- full present-value price;
+- Macaulay duration;
+- modified duration;
+- duration-based DV01;
+- discrete-compounding convexity;
+- rate-shock scenarios.
+
+The required rate shocks are −200, −100, −50, 0, +50, +100, and +200 basis
+points.
+
+Each scenario compares duration-only approximation, duration-plus-convexity
+approximation, and actual full repricing.
+
+The engine does not currently model settlement dates, accrued interest,
+clean/dirty price conversion, day-count conventions, irregular coupons,
+embedded options, floating rates, or amortization.
+
+It is a generic fixed-rate bullet bond engine and is not represented as a
+universal Sukuk valuation model.
+
+Nine direct mathematical tests protect the Phase 11 backend.
+
+# 86. Nelson-Siegel Global-Decay Production Contract
+
+**Status:** CONTRACT-FROZEN
+
+PakYield uses the three-factor Nelson-Siegel functional form:
+
+`y(tau) = beta0 + beta1*L1(tau, lambda) + beta2*L2(tau, lambda)`
+
+where:
+
+`L1(tau, lambda) = (1 - exp(-lambda*tau)) / (lambda*tau)`
+
+and:
+
+`L2(tau, lambda) = L1(tau, lambda) - exp(-lambda*tau)`.
+
+Maturity is measured in years.
+
+The production global decay parameter is:
+
+`lambda = 1.877661465308`.
+
+It is common across eligible production dates and was selected by minimizing
+equal-date-weighted mean cross-sectional MSE in the Phase 12 identification
+audit.
+
+The audited global lambda search range is frozen at `0.01` through `10.0`.
+
+A curve date is production-eligible only when it contains:
+
+- at least 10 distinct observed maturities;
+- at least one maturity <= 1 year;
+- at least one maturity > 1 year and <= 10 years;
+- at least one maturity > 10 years;
+- maturity span >= 15 years.
+
+No interpolation or synthetic maturity construction may be used to satisfy
+these requirements.
+
+All 1,149 current PKRV dates satisfy this rule. This includes 1,119 dates with
+20 observed points and 30 dates with 14 observed points.
+
+All 403 current PKISRV dates are structurally ineligible because their
+observed maturity distribution does not satisfy the frozen identification
+requirements.
+
+For each eligible date, beta0, beta1, and beta2 are estimated by linear least
+squares conditional on the frozen global lambda.
+
+The design matrix must have rank 3.
+
+Production diagnostics retain the number of observed maturities, maturity
+range and span, matrix rank, condition number, fitted values, residuals, and
+cross-sectional RMSE.
+
+Residuals are defined as:
+
+`observed_yield_pct - fitted_yield_pct`.
+
+A high residual or RMSE does not automatically delete a structurally eligible
+date.
+
+Ineligible curves remain explicit and do not receive synthetic or zero factor
+estimates.
+
+The Nelson-Siegel representation is descriptive. Causal, predictive,
+statistical-significance, term-premium, and other economic interpretations
+remain outside this construction contract.

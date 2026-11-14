@@ -92,7 +92,7 @@ PAKYIELD_CSS = f"""
 
     .block-container {{
         max-width: 1800px;
-        padding-top: 0.85rem;
+        padding-top: 5rem;
         padding-bottom: 2.25rem;
         padding-left: 1.35rem;
         padding-right: 1.35rem;

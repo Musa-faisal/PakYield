@@ -1,6 +1,7 @@
 """PakYield market overview."""
 
 import streamlit as st
+from app.components.presentation import apply_institutional_css, render_disclaimer
 
 from components.layout import (
     render_data_caption,
@@ -9,6 +10,7 @@ from components.layout import (
     render_section_header,
     render_terminal_bar,
 )
+from components.market_overview import render_market_workspace
 from styles.theme import apply_theme
 
 st.set_page_config(
@@ -18,6 +20,7 @@ st.set_page_config(
 )
 
 apply_theme()
+apply_institutional_css()
 
 render_terminal_bar(
     context="PAKISTAN SOVEREIGN FIXED INCOME",
@@ -28,25 +31,21 @@ render_page_header(
     "MARKET",
     "Market Overview",
     (
-        "A compact view of Pakistan's sovereign benchmark "
-        "rates, monetary-policy context, and curve conditions."
+        "Explore observed sovereign benchmark curves and compare "
+        "yields across two available dates."
     ),
 )
 
 render_section_header("Market Snapshot")
 
-render_placeholder(
-    "Market-summary metrics will appear here when the "
-    "validated analytical data layer is connected."
-)
-
-render_section_header("Curve Monitor")
-
-render_placeholder(
-    "PKRV and PKISRV market views will be rendered here "
-    "without interpolation or synthetic observations."
-)
+if not render_market_workspace():
+    render_placeholder(
+        "No verified market observations are available for this selection."
+    )
 
 render_data_caption(
-    "Presentation shell only — no analytical values are manufactured in this rollout."
+    "Historical research data from verified PakYield artifacts. "
+    "These observations are not live market quotes."
 )
+
+render_disclaimer()

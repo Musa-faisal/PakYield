@@ -1,6 +1,7 @@
 """PakYield monetary-policy laboratory."""
 
 import streamlit as st
+from app.components.presentation import apply_institutional_css, render_disclaimer
 
 from components.layout import (
     render_data_caption,
@@ -9,6 +10,7 @@ from components.layout import (
     render_section_header,
     render_terminal_bar,
 )
+from components.monetary_policy_lab import render_monetary_policy_lab
 from styles.theme import apply_theme
 
 st.set_page_config(
@@ -18,6 +20,7 @@ st.set_page_config(
 )
 
 apply_theme()
+apply_institutional_css()
 
 render_terminal_bar(
     context="PAKISTAN SOVEREIGN FIXED INCOME",
@@ -28,25 +31,21 @@ render_page_header(
     "POLICY",
     "Monetary Policy Lab",
     (
-        "Examine SBP policy decisions, directional regimes, "
-        "and observed sovereign-yield announcement windows."
+        "Examine SBP policy decisions and observed sovereign-yield "
+        "movements around announcement dates."
     ),
 )
 
-render_section_header("Policy Timeline")
+render_section_header("MPC Announcement Windows")
 
-render_placeholder(
-    "Validated MPC decisions and policy-rate state will be connected here."
-)
-
-render_section_header("Announcement Windows")
-
-render_placeholder(
-    "Observed-position MPC event windows will appear here "
-    "using the frozen Phase 5C event-study contract."
-)
+if not render_monetary_policy_lab():
+    render_placeholder(
+        "No verified MPC event-window data are available for this selection."
+    )
 
 render_data_caption(
-    "Announcement-date observations are not silently treated "
-    "as post-decision observations when intraday timing is unavailable."
+    "Historical research data from verified PakYield artifacts. "
+    "Announcement-window movements do not by themselves establish causality."
 )
+
+render_disclaimer()

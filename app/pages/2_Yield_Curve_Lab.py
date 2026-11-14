@@ -1,6 +1,7 @@
 """PakYield sovereign yield-curve laboratory."""
 
 import streamlit as st
+from app.components.presentation import apply_institutional_css, render_disclaimer
 
 from components.layout import (
     render_data_caption,
@@ -9,6 +10,7 @@ from components.layout import (
     render_section_header,
     render_terminal_bar,
 )
+from components.yield_curve_lab import render_yield_curve_lab
 from styles.theme import apply_theme
 
 st.set_page_config(
@@ -18,6 +20,7 @@ st.set_page_config(
 )
 
 apply_theme()
+apply_institutional_css()
 
 render_terminal_bar(
     context="PAKISTAN SOVEREIGN FIXED INCOME",
@@ -28,26 +31,21 @@ render_page_header(
     "CURVES",
     "Yield Curve Lab",
     (
-        "Inspect the sovereign term structure across observed "
-        "maturities while preserving source-date integrity."
+        "Explore observed sovereign benchmark curves, maturity histories, "
+        "and eligible Nelson–Siegel model results."
     ),
 )
 
 render_section_header("Curve Explorer")
 
-render_placeholder(
-    "Interactive maturity and date controls will be connected "
-    "to validated PKRV and PKISRV observations."
-)
-
-render_section_header("Term Structure Diagnostics")
-
-render_placeholder(
-    "Observed term spreads and curve-shape diagnostics will "
-    "appear here using frozen analytical inputs."
-)
+if not render_yield_curve_lab():
+    render_placeholder(
+        "No verified yield observations are available for this selection."
+    )
 
 render_data_caption(
-    "No interpolation, nearest-tenor substitution, or "
-    "synthetic curve points are introduced by this page shell."
+    "Historical research data from verified PakYield artifacts. "
+    "No missing benchmark observations are fabricated."
 )
+
+render_disclaimer()

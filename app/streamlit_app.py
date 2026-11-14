@@ -9,6 +9,11 @@ from typing import Final
 
 import streamlit as st
 
+from app.components.presentation import (
+    apply_institutional_css,
+    render_disclaimer,
+)
+
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
 if str(PROJECT_ROOT) not in sys.path:
@@ -190,7 +195,7 @@ def render_latest_curves() -> None:
         if pkrv:
             st.dataframe(
                 _curve_table(pkrv),
-                use_container_width=True,
+                width="stretch",
                 hide_index=True,
             )
         else:
@@ -202,7 +207,7 @@ def render_latest_curves() -> None:
         if pkisrv:
             st.dataframe(
                 _curve_table(pkisrv),
-                use_container_width=True,
+                width="stretch",
                 hide_index=True,
             )
         else:
@@ -227,7 +232,7 @@ def render_analysis_inventory() -> None:
 
     st.dataframe(
         rows,
-        use_container_width=True,
+        width="stretch",
         hide_index=True,
     )
 
@@ -265,6 +270,8 @@ def main() -> None:
         layout="wide",
     )
 
+    apply_institutional_css()
+
     render_header()
 
     render_market_overview()
@@ -278,3 +285,5 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+render_disclaimer()
