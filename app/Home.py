@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import streamlit as st
 
+from app.components.home_dashboard import render_home_dashboard
 from app.components.presentation import (
     apply_institutional_css,
     render_disclaimer,
@@ -101,6 +102,8 @@ else:
         "Each metric shows its latest available verified observation. "
         "Dates may differ; these are historical research data, not live quotes."
     )
+
+render_home_dashboard()
 
 render_section_header("Research Modules")
 
