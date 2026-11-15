@@ -8,6 +8,7 @@ import plotly.graph_objects as go
 import streamlit as st
 
 from app.components.charts import apply_financial_chart_layout
+from app.components.rolling_correlation import render_rolling_correlation
 from app.services import data
 
 
@@ -218,6 +219,8 @@ def render_cross_curve_lab() -> bool:
         "Each marker is an eligible recorded pair. "
         "Missing or ineligible observations are not filled."
     )
+
+    render_rolling_correlation(history, selected_tenor)
 
     st.info(
         "These differences are numerical benchmark comparisons. "
