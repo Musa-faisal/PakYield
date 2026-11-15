@@ -35,8 +35,13 @@ dev = [
     "mypy",
 ]
 
+[tool.setuptools]
+package-dir = {"app" = "app", "pakyield" = "src/pakyield"}
+
 [tool.setuptools.packages.find]
-where = ["src"]
+where = [".", "src"]
+include = ["app", "app.*", "pakyield", "pakyield.*"]
+namespaces = false
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

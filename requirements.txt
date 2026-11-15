@@ -1,3 +1,6 @@
 # PakYield deployment runtime dependencies.
 # Exact validated closure is stored in requirements-lock.txt.
 -r requirements-lock.txt
+
+# Install PakYield's app and research packages.
+-e .
