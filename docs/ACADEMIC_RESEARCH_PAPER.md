@@ -58,6 +58,29 @@ not support an inferential macroeconomic model.
 **Evidence source:** `docs/RESEARCH_QUESTIONS.md`;
 `data/interim/research_evidence_map.csv`.
 
+### Related literature
+
+Nelson and Siegel (1987) introduce a parsimonious model capable of
+representing several common yield-curve shapes. Such models provide a useful
+summary of the term structure, but fitted values are model estimates rather
+than additional observed benchmark rates. In PakYield, a production fit is
+reported only when the project's maturity-coverage requirements are met.
+
+For Pakistan, Hussain, Hussain and Hyder (2022) examine monetary-policy
+transmission through several channels using a structural vector
+autoregression and historical monthly data. Their analysis provides
+institutional and methodological context, but its identified shocks and
+macroeconomic outcomes differ from the observational regime comparisons in
+this paper.
+
+Gurkaynak, Sack and Swanson (2004) use high-frequency US data to distinguish
+information about the current policy target from information about the
+expected future path of policy. Their design illustrates why announcement
+responses need careful identification. PakYield's observation-based windows
+do not contain equivalent intraday surprise measures and therefore describe
+yield movements around meetings without identifying causal announcement
+effects.
+
 ## 3. Institutional and Market Context
 
 The empirical system combines benchmark rates published through the Mutual
@@ -545,6 +568,21 @@ The paper is generated from evidence artifacts only; it performs no new
 statistical estimation.
 
 ## 16. References and Source Notes
+
+### Academic literature
+
+- Nelson, C. R. and Siegel, A. F. (1987). "Parsimonious Modeling of Yield
+  Curves." *The Journal of Business*, 60(4), 473–489.
+  https://doi.org/10.1086/296409
+- Hussain, F., Hussain, F. and Hyder, K. (2022). "Monetary Policy
+  Effectiveness in Pakistan: An In-depth Analysis of Four Transmission
+  Channels." State Bank of Pakistan Working Paper No. 109.
+  https://www.sbp.org.pk/publications/wpapers/2022/wp109.pdf
+- Gurkaynak, R., Sack, B. and Swanson, E. (2004). "Do Actions Speak Louder
+  Than Words? The Response of Asset Prices to Monetary Policy Actions and
+  Statements." Federal Reserve Finance and Economics Discussion Series
+  2004-66.
+  https://www.federalreserve.gov/pubs/feds/2004/200466/200466abs.html
 
 ### Primary data organizations
 
