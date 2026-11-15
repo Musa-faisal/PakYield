@@ -1,0 +1,8 @@
+family,artifact_path,artifact_sha256,total_rows,inferential_rows,descriptive_only_rows,reject_count,do_not_reject_count,min_sample_size,max_sample_size,hac_lag_values,bh_max_abs_diff,bh_reject_reconciliation,diagnostic_status
+yield_level_regime,data/interim/inferential_yield_level_regime.csv,4c9ba3fdd6e920e905db3dc118e645ad904e2cbf0682c33d0c5228998790b1a4,25,25,0,24,1,390,1048,"5,6",0,PASS,PASS
+yield_change_regime,data/interim/inferential_yield_change_regime.csv,4baf694f635fb183ef4072dde24b10924bd280241276940b83d19b2c3c2f9501,25,25,0,10,15,389,1048,"5,6",0,PASS,PASS
+term_spread_regime,data/interim/inferential_term_spread_regime.csv,17f7222dda8f17e14830d64f268b076ac365e66012b4fdf6aa38527a835e1349,4,4,0,4,0,1020,1048,6,0,PASS,PASS
+cross_curve_zero,data/interim/inferential_cross_curve_zero.csv,14a906144b79f4a81dbe8b2df752a607600871bfc9de7e098e079b44e31f75de,5,5,0,5,0,388,388,5,0,PASS,PASS
+cross_curve_regime,data/interim/inferential_cross_curve_regime.csv,f3cca17f6cf658828a9ac613d7fdf7764126e9da0a74760749a9109a8717a6a5,5,5,0,4,1,388,388,5,0,PASS,PASS
+mpc_event_window,data/interim/inferential_mpc_event_windows.csv,13673445d98051044a1fe5b019d712fadf6b4b544dde2c6cc64a8ca48441f2f1,72,54,18,0,54,8,22,,0,PASS,PASS
+monthly_cpi_yield,data/interim/monthly_cpi_yield_panel.csv,978734c701969e049b4bd78c3a7c3d15b6534f530c19971c1b6df8efd6f370c7,1234,0,1234,0,0,,,,,NOT_APPLICABLE,PASS

@@ -23,7 +23,7 @@ PakYield Lab currently targets:
 The canonical application entrypoint is:
 
 ```text
-app/streamlit_app.py
+app/Home.py
 ```
 
 The repository's Streamlit configuration is:
@@ -63,13 +63,13 @@ python -m pip install -e ".[dev]"
 Start PakYield Lab with:
 
 ```bash
-streamlit run app/streamlit_app.py
+streamlit run app/Home.py
 ```
 
 A headless smoke test can be performed with:
 
 ```bash
-streamlit run app/streamlit_app.py \
+streamlit run app/Home.py \
   --server.headless true \
   --server.port 8765
 ```

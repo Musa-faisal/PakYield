@@ -61,7 +61,7 @@ for the controlling research specification and feasibility findings.
 
 ## Project Status
 
-Phase 3 — Repository & Architecture
+Active development — public release preparation in progress
 
 Production analysis is complete through the frozen Phase 6 research outputs, and the Phase 7 Streamlit presentation and delivery layers are complete.
 
@@ -98,13 +98,13 @@ python -m pip install -e ".[dev]"
 The canonical Streamlit entrypoint is:
 
 ```text
-app/streamlit_app.py
+app/Home.py
 ```
 
 Start the application with:
 
 ```bash
-streamlit run app/streamlit_app.py
+streamlit run app/Home.py
 ```
 
 Streamlit configuration is stored in:
