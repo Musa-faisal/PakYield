@@ -63,7 +63,7 @@ INSTITUTIONAL_CSS = f"""
 
 .block-container {{
     max-width: 1480px;
-    padding-top: 5rem;
+    padding-top: 6rem !important;
     padding-bottom: 4rem;
 }}
 
