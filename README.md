@@ -2,166 +2,69 @@
 
 **Pakistan Sovereign Fixed-Income & Monetary Policy Research Platform**
 
-PakYield Lab is an empirical financial-market research project examining
-Pakistan's conventional and Shariah-compliant sovereign benchmark curves,
-monetary-policy announcements, inflation, fixed-income risk, and yield-curve
-behavior.
+[Live application](https://pakyield-azfcfge3jymnrh7jkskn73.streamlit.app/) · [Research paper](docs/ACADEMIC_RESEARCH_PAPER.md) · [Research brief](docs/RESEARCH_BRIEF.md) · [Methodology](docs/METHODOLOGY_DRAFT.md)
 
-## Central Research Question
+PakYield Lab is an interactive research platform for exploring Pakistan's sovereign benchmark yield curves, monetary-policy environments, inflation context, and fixed-income risk. It connects a documented analytical pipeline to a Streamlit dashboard and an evidence-grounded research paper.
 
-> How does monetary policy transmit across Pakistan's sovereign yield curve,
-> and how do conventional and Shariah-compliant sovereign benchmark rates
-> behave across maturities and monetary-policy regimes?
+## Research questions
 
-## Core Research Areas
+How do benchmark yields vary across maturities and monetary-policy environments? How do yields move around MPC announcements? How do conventional PKRV and Shariah-compliant PKISRV benchmark rates compare at the same date and maturity?
 
-- Pakistan PKRV yield-curve evolution
-- SBP MPC announcement-window analysis
-- PKRV versus PKISRV comparison
-- PKISRV-PKRV spreads
-- monetary-policy regime analysis
-- CPI and sovereign-yield relationships
-- fixed-income risk analytics
-- Nelson-Siegel yield-curve modeling
+## Explore the application
 
-## Planned Technology
+- **Home and Market Overview:** historical market metrics and interactive benchmark views.
+- **Yield Curve Lab:** observed curves and Nelson–Siegel fits for dates meeting coverage requirements.
+- **Monetary Policy Lab:** policy history, regimes and observation-based MPC announcement windows.
+- **Islamic vs Conventional:** exact-date, exact-maturity benchmark comparisons and rolling correlations.
+- **Fixed-Income Risk:** a generic fixed-rate bullet bond calculator with price, duration, DV01 and convexity.
+- **Research:** inferential results and diagnostic evidence, with methodology and limitations.
 
-- Python 3.12
-- pandas
-- NumPy
-- SciPy
-- statsmodels
-- SQLite
-- SQL
-- Plotly
-- Streamlit
-- Jupyter
-- pytest
-- Ruff
-- Git / GitHub
+## Data and selected findings
 
-## Research Data
+The research paper reports 22,800 observed PKRV yields across 1,149 accepted dates (4 January 2022–28 September 2026), 2,015 PKISRV yields across 403 accepted dates (3 February 2025–30 September 2026), and 39 validated MPC meetings. Sources include the Mutual Funds Association of Pakistan (MUFAP), State Bank of Pakistan (SBP), and Pakistan Bureau of Statistics (PBS).
 
-Primary authorities include:
+The frozen analysis reports multiplicity-adjusted rejections in 24 of 25 yield-level regime tests and 0 of 54 MPC announcement-window groups. These counts do not establish economic significance or causality. See the [paper](docs/ACADEMIC_RESEARCH_PAPER.md) and [research brief](docs/RESEARCH_BRIEF.md) for sample definitions, other test families, interpretation, and source references.
 
-- Mutual Funds Association of Pakistan (MUFAP)
-- State Bank of Pakistan (SBP)
-- Pakistan Bureau of Statistics (PBS)
+## Method and limitations
 
-See:
+Observations are matched by date and maturity for cross-curve comparison; missing benchmark observations are not silently invented. Regime classifications and announcement windows are observational: they do not identify causal policy effects or monetary-policy surprises. PKISRV-minus-PKRV differences do not, on their own, identify liquidity, credit, religious, or other structural premia. Model fits are estimates, not additional observed yields; they are unavailable when maturity coverage is insufficient.
 
-- `docs/PROJECT_SPEC.md`
-- `docs/RESEARCH_QUESTIONS.md`
-- `docs/METHODOLOGY_DRAFT.md`
-- `docs/DATA_FEASIBILITY_AUDIT.md`
-- `docs/DATA_COVERAGE_MATRIX.md`
-- `docs/DECISIONS.md`
+The CPI/yield evidence in the frozen research layer is descriptive. Separately documented exploratory macro analysis is not part of the frozen inferential findings. Data are historical research observations, not live quotes or investment advice.
 
-for the controlling research specification and feasibility findings.
+## Architecture
 
-## Project Status
+Validated source data → analytical panels and statistical artifacts → Python service layer → Streamlit and Plotly dashboard. The project also includes SQLite-based research data, tests, reproducibility documentation, and artifact integrity checks.
 
-Active development — public release preparation in progress
+Primary tools include Python 3.12, pandas, NumPy, SciPy, statsmodels, Plotly, Streamlit, SQLite, pytest and Ruff.
 
-Production analysis is complete through the frozen Phase 6 research outputs, and the Phase 7 Streamlit presentation and delivery layers are complete.
+## Run locally
 
-## Running PakYield Lab
-
-PakYield Lab uses Python 3.12 and Streamlit.
-
-### 1. Create and activate a virtual environment
-
-On macOS or Linux:
+Use Python 3.12:
 
 ```bash
+git clone https://github.com/Musa-faisal/PakYield.git
+cd PakYield
 python3.12 -m venv .venv
 source .venv/bin/activate
-```
-
-### 2. Install the project
-
-Install the application and research dependencies from the project metadata:
-
-```bash
 python -m pip install --upgrade pip
-python -m pip install -e .
-```
-
-For development and testing tools:
-
-```bash
 python -m pip install -e ".[dev]"
-```
-
-### 3. Run the dashboard
-
-The canonical Streamlit entrypoint is:
-
-```text
-app/Home.py
-```
-
-Start the application with:
-
-```bash
 streamlit run app/Home.py
 ```
 
-Streamlit configuration is stored in:
+On Windows, activate the environment with `.venv\Scripts\activate` instead. For deployment details, see [the deployment guide](docs/DEPLOYMENT.md).
 
-```text
-.streamlit/config.toml
-```
-
-### 4. Verify the project before delivery
-
-Run the complete automated test suite:
+## Test and reproduce
 
 ```bash
-pytest -q
-```
-
-Check Python source quality:
-
-```bash
+python -m pytest -q
 ruff check .
 ruff format --check .
 ```
 
-Check the production research database:
+Selected runtime artifacts are tracked under `data/runtime/` and `data/interim/`; other generated research data and the processed SQLite database may be ignored. A clean clone may therefore require additional inputs to regenerate every research artifact or run all research checks. The [deployment data manifest](docs/DEPLOYMENT_DATA_MANIFEST.md) records an earlier audit checkpoint and should be read alongside the current tracked files and application service definitions.
 
-```bash
-sqlite3 data/processed/pakyield.sqlite3 "PRAGMA integrity_check;"
-sqlite3 data/processed/pakyield.sqlite3   "SELECT COUNT(*) FROM pragma_foreign_key_check;"
-```
+The [publication source packet](docs/RESEARCH_PUBLICATION_SOURCE_PACKET.md), [research questions](docs/RESEARCH_QUESTIONS.md), and [methodology](docs/METHODOLOGY_DRAFT.md) describe the evidence and research boundaries.
 
-Expected database-health results are:
+## Project status
 
-```text
-ok
-0
-```
-
-### Research-data boundary
-
-The dashboard presents deterministic research outputs produced by the PakYield
-research pipeline.
-
-Generated analytical artifacts under `data/interim/` are intentionally
-Git-ignored. Deployment must therefore provide every runtime data dependency
-required by the application through the approved delivery mechanism rather
-than assuming ignored local files are present automatically.
-
-Do not replace missing research data with interpolation, fabricated values,
-nearest-date matches, or silent fallbacks.
-
-### Deployment
-
-See:
-
-```text
-docs/DEPLOYMENT.md
-```
-
-for the delivery contract, deployment prerequisites, verification procedure,
-and runtime-data requirements.
+The dashboard is deployed and the research paper, brief, and portfolio draft are in the repository. Final recorded visual QA, rendered two-page brief verification, and portfolio screenshots remain to be completed before a final release.
