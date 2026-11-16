@@ -127,29 +127,17 @@ release is considered deployable.
 
 ## Runtime research data
 
-PakYield Lab is not a stateless UI. It depends on the project's validated
-research data.
+PakYield Lab depends on validated research data. Selected runtime
+artifacts under `data/runtime/` and `data/interim/` are tracked in the
+repository for the deployed dashboard.
 
-Generated analytical artifacts in:
+Other generated files under `data/interim/` and the local processed SQLite
+database can remain ignored. Do not assume that every research input needed
+to rebuild the complete analytical pipeline is present in a fresh clone.
 
-```text
-data/interim/
-```
-
-are intentionally Git-ignored.
-
-Therefore deployment must explicitly account for runtime research-data
-availability.
-
-A deployment must not assume that a fresh Git clone automatically contains
-all ignored research artifacts.
-
-Before choosing the final hosting mechanism, verify exactly which data files
-the application reads at runtime through `app/services/data.py` and related
-presentation-layer services.
-
-Any required runtime artifact must be supplied through an approved delivery
-method.
+See `docs/DEPLOYMENT_DATA_MANIFEST.md` and the application services for the
+tracked runtime dependencies. Verify artifact availability and integrity after
+deployment.
 
 ---
 
@@ -228,19 +216,15 @@ A release is ready for hosting only when all of the following pass:
 
 ## Hosting target
 
-The repository is deployment-ready at the application level, but the final
-hosting target must be selected separately.
+The public application is hosted on Streamlit Community Cloud:
 
-The hosting decision should be based on:
+https://pakyield-azfcfge3jymnrh7jkskn73.streamlit.app/
 
-1. Python 3.12 support;
-2. Streamlit support;
-3. ability to package or mount the required research data;
-4. SQLite persistence/read access requirements;
-5. resource limits;
-6. reproducible dependency installation;
-7. deployment visibility requirements;
-8. cost and operational simplicity.
+The configured entry point is `app/Home.py`. The repository's
+`requirements.txt` installs the locked runtime dependencies and the project
+package. Selected runtime artifacts are tracked in Git; see
+`docs/DEPLOYMENT_DATA_MANIFEST.md`.
 
-Platform-specific configuration should be added only after the hosting target
-is selected.
+After a deployment, open the public application and check the pages,
+interactive controls, artifact-backed results, and error states. A successful
+application boot alone does not establish that every analytical feature works.
