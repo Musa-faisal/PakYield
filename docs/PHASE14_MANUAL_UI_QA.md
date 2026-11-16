@@ -249,183 +249,183 @@ Rules:
 
 ## Home
 
-[ ] Page loads without exception.
-[ ] No raw traceback or red Streamlit error.
-[ ] Sidebar navigation works.
-[ ] Page title and header hierarchy look intentional.
-[ ] Intro/subtitle spacing is consistent.
-[ ] KPI or metric cards align correctly.
-[ ] Charts fit container width.
-[ ] Plot labels and titles are readable.
-[ ] No clipped legends.
-[ ] No horizontal overflow.
-[ ] Tables remain readable.
-[ ] Empty states look intentional where applicable.
-[ ] Methodology notes display correctly where applicable.
-[ ] Disclaimer appears where required.
-[ ] No duplicate page title.
-[ ] No legacy `use_container_width` warning is visible.
-[ ] No visibly broken HTML or CSS.
-[ ] Light/dark contrast is acceptable.
-[ ] Narrow-width resize does not catastrophically break layout.
-[ ] Displayed data looks plausible relative to labels and units.
+[x] Page loads without exception.
+[x] No raw traceback or red Streamlit error.
+[x] Sidebar navigation works.
+[x] Page title and header hierarchy look intentional.
+[x] Intro/subtitle spacing is consistent.
+[x] KPI or metric cards align correctly.
+[x] Charts fit container width.
+[x] Plot labels and titles are readable.
+[x] No clipped legends.
+[x] No horizontal overflow.
+[x] Tables remain readable.
+[x] Empty states look intentional where applicable.
+[x] Methodology notes display correctly where applicable.
+[x] Disclaimer appears where required.
+[x] No duplicate page title.
+[x] No legacy `use_container_width` warning is visible.
+[x] No visibly broken HTML or CSS.
+[x] Light/dark contrast is acceptable.
+[x] Narrow-width resize does not catastrophically break layout.
+[x] Displayed data looks plausible relative to labels and units.
 
 ## Main Dashboard / streamlit_app
 
-[ ] Page loads without exception.
-[ ] No raw traceback or red Streamlit error.
-[ ] Sidebar navigation works.
-[ ] Page title and header hierarchy look intentional.
-[ ] Intro/subtitle spacing is consistent.
-[ ] KPI or metric cards align correctly.
-[ ] Charts fit container width.
-[ ] Plot labels and titles are readable.
-[ ] No clipped legends.
-[ ] No horizontal overflow.
-[ ] Tables remain readable.
-[ ] Empty states look intentional where applicable.
-[ ] Methodology notes display correctly where applicable.
-[ ] Disclaimer appears where required.
-[ ] No duplicate page title.
-[ ] No legacy `use_container_width` warning is visible.
-[ ] No visibly broken HTML or CSS.
-[ ] Light/dark contrast is acceptable.
-[ ] Narrow-width resize does not catastrophically break layout.
-[ ] Displayed data looks plausible relative to labels and units.
+[x] Page loads without exception.
+[x] No raw traceback or red Streamlit error.
+[x] Sidebar navigation works.
+[x] Page title and header hierarchy look intentional.
+[x] Intro/subtitle spacing is consistent.
+[x] KPI or metric cards align correctly.
+[x] Charts fit container width.
+[x] Plot labels and titles are readable.
+[x] No clipped legends.
+[x] No horizontal overflow.
+[x] Tables remain readable.
+[x] Empty states look intentional where applicable.
+[x] Methodology notes display correctly where applicable.
+[x] Disclaimer appears where required.
+[x] No duplicate page title.
+[x] No legacy `use_container_width` warning is visible.
+[x] No visibly broken HTML or CSS.
+[x] Light/dark contrast is acceptable.
+[x] Narrow-width resize does not catastrophically break layout.
+[x] Displayed data looks plausible relative to labels and units.
 
 ## Market Overview
 
-[ ] Page loads without exception.
-[ ] No raw traceback or red Streamlit error.
-[ ] Sidebar navigation works.
-[ ] Page title/header hierarchy looks intentional.
-[ ] KPI cards align correctly.
-[ ] Charts fit container width.
-[ ] Plot labels and titles are readable.
-[ ] No clipped legends.
-[ ] No horizontal overflow.
-[ ] Tables remain readable.
-[ ] Date controls work.
-[ ] Curve controls work where present.
-[ ] Methodology notes display correctly.
-[ ] Disclaimer appears where required.
-[ ] Narrow-width resize remains usable.
-[ ] Displayed values look plausible relative to labels and units.
+[X] Page loads without exception.
+[X] No raw traceback or red Streamlit error.
+[X] Sidebar navigation works.
+[X] Page title/header hierarchy looks intentional.
+[X] KPI cards align correctly.
+[X] Charts fit container width.
+[X] Plot labels and titles are readable.
+[X] No clipped legends.
+[X] No horizontal overflow.
+[X] Tables remain readable.
+[X] Date controls work.
+[X] Curve controls work where present.
+[X] Methodology notes display correctly.
+[X] Disclaimer appears where required.
+[X] Narrow-width resize remains usable.
+[X] Displayed values look plausible relative to labels and units.
 
 ## Yield Curve Lab
 
-[ ] Page loads without exception.
-[ ] No raw traceback or red Streamlit error.
-[ ] Sidebar navigation works.
-[ ] Page title/header hierarchy looks intentional.
-[ ] Yield-curve chart fits container width.
-[ ] Tenor labels are readable.
-[ ] Curve legend is not clipped.
-[ ] Date controls work.
-[ ] Tenor controls work where present.
-[ ] Curve controls work.
-[ ] Tabs work where present.
-[ ] Expanders work where present.
-[ ] Download buttons work where present.
-[ ] Nelson-Siegel presentation looks intentional where present.
-[ ] Methodology notes display correctly.
-[ ] No horizontal overflow.
-[ ] Narrow-width resize remains usable.
-[ ] Displayed yields and units look plausible.
+[X] Page loads without exception.
+[X] No raw traceback or red Streamlit error.
+[X] Sidebar navigation works.
+[X] Page title/header hierarchy looks intentional.
+[X] Yield-curve chart fits container width.
+[X] Tenor labels are readable.
+[X] Curve legend is not clipped.
+[X] Date controls work.
+[X] Tenor controls work where present.
+[X] Curve controls work.
+[X] Tabs work where present.
+[X] Expanders work where present.
+[X] Download buttons work where present.
+[X] Nelson-Siegel presentation looks intentional where present.
+[X] Methodology notes display correctly.
+[X] No horizontal overflow.
+[X] Narrow-width resize remains usable.
+[X] Displayed yields and units look plausible.
 
 ## Monetary Policy Lab
 
-[ ] Page loads without exception.
-[ ] No raw traceback or red Streamlit error.
-[ ] Sidebar navigation works.
-[ ] Page title/header hierarchy looks intentional.
-[ ] Policy-rate presentation looks intentional.
-[ ] Event-window charts fit container width.
-[ ] Plot labels and titles are readable.
-[ ] No clipped legends.
-[ ] Date controls work where present.
-[ ] Regime controls work where present.
-[ ] Tabs work where present.
-[ ] Expanders work where present.
-[ ] Methodology notes display correctly.
-[ ] Announcement/event labels look plausible.
-[ ] No horizontal overflow.
-[ ] Narrow-width resize remains usable.
-[ ] No causal wording is presented as established fact.
+[X] Page loads without exception.
+[X] No raw traceback or red Streamlit error.
+[X] Sidebar navigation works.
+[X] Page title/header hierarchy looks intentional.
+[X] Policy-rate presentation looks intentional.
+[X] Event-window charts fit container width.
+[X] Plot labels and titles are readable.
+[X] No clipped legends.
+[X] Date controls work where present.
+[X] Regime controls work where present.
+[X] Tabs work where present.
+[X] Expanders work where present.
+[X] Methodology notes display correctly.
+[X] Announcement/event labels look plausible.
+[X] No horizontal overflow.
+[X] Narrow-width resize remains usable.
+[X] No causal wording is presented as established fact.
 
 ## Islamic vs Conventional
 
-[ ] Page loads without exception.
-[ ] No raw traceback or red Streamlit error.
-[ ] Sidebar navigation works.
-[ ] Page title/header hierarchy looks intentional.
-[ ] PKRV/PKISRV comparison charts fit container width.
-[ ] Plot labels and titles are readable.
-[ ] No clipped legends.
-[ ] Date controls work where present.
-[ ] Tenor controls work where present.
-[ ] Tabs work where present.
-[ ] Tables remain readable.
-[ ] Methodology notes display correctly.
-[ ] Disclaimer/boundary language appears where required.
-[ ] No horizontal overflow.
-[ ] Narrow-width resize remains usable.
-[ ] Numerical spreads look plausible relative to displayed yields.
-[ ] No unsupported premium/discount causal interpretation is shown.
+[X] Page loads without exception.
+[X] No raw traceback or red Streamlit error.
+[X] Sidebar navigation works.
+[X] Page title/header hierarchy looks intentional.
+[X] PKRV/PKISRV comparison charts fit container width.
+[X] Plot labels and titles are readable.
+[X] No clipped legends.
+[X] Date controls work where present.
+[X] Tenor controls work where present.
+[X] Tabs work where present.
+[X] Tables remain readable.
+[X] Methodology notes display correctly.
+[X] Disclaimer/boundary language appears where required.
+[X] No horizontal overflow.
+[X] Narrow-width resize remains usable.
+[X] Numerical spreads look plausible relative to displayed yields.
+[X] No unsupported premium/discount causal interpretation is shown.
 
 ## Fixed Income Risk
 
-[ ] Page loads without exception.
-[ ] No raw traceback or red Streamlit error.
-[ ] Sidebar navigation works.
-[ ] Page title/header hierarchy looks intentional.
-[ ] Calculator layout is aligned.
-[ ] Input controls accept valid values.
-[ ] Fixed-income calculators execute successfully.
-[ ] Output units are clear.
-[ ] Duration/convexity/risk results display cleanly.
-[ ] Tables remain readable.
-[ ] Charts fit container width where present.
-[ ] Methodology notes display correctly.
-[ ] Disclaimer appears where required.
-[ ] No horizontal overflow.
-[ ] Narrow-width resize remains usable.
-[ ] Calculated values look plausible for entered inputs.
+[X] Page loads without exception.
+[X] No raw traceback or red Streamlit error.
+[X] Sidebar navigation works.
+[X] Page title/header hierarchy looks intentional.
+[X] Calculator layout is aligned.
+[X] Input controls accept valid values.
+[X] Fixed-income calculators execute successfully.
+[X] Output units are clear.
+[X] Duration/convexity/risk results display cleanly.
+[X] Tables remain readable.
+[X] Charts fit container width where present.
+[X] Methodology notes display correctly.
+[X] Disclaimer appears where required.
+[X] No horizontal overflow.
+[X] Narrow-width resize remains usable.
+[X] Calculated values look plausible for entered inputs.
 
 ## Research
 
-[ ] Page loads without exception.
-[ ] No raw traceback or red Streamlit error.
-[ ] Sidebar navigation works.
-[ ] Page title/header hierarchy looks intentional.
-[ ] Research controls work.
-[ ] Econometric controls work where present.
-[ ] Tabs work where present.
-[ ] Expanders work where present.
-[ ] Download buttons work where present.
-[ ] Tables remain readable.
-[ ] Charts fit container width.
-[ ] Plot labels and titles are readable.
-[ ] Methodology notes display correctly.
-[ ] Research/investment disclaimer is visible.
-[ ] No horizontal overflow.
-[ ] Narrow-width resize remains usable.
-[ ] No statistical result is presented with obviously mismatched labels/units.
+[X] Page loads without exception.
+[X] No raw traceback or red Streamlit error.
+[X] Sidebar navigation works.
+[X] Page title/header hierarchy looks intentional.
+[X] Research controls work.
+[X] Econometric controls work where present.
+[X] Tabs work where present.
+[X] Expanders work where present.
+[X] Download buttons work where present.
+[X] Tables remain readable.
+[X] Charts fit container width.
+[X] Plot labels and titles are readable.
+[X] Methodology notes display correctly.
+[X] Research/investment disclaimer is visible.
+[X] No horizontal overflow.
+[X] Narrow-width resize remains usable.
+[X] No statistical result is presented with obviously mismatched labels/units.
 
 ## Cross-page interaction checks
 
-[ ] Sidebar navigation successfully reaches all eight surfaces.
-[ ] Date controls tested where available.
-[ ] Tenor controls tested where available.
-[ ] Curve controls tested where available.
-[ ] Regime controls tested where available.
-[ ] Tabs tested where available.
-[ ] Expanders tested where available.
-[ ] Download buttons tested where available.
-[ ] Research/econometric controls tested.
-[ ] Fixed-income calculators tested.
-[ ] Browser refresh does not break the active page.
-[ ] No obvious Streamlit runtime errors appear after interaction.
+[x] Sidebar navigation successfully reaches all eight surfaces.
+[x] Date controls tested where available.
+[X] Tenor controls tested where available.
+[X] Curve controls tested where available.
+[X] Regime controls tested where available.
+[X] Tabs tested where available.
+[X] Expanders tested where available.
+[X] Download buttons tested where available.
+[X] Research/econometric controls tested.
+[X] Fixed-income calculators tested.
+[X] Browser refresh does not break the active page.
+[X] No obvious Streamlit runtime errors appear after interaction.
 
 ## Manual QA defects / notes
 
